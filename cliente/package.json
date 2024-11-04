@@ -1,0 +1,34 @@
+{
+  "name": "asi-2324-vue-example",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve --port 1234",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "asi-2324-vue-example": "file:",
+    "axios": "^1.5.0",
+    "bootstrap": "^5.3.1",
+    "sass": "^1.67.0",
+    "sass-loader": "^13.3.2",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-eslint": "~5.0.8",
+    "@vue/cli-plugin-router": "~5.0.8",
+    "@vue/cli-service": "~5.0.8",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "prettier": "^2.4.1"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  }
+}
