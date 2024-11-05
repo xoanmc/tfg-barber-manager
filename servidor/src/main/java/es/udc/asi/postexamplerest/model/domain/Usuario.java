@@ -1,5 +1,7 @@
 package es.udc.asi.postexamplerest.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.hibernate.annotations.DiscriminatorOptions;
 
 import javax.persistence.*;
@@ -8,6 +10,15 @@ import javax.persistence.*;
 @DiscriminatorOptions(force = true)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @Entity
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,  // Usamos un campo para definir el tipo
+        include = JsonTypeInfo.As.PROPERTY,  // El discriminador será una propiedad en el JSON
+        property = "autoridad"  // Usaremos el campo 'autoridad' para diferenciar las subclases
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Cliente.class, name = "CLIENTE"),
+        @JsonSubTypes.Type(value = Empleado.class, name = "EMPLEADO")
+})
 public abstract class Usuario {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")

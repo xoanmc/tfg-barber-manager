@@ -16,6 +16,20 @@
       </select>
     </div>
 
+    <!-- Lista de servicios disponibles -->
+    <div>
+      <label for="servicio">Selecciona Servicio:</label>
+      <select v-model="cita.servicioId" id="servicio">
+        <option
+          v-for="servicio in servicios"
+          :key="servicio.id"
+          :value="servicio.id"
+        >
+          {{ servicio.nombre }} - {{ servicio.precio }}€
+        </option>
+      </select>
+    </div>
+
     <!-- Fecha y Hora de la cita con botones "Aceptar" y "Cancelar" directamente en el calendario -->
     <div>
       <label for="fecha">Fecha y Hora:</label>
@@ -30,7 +44,7 @@
       />
     </div>
 
-    <!-- El calendario aparece directamente bajo el campo de texto y no tapa nada -->
+    <!-- Calendario para seleccionar la fecha y hora -->
     <div v-if="mostrarCalendario" class="calendario-container">
       <!-- Se establece la fecha mínima como el valor actual -->
       <input
@@ -48,7 +62,7 @@
 
     <!-- Botón para reservar -->
     <div>
-      <button @click="reservarCita" :disabled="!cita.fechaHora">
+      <button @click="reservarCita" :disabled="!cita.fechaHora || !cita.servicioId">
         Reservar
       </button>
     </div>
@@ -58,13 +72,16 @@
 <script>
 import CitaRepository from "@/repositories/CitaRepository";
 import UsuarioRepository from "@/repositories/UsuarioRepository";
+import ServicesRepository from "@/repositories/ServicesRepository";
 
 export default {
   data() {
     return {
       barberos: [],
+      servicios: [], // Lista de servicios disponibles
       cita: {
         barberoId: null,
+        servicioId: null, // Nuevo campo para seleccionar servicio
         fechaHora: null,
         clienteId: 1, // Obtener cliente autenticado dinámicamente
       },
@@ -76,6 +93,7 @@ export default {
   },
   mounted() {
     this.cargarBarberos();
+    this.cargarServicios();
     this.establecerMinFecha(); // Establecer la fecha mínima permitida
   },
   methods: {
@@ -84,6 +102,14 @@ export default {
         this.barberos = await UsuarioRepository.findAllBarberos(); // Cargar solo barberos
       } catch (error) {
         console.error("Error cargando barberos", error);
+      }
+    },
+
+    async cargarServicios() {
+      try {
+        this.servicios = await ServicesRepository.findAllServicios(); // Cargar servicios
+      } catch (error) {
+        console.error("Error cargando servicios", error);
       }
     },
 
@@ -107,6 +133,17 @@ export default {
 
     // Confirma la fecha seleccionada y la asigna al objeto cita
     confirmarFecha() {
+      const ahora = new Date();
+      const fechaSeleccionada = new Date(this.fechaHoraSeleccionada);
+
+      if (
+        fechaSeleccionada.getTime() < ahora.getTime() &&
+        fechaSeleccionada.toDateString() === ahora.toDateString()
+      ) {
+        alert("La hora seleccionada no está permitida.");
+        return;
+      }
+
       if (this.fechaHoraSeleccionada) {
         this.cita.fechaHora = this.fechaHoraSeleccionada;
         this.fechaHoraTemporal = new Date(
@@ -123,37 +160,31 @@ export default {
     },
 
     // Reserva la cita
-    async reservarCita() {
-      try {
-        console.log("Datos de la cita:", this.cita);
-        await CitaRepository.reservarCita(this.cita);
-        alert("Cita reservada con éxito");
-      } catch (error) {
-        console.error("Error reservando cita", error);
-        alert("Hubo un error al reservar la cita");
-      }
-    },
+// Reserva la cita con el barbero y servicio correctamente formateados
+async reservarCita() {
+  try {
+    // Asegurarse de que el barbero y el servicio se asignan correctamente a la cita
+    const citaData = {
+      barbero: { id: this.cita.barberoId, autoridad: "EMPLEADO" }, // Incluye la autoridad del barbero
+      servicio: { id: this.cita.servicioId }, // Asigna el servicio
+      fechaHora: this.cita.fechaHora, // Asigna la fecha y hora
+      cliente: { id: this.cita.clienteId, autoridad: "CLIENTE" }, // Incluye la autoridad del cliente
+    };
+
+    console.log("Datos de la cita que se enviarán:", citaData);
+    await CitaRepository.reservarCita(citaData);
+    alert("Cita reservada con éxito");
+  } catch (error) {
+    console.error("Error reservando cita", error);
+    alert("Hubo un error al reservar la cita");
+  }
+}
+,
   },
 };
 </script>
 
 <style scoped>
-/* Asegura que las secciones están organizadas verticalmente */
-div {
-  margin-bottom: 20px;
-}
-label {
-  display: block;
-  margin-bottom: 5px;
-}
-select,
-input,
-button {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-}
-
 /* Estilos para el calendario */
 .calendario-container {
   position: absolute;

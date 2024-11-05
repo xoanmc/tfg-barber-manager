@@ -1,6 +1,17 @@
 import HTTP from "@/common/http"; // Asegúrate de tener configurado un helper HTTP para manejar las peticiones
 
 export default {
+  // Obtener citas del cliente autenticado
+  async getMisCitas() {
+    try {
+      const response = await HTTP.get("/citas/cliente/mis-citas");
+      return response.data;
+    } catch (error) {
+      console.error("Error obteniendo las citas del cliente", error);
+      throw error;
+    }
+  },
+
   // Obtener citas de un cliente por su ID
   async getCitasCliente(clienteId) {
     try {
@@ -26,7 +37,7 @@ export default {
   // Reservar una nueva cita
   async reservarCita(cita) {
     try {
-      const response = await HTTP.post("/reservar", cita);
+      const response = await HTTP.post("/citas/reservar", cita);
       return response.data;
     } catch (error) {
       console.error("Error reservando la cita", error);
