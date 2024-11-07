@@ -11,9 +11,9 @@ import javax.persistence.*;
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @Entity
 @JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,  // Usamos un campo para definir el tipo
-        include = JsonTypeInfo.As.PROPERTY,  // El discriminador será una propiedad en el JSON
-        property = "autoridad"  // Usaremos el campo 'autoridad' para diferenciar las subclases
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "autoridad"  // Esto permite diferenciar los subtipos
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Cliente.class, name = "CLIENTE"),

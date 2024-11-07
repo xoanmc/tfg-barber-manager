@@ -20,12 +20,13 @@
       <div v-if="citas.length > 0">
         <ul>
           <li v-for="cita in citas" :key="cita.id">
-            {{ cita.fechaHora }} - {{ cita.servicio.nombre }} - Estado: {{ cita.estado }}
+            <!-- Mostrar fecha, hora, servicio, estado y nombre del cliente -->
+            {{ cita.fechaHora }} - {{ cita.servicio.nombre }} - Cliente: {{ cita.cliente.nombre }} - Estado: {{ cita.estado }}
             <div v-if="cita.estado !== 'Confirmada'">
               <button @click="confirmarCita(cita.id)">Confirmar</button>
               <button @click="rechazarCita(cita.id)">Rechazar</button>
             </div>
-            <button @click="modificarCita(cita)">Modificar</button>
+            <!-- <button @click="modificarCita(cita)">Modificar</button> -->
           </li>
         </ul>
       </div>

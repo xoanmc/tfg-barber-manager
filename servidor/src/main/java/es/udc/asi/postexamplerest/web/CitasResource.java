@@ -3,6 +3,7 @@ package es.udc.asi.postexamplerest.web;
 import es.udc.asi.postexamplerest.model.domain.Cita;
 import es.udc.asi.postexamplerest.model.domain.Usuario;
 import es.udc.asi.postexamplerest.model.service.CitasService;
+import es.udc.asi.postexamplerest.security.CustomUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -50,9 +51,16 @@ public class CitasResource {
   @GetMapping("/barbero/mis-citas")
   @PreAuthorize("hasAuthority('EMPLEADO')")
   public List<Cita> getCitasBarbero(Authentication authentication) {
-    Usuario barbero = (Usuario) authentication.getPrincipal();
-    return citasService.findCitasByBarbero(barbero.getId());
+    Object principal = authentication.getPrincipal();
+    if (principal instanceof CustomUserPrincipal) {
+      CustomUserPrincipal customUserPrincipal = (CustomUserPrincipal) principal;
+      Usuario barbero = customUserPrincipal.getUsuario();
+      return citasService.findCitasByBarbero(barbero.getId());
+    } else {
+      throw new IllegalStateException("El principal no es de tipo CustomUserPrincipal. Tipo actual: " + principal.getClass().getName());
+    }
   }
+
 
   // Confirmar una cita (por el barbero)
   @PostMapping("/confirmar/{citaId}")

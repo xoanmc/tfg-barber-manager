@@ -15,7 +15,6 @@ public class Cita {
 
   @ManyToOne
   private Usuario barbero;  // Relación con el barbero
-
   private LocalDateTime fechaHora; // Fecha y hora de la cita
   private String estado;  // Ej: "Confirmada", "Pendiente", "Cancelada"
 

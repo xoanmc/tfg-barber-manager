@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: es.udc.asi.postexamplerest.PostExampleRestApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.796 s - in es.udc.asi.postexamplerest.PostExampleRestApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.033 s - in es.udc.asi.postexamplerest.PostExampleRestApplicationTests

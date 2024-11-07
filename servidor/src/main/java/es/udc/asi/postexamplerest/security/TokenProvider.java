@@ -7,12 +7,15 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import es.udc.asi.postexamplerest.model.domain.Usuario;
+import es.udc.asi.postexamplerest.model.repository.UsuarioDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import es.udc.asi.postexamplerest.config.Properties;
@@ -27,6 +30,10 @@ public class TokenProvider {
   @Autowired
   private Properties properties;
 
+  @Autowired
+  private UsuarioDao userDAO;
+
+
   public boolean validateToken(String authToken) {
     SecretKey key = Keys.hmacShaKeyFor(properties.getJwtSecretKey().getBytes(StandardCharsets.UTF_8));
     Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken);
@@ -36,11 +43,23 @@ public class TokenProvider {
   public Authentication getAuthentication(String authToken) {
     SecretKey key = Keys.hmacShaKeyFor(properties.getJwtSecretKey().getBytes(StandardCharsets.UTF_8));
     Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken).getBody();
+
+    // Obtén el login (nombre de usuario) desde el token
+    String login = claims.getSubject();
     GrantedAuthority authority = new SimpleGrantedAuthority(claims.get(AUTHORITIES_KEY).toString());
     Collection<GrantedAuthority> authorities = Collections.singleton(authority);
-    User user = new User(claims.getSubject(), "", authorities);
-    return new UsernamePasswordAuthenticationToken(user, authToken, authorities);
+
+    // Carga el usuario desde la base de datos
+    Usuario usuario = userDAO.findByLogin(login); // Asegúrate de tener acceso a `userDAO` en esta clase
+    if (usuario == null) {
+      throw new UsernameNotFoundException("User " + login + " not found");
+    }
+
+    // Envuelve `Usuario` en `CustomUserPrincipal`
+    CustomUserPrincipal customUserPrincipal = new CustomUserPrincipal(usuario);
+    return new UsernamePasswordAuthenticationToken(customUserPrincipal, authToken, authorities);
   }
+
 
   public String createToken(Authentication authentication) {
     String authority = authentication.getAuthorities().iterator().next().toString();

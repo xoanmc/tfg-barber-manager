@@ -30,8 +30,10 @@ public class CitasService {
   }
 
   public List<Cita> findCitasByBarbero(Long barberoId) {
+    System.out.println("Buscando citas para barbero con ID: " + barberoId);
     return citasDao.findCitasByBarbero(barberoId);
   }
+
 
   @Transactional(readOnly = false)
   public Cita reservarCita(Cita cita) {

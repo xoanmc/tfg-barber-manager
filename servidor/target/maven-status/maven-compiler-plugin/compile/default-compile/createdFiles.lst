@@ -27,6 +27,7 @@ es\udc\asi\postexamplerest\model\domain\Empleado.class
 es\udc\asi\postexamplerest\config\SecurityConfiguration.class
 es\udc\asi\postexamplerest\web\exceptions\ResourceException.class
 es\udc\asi\postexamplerest\model\repository\CitaDaoJpa.class
+es\udc\asi\postexamplerest\security\CustomUserPrincipal.class
 es\udc\asi\postexamplerest\model\domain\About.class
 es\udc\asi\postexamplerest\model\repository\UsuarioDao.class
 es\udc\asi\postexamplerest\config\SecurityConfiguration$1.class

@@ -14,13 +14,11 @@ public interface CitaDao {
   // Eliminar una cita por su ID
   void delete(Cita cita);
 
-  // Buscar una cita por su ID
   Cita findById(Long id);
 
-  // Cambiar nombres para que coincidan con el servicio
-  List<Cita> findCitasByCliente(Long clienteId);  // Cambiar el nombre
+  List<Cita> findCitasByCliente(Long clienteId);
 
-  List<Cita> findCitasByBarbero(Long barberoId);  // Cambiar el nombre
+  List<Cita> findCitasByBarbero(Long barberoId);
 
   // Buscar citas de un barbero en un rango de fechas
   List<Cita> findCitasByBarberoIdAndFechaHoraBetween(Long barberoId, LocalDateTime inicio, LocalDateTime fin);
