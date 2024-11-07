@@ -44,7 +44,7 @@ public class UserResource {
   }
 
   // Endpoint para subir la imagen de perfil
-  @PostMapping("/upload/{userId}")
+  /*@PostMapping("/upload/{userId}")
   public ResponseEntity<Map<String, String>> uploadProfileImage(@PathVariable Long userId, @RequestParam("file") MultipartFile file) {
     if (file.isEmpty()) {
       return ResponseEntity.badRequest().body(null); // Si el archivo está vacío, retornar un error
@@ -60,7 +60,7 @@ public class UserResource {
     } catch (IOException e) {
       return ResponseEntity.status(500).body(null);
     }
-  }
+  }*/
 
   // Endpoint para obtener la URL de la imagen de perfil
   @GetMapping("/profile-image/{userId}")

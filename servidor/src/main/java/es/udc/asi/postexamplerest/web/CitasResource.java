@@ -21,22 +21,15 @@ public class CitasResource {
   @GetMapping("/cliente/mis-citas")
   @PreAuthorize("hasAuthority('CLIENTE')")
   public List<Cita> getMisCitas(Authentication authentication) {
-    Usuario cliente = (Usuario) authentication.getPrincipal(); // Obtener el cliente autenticado
-    return citasService.findCitasByCliente(cliente.getId()); // Llamar a la función con el ID del cliente
+    Usuario cliente = (Usuario) authentication.getPrincipal();
+    return citasService.findCitasByCliente(cliente.getId());
   }
 
-  // Obtener citas de un cliente
+  // Obtener citas de un cliente específico
   @GetMapping("/cliente/{clienteId}")
   @PreAuthorize("hasAuthority('CLIENTE')")
   public List<Cita> getCitasCliente(@PathVariable Long clienteId) {
     return citasService.findCitasByCliente(clienteId);
-  }
-
-  // Obtener citas de un barbero
-  @GetMapping("/barbero/{barberoId}")
-  @PreAuthorize("hasAuthority('BARBERO')")
-  public List<Cita> getCitasBarbero(@PathVariable Long barberoId) {
-    return citasService.findCitasByBarbero(barberoId);
   }
 
   // Reservar una nueva cita
@@ -46,17 +39,39 @@ public class CitasResource {
     return citasService.reservarCita(cita);
   }
 
-  // Confirmar una cita (por el barbero)
-  @PostMapping("/confirmar/{citaId}")
-  @PreAuthorize("hasAuthority('BARBERO')")
-  public void confirmarCita(@PathVariable Long citaId) {
-    citasService.confirmarCita(citaId);
-  }
-
   // Cancelar una cita
   @DeleteMapping("/cancelar/{citaId}")
   @PreAuthorize("hasAuthority('CLIENTE')")
   public void cancelarCita(@PathVariable Long citaId) {
     citasService.cancelarCita(citaId);
+  }
+
+  // Obtener citas del barbero autenticado
+  @GetMapping("/barbero/mis-citas")
+  @PreAuthorize("hasAuthority('EMPLEADO')")
+  public List<Cita> getCitasBarbero(Authentication authentication) {
+    Usuario barbero = (Usuario) authentication.getPrincipal();
+    return citasService.findCitasByBarbero(barbero.getId());
+  }
+
+  // Confirmar una cita (por el barbero)
+  @PostMapping("/confirmar/{citaId}")
+  @PreAuthorize("hasAuthority('EMPLEADO')")
+  public void confirmarCita(@PathVariable Long citaId) {
+    citasService.confirmarCita(citaId);
+  }
+
+  // Rechazar una cita (por el barbero)
+  @PostMapping("/rechazar/{citaId}")
+  @PreAuthorize("hasAuthority('EMPLEADO')")
+  public void rechazarCita(@PathVariable Long citaId) {
+    citasService.rechazarCita(citaId);
+  }
+
+  // Modificar una cita (por el barbero)
+  @PutMapping("/modificar/{citaId}")
+  @PreAuthorize("hasAuthority('EMPLEADO')")
+  public Cita modificarCita(@PathVariable Long citaId, @RequestBody Cita citaModificada) {
+    return citasService.modificarCita(citaId, citaModificada);
   }
 }

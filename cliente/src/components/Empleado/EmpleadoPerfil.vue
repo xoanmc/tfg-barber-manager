@@ -1,23 +1,36 @@
 <template>
-  <div class="container">
-    <div v-if="user">
-      <!-- Usar el componente ProfileImage para la imagen de perfil -->
+  <div v-if="user">
+    <div class="container">
       <ProfileImage
         :userId="myuser.id"
         :currentImageUrl="imageUrl"
         @imageUploaded="handleImageUpload"
       />
-
-      <!-- Mostrar Detalles del Empleado -->
       <h1>{{ myuser.nombre + " " + myuser.apellido }}</h1>
       <h4>{{ "login: " + myuser.login }}</h4>
       <h4>{{ "telefono: " + myuser.telefono }}</h4>
       <h2>{{ "puesto: " + myuser.puesto }}</h2>
-
-      <!-- Nuevo Bloque: Información del Empleado -->
+      
       <div class="employee-info">
         <h4>{{ "Horario: " + myuser.horario }}</h4>
         <h4>{{ "Descripción: " + myuser.descripcion }}</h4>
+      </div>
+
+      <h2>Citas Programadas</h2>
+      <div v-if="citas.length > 0">
+        <ul>
+          <li v-for="cita in citas" :key="cita.id">
+            {{ cita.fechaHora }} - {{ cita.servicio.nombre }} - Estado: {{ cita.estado }}
+            <div v-if="cita.estado !== 'Confirmada'">
+              <button @click="confirmarCita(cita.id)">Confirmar</button>
+              <button @click="rechazarCita(cita.id)">Rechazar</button>
+            </div>
+            <button @click="modificarCita(cita)">Modificar</button>
+          </li>
+        </ul>
+      </div>
+      <div v-else>
+        No tienes citas programadas.
       </div>
     </div>
   </div>
@@ -26,6 +39,7 @@
 <script>
 import AccountRepository from "@/repositories/AccountRepository";
 import UsuarioRepository from "@/repositories/UsuarioRepository";
+import CitaRepository from "@/repositories/CitaRepository";
 import ProfileImage from "@/components/ProfileImage";
 
 export default {
@@ -36,11 +50,15 @@ export default {
     return {
       myuser: null,
       user: null,
-      imageUrl: "", // URL de la imagen de perfil
+      citas: [],
+      imageUrl: "",
     };
   },
-  mounted() {
-    this.fetchData();
+  async mounted() {
+    await this.fetchData();
+    if (this.myuser && this.myuser.id) {
+      await this.fetchCitas();
+    }
   },
   methods: {
     async fetchData() {
@@ -48,20 +66,38 @@ export default {
         this.myuser = await AccountRepository.getAccount();
         this.user = await UsuarioRepository.findOne(this.myuser.id);
 
-        // Obtener la imagen de perfil desde la base de datos si existe
         if (this.user && this.user.profileImageUrl) {
           this.imageUrl = this.user.profileImageUrl;
         }
-
-        // Obtener los nuevos datos (horario y descripción)
-        if (this.user && this.user.horario) {
-          this.myuser.horario = this.user.horario;
-        }
-        if (this.user && this.user.descripcion) {
-          this.myuser.descripcion = this.user.descripcion;
-        }
       } catch (err) {
-        console.error(err);
+        console.error("Error cargando el perfil del usuario", err);
+      }
+    },
+    async fetchCitas() {
+      try {
+        this.citas = await CitaRepository.getCitasBarbero();
+      } catch (error) {
+        console.error("Error obteniendo las citas del barbero", error);
+      }
+    },
+    async confirmarCita(citaId) {
+      try {
+        await CitaRepository.confirmarCita(citaId);
+        await this.fetchCitas();
+        alert("Cita confirmada exitosamente");
+      } catch (error) {
+        console.error("Error confirmando cita", error);
+        alert("Error al confirmar la cita");
+      }
+    },
+    async rechazarCita(citaId) {
+      try {
+        await CitaRepository.rechazarCita(citaId);
+        await this.fetchCitas();
+        alert("Cita rechazada exitosamente");
+      } catch (error) {
+        console.error("Error rechazando cita", error);
+        alert("Error al rechazar la cita");
       }
     },
     handleImageUpload(newImageUrl) {
@@ -70,21 +106,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.employee-info {
-  margin-top: 20px;
-  text-align: left;
-}
-
-.employee-info h4 {
-  margin: 5px 0;
-}
-</style>

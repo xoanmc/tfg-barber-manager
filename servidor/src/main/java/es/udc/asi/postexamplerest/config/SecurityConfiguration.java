@@ -24,6 +24,12 @@ import es.udc.asi.postexamplerest.security.MyUnauthorizedEntryPoint;
 import es.udc.asi.postexamplerest.security.MyUserDetailsService;
 import es.udc.asi.postexamplerest.security.TokenProvider;
 
+/*
+Establece los permisos y protege los endpoints de la API para que solo
+los usuarios autorizados puedan acceder a los recursos
+y realizar acciones específicas.
+*/
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)

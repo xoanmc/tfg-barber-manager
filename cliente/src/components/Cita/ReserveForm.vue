@@ -159,8 +159,7 @@ export default {
       this.mostrarCalendario = false;
     },
 
-    // Reserva la cita
-// Reserva la cita con el barbero y servicio correctamente formateados
+// Reserva la cita
 async reservarCita() {
   try {
     // Asegurarse de que el barbero y el servicio se asignan correctamente a la cita

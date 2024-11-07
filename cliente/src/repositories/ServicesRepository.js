@@ -1,6 +1,17 @@
 import HTTP from "@/common/http";
 
 export default {
+
+  async getServicios() {
+    try {
+      const response = await HTTP.get("/servicios");  // Cambia la ruta según tu backend
+      return response.data;  // Devuelve la lista de servicios
+    } catch (error) {
+      console.error("Error obteniendo servicios:", error);
+      throw error;
+    }
+  },
+  
   // Método para obtener todos los servicios disponibles
   async findAllServicios() {
     try {

@@ -41,7 +41,7 @@ public class UsuarioService {
   private PasswordEncoder passwordEncoder;
 
   // Método para subir imagen de perfil
-  @Transactional(readOnly = false)
+  /*@Transactional(readOnly = false)
   public String uploadProfileImage(Long userId, MultipartFile file) throws NotFoundException, IOException {
     Usuario usuario = usuarioDAO.findById(userId);
     if (usuario == null) {
@@ -58,7 +58,7 @@ public class UsuarioService {
     usuarioDAO.update(usuario); // Actualizar el usuario con la nueva imagen
 
     return usuario.getProfileImageUrl();
-  }
+  }*/
 
   // Método para obtener la URL de la imagen de perfil
   public String getProfileImageUrl(Long userId) throws NotFoundException {

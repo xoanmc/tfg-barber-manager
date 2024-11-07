@@ -11,6 +11,7 @@ export default {
       throw error;
     }
   },
+  
 
   // Obtener citas de un cliente por su ID
   async getCitasCliente(clienteId) {
@@ -23,16 +24,17 @@ export default {
     }
   },
 
-  // Obtener citas de un barbero por su ID
-  async getCitasBarbero(barberoId) {
+  // Obtener citas de un barbero
+  async getCitasBarbero() {
     try {
-      const response = await HTTP.get(`/citas/barbero/${barberoId}`);
+      const response = await HTTP.get("/citas/barbero/mis-citas");
       return response.data;
     } catch (error) {
       console.error("Error obteniendo citas del barbero", error);
       throw error;
     }
   },
+  
 
   // Reservar una nueva cita
   async reservarCita(cita) {
@@ -61,6 +63,25 @@ export default {
       await HTTP.delete(`/citas/cancelar/${citaId}`);
     } catch (error) {
       console.error("Error cancelando la cita", error);
+      throw error;
+    }
+  },
+
+  async rechazarCita(citaId) {
+    try {
+      await HTTP.post(`/citas/rechazar/${citaId}`);
+    } catch (error) {
+      console.error("Error rechazando la cita", error);
+      throw error;
+    }
+  },
+
+  async modificarCita(citaId, citaModificada) {
+    try {
+      const response = await HTTP.put(`/citas/modificar/${citaId}`, citaModificada);
+      return response.data;
+    } catch (error) {
+      console.error("Error modificando la cita", error);
       throw error;
     }
   },

@@ -1,3 +1,4 @@
+es\udc\asi\postexamplerest\model\domain\Estado.class
 es\udc\asi\postexamplerest\web\util\GlobalControllerExceptionHandler.class
 es\udc\asi\postexamplerest\web\AboutResource.class
 es\udc\asi\postexamplerest\web\exceptions\IdAndBodyNotMatchingOnUpdateException.class
