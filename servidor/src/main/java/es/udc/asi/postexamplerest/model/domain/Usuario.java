@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.hibernate.annotations.DiscriminatorOptions;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorOptions(force = true)
@@ -25,32 +26,38 @@ public abstract class Usuario {
   @SequenceGenerator(name = "user_generator", sequenceName = "user_seq")
   private Long id;
 
-  @Column(unique = true)
+  @Column(unique = true, nullable = false)
   private String login;
 
-  @Column
+  @Column(nullable = false)
   private String nombre;
 
-  @Column
+  @Column(nullable = false)
   private String apellido;
 
-  @Column
+  @Column(nullable = false, unique = true)
+  private String email; // Nuevo campo para email
+
+  @Column(nullable = false)
   private String telefono;
 
-  @Column
-  private int edad;
-
+  @Column(nullable = false)
   private String password;
 
   @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
   private AutoridadUsuario autoridad;
 
   @Column
   private String profileImageUrl;
 
+  @Column(name = "fecha_nacimiento") // Nueva columna para la fecha de nacimiento
+  private LocalDate fechaNacimiento;
 
   public Usuario() {
   }
+
+  // Getters y Setters
 
   public Long getId() {
     return id;
@@ -74,6 +81,14 @@ public abstract class Usuario {
 
   public void setApellido(String apellido) {
     this.apellido = apellido;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   public String getTelefono() {
@@ -108,19 +123,19 @@ public abstract class Usuario {
     this.autoridad = autoridad;
   }
 
-  public int getEdad() {
-    return edad;
-  }
-
-  public void setEdad(int edad) {
-    this.edad = edad;
-  }
-
   public String getProfileImageUrl() {
     return profileImageUrl;
   }
 
   public void setProfileImageUrl(String profileImageUrl) {
     this.profileImageUrl = profileImageUrl;
+  }
+
+  public LocalDate getFechaNacimiento() {
+    return fechaNacimiento;
+  }
+
+  public void setFechaNacimiento(LocalDate fechaNacimiento) {
+    this.fechaNacimiento = fechaNacimiento;
   }
 }

@@ -1,4 +1,4 @@
-# asi-2223-vue-example
+# tfg-barber
 
 ## Project setup
 ```

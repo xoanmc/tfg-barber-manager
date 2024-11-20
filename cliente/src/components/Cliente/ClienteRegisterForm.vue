@@ -4,7 +4,7 @@
     <form @submit.prevent="handleRegister">
       <div class="form-group">
         <label for="name">Nombre:</label>
-        <input type="text" id="name" v-model="nombre" class="form-control" />
+        <input type="text" id="name" v-model="nombre" class="form-control" required />
       </div>
       <div class="form-group">
         <label for="apellido">Apellido:</label>
@@ -17,22 +17,11 @@
         />
       </div>
       <div class="form-group">
-        <label for="telefono">Teléfono:</label>
+        <label for="email">Email:</label>
         <input
-          type="text"
-          id="telefono"
-          v-model="telefono"
-          class="form-control"
-          required
-        />
-      </div>
-      <div class="form-group">
-        <label for="edad">Edad:</label>
-        <input
-          type="number"
-          id="edad"
-          v-model.number="edad"
-          min="0"
+          type="email"
+          id="email"
+          v-model="email"
           class="form-control"
           required
         />
@@ -69,6 +58,33 @@
           required
         />
       </div>
+      <div class="form-group">
+        <label>Fecha de Nacimiento:</label>
+        <div class="fecha-nacimiento">
+          <select v-model="fechaNacimiento.dia" required>
+            <option disabled value="">Día</option>
+            <option v-for="dia in 31" :key="dia" :value="dia">{{ dia }}</option>
+          </select>
+          <select v-model="fechaNacimiento.mes" required>
+            <option disabled value="">Mes</option>
+            <option v-for="(mes, index) in meses" :key="index" :value="index + 1">{{ mes }}</option>
+          </select>
+          <select v-model="fechaNacimiento.anio" required>
+            <option disabled value="">Año</option>
+            <option v-for="anio in anios" :key="anio" :value="anio">{{ anio }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="telefono">Teléfono:</label>
+        <input
+          type="text"
+          id="telefono"
+          v-model="telefono"
+          class="form-control"
+          required
+        />
+      </div>
       <div class="d-grid gap-2">
         <button class="btn btn-primary">Registrarse</button>
       </div>
@@ -87,12 +103,28 @@ export default {
     return {
       nombre: "",
       apellido: "",
+      email: "", // Nuevo campo
       telefono: "",
-      edad: 0, // Campo edad
+      fechaNacimiento: { dia: "", mes: "", anio: "" }, // Fecha de nacimiento
       login: "",
       password: "",
       confirmPassword: "",
       error: "",
+      meses: [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre",
+      ],
+      anios: Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i), // Últimos 100 años
     };
   },
   methods: {
@@ -103,22 +135,24 @@ export default {
           return;
         }
 
+        const fechaNacimiento = `${this.fechaNacimiento.anio}-${this.fechaNacimiento.mes}-${this.fechaNacimiento.dia}`;
         await auth.registerCliente({
           nombre: this.nombre,
           apellido: this.apellido,
+          email: this.email, // Nuevo campo
           telefono: this.telefono,
-          edad: this.edad, // Incluimos el campo edad
+          fechaNacimiento, // Formateo de fecha
           login: this.login,
           password: this.password,
         });
 
-        // autenticar automáticamente después del registro
+        // Autenticar automáticamente después del registro
         await auth.login({
           login: this.login,
           password: this.password,
         });
 
-        this.$router.push("/"); // redirige a la página principal tras del registro
+        this.$router.push("/"); // Redirige a la página principal tras el registro
       } catch (e) {
         console.error(e);
         if (e.response?.data?.message) {
@@ -144,6 +178,12 @@ export default {
 
 .form-group {
   margin-bottom: 15px;
+}
+
+.fecha-nacimiento select {
+  margin-right: 5px;
+  padding: 5px;
+  font-size: 1em;
 }
 
 .btn-primary {

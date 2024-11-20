@@ -20,6 +20,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 
 /**
  * Este controlador maneja la autenticación, registro y gestión de cuentas de usuarios.
@@ -42,7 +43,7 @@ public class AccountResource {
   public JWTToken authenticate(@Valid @RequestBody LoginDTO loginDTO) throws CredentialsAreNotValidException {
 
     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-      loginDTO.getLogin(), loginDTO.getPassword());
+            loginDTO.getLogin(), loginDTO.getPassword());
     try {
       Authentication authentication = authenticationManager.authenticate(authenticationToken);
       SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -59,32 +60,54 @@ public class AccountResource {
     return userService.getCurrentUserWithAuthority();
   }
 
-  // Registro de cliente con los campos adicionales (edad, citas, primera cita)
+  // Registro de cliente con los nuevos campos (fechaNacimiento y email)
   @PostMapping("/register")
   public void registerClient(@Valid @RequestBody AccountDTO account,
                              Errors errors)
-    throws UserLoginExistsException, RequestBodyNotValidException {
+          throws UserLoginExistsException, RequestBodyNotValidException {
     if (errors.hasErrors()) {
       throw new RequestBodyNotValidException(errors);
     }
 
-    // Registro del cliente con edad, citas y primera cita
-    userService.registerCliente(account.getNombre(), account.getApellido(), account.getTelefono(), account.getEdad(), account.getLogin(),
-      account.getPassword(), account.getCitas(), account.getPrimeraCita());
+
+    // Registro del cliente con los nuevos campos
+    userService.registerCliente(
+            account.getNombre(),
+            account.getApellido(),
+            account.getTelefono(),
+            account.getFechaNacimiento(),
+            account.getEmail(), // Nuevo campo email
+            account.getLogin(),
+            account.getPassword(),
+            account.getCitas(),
+            account.getPrimeraCita()
+    );
   }
 
-  // Contratar empleado con los nuevos campos (edad, salario, contrato, horario, descripción)
+  // Contratar empleado con los nuevos campos (fechaNacimiento, email, salario, contrato, horario, descripción)
   @PostMapping("/contratar")
   public void registerEmpleado(@Valid @RequestBody AccountDTO account,
                                Errors errors)
-    throws UserLoginExistsException, RequestBodyNotValidException {
+          throws UserLoginExistsException, RequestBodyNotValidException {
     if (errors.hasErrors()) {
       throw new RequestBodyNotValidException(errors);
     }
 
+
     // Registro del empleado con los nuevos campos
-    userService.registerEmpleado(account.getNombre(), account.getApellido(), account.getTelefono(), account.getEdad(),
-      account.getPuesto(), account.getLogin(), account.getPassword(),
-      account.getSalario(), account.getContrato(), account.getHorario(), account.getDescripcion());
+    userService.registerEmpleado(
+            account.getNombre(),
+            account.getApellido(),
+            account.getTelefono(),
+            account.getFechaNacimiento(), // Nuevo campo fechaNacimiento
+            account.getPuesto(),
+            account.getEmail(), // Nuevo campo email
+            account.getLogin(),
+            account.getPassword(),
+            account.getSalario(),
+            account.getContrato(),
+            account.getHorario(),
+            account.getDescripcion()
+    );
   }
 }

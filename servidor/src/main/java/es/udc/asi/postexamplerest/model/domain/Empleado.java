@@ -27,7 +27,6 @@ public class Empleado extends Usuario {
     setAutoridad(AutoridadUsuario.EMPLEADO);
   }
 
-  // Getters y Setters para todos los campos
 
   public String getPuesto() {
     return puesto;

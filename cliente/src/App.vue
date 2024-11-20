@@ -2,26 +2,14 @@
   <nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid">
       <router-link class="navbar-brand" to="/home"> TFG Barber </router-link>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link
-              to="/home"
-              class="nav-link"
-              aria-current="page"
-              active-class="active"
-            >
+            <router-link to="/home" class="nav-link" aria-current="page" active-class="active">
               Inicio
             </router-link>
           </li>
@@ -45,10 +33,9 @@
               Tendencias
             </router-link>
           </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/reserve" active-class="active">
-              Reservar
-            </router-link>
+          <!-- Botón para reservar con verificación -->
+          <li class="nav-item" v-if="isCliente">
+            <a class="nav-link" @click="irAReservar">Reservar</a>
           </li>
         </ul>
         <ul class="navbar-nav">
@@ -66,29 +53,17 @@
             <a class="nav-link" @click="desautenticarme()"> Logout </a>
           </li>
           <li class="nav-item" v-if="isCliente">
-            <router-link
-              class="nav-link"
-              to="/perfilCliente"
-              active-class="active"
-            >
+            <router-link class="nav-link" to="/perfilCliente" active-class="active">
               Perfil
             </router-link>
           </li>
           <li class="nav-item" v-if="isEmpleado">
-            <router-link
-              class="nav-link"
-              to="/perfilEmpleado"
-              active-class="active"
-            >
+            <router-link class="nav-link" to="/perfilEmpleado" active-class="active">
               Perfil
             </router-link>
           </li>
           <li class="nav-item" v-if="isJefe">
-            <router-link
-              class="nav-link"
-              to="/perfilJefe"
-              active-class="active"
-            >
+            <router-link class="nav-link" to="/perfilJefe" active-class="active">
               Perfil
             </router-link>
           </li>
@@ -127,6 +102,14 @@ export default {
     desautenticarme() {
       auth.logout();
       this.$router.push("/login");
+    },
+    irAReservar() {
+      // Verificación de autenticación antes de redirigir
+      if (this.isLogged) {
+        this.$router.push("/reserve");
+      } else {
+        this.$router.push("/login");
+      }
     },
   },
 };

@@ -3,6 +3,7 @@ package es.udc.asi.postexamplerest.model.domain;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import java.time.LocalDate;
 
 @Entity
 @DiscriminatorValue("CLIENTE")
@@ -18,7 +19,7 @@ public class Cliente extends Usuario {
     setAutoridad(AutoridadUsuario.CLIENTE);
   }
 
-  // Getters y setters
+
   public int getCitas() {
     return citas;
   }
@@ -34,4 +35,5 @@ public class Cliente extends Usuario {
   public void setPrimeraCita(String primeraCita) {
     this.primeraCita = primeraCita;
   }
+
 }

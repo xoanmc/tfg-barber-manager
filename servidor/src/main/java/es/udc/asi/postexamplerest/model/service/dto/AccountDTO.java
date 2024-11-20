@@ -6,12 +6,14 @@ import es.udc.asi.postexamplerest.model.domain.Cliente;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 
 public class AccountDTO {
 
   private Long id;
   private String nombre;
   private String apellido;
+  private String email; // Nuevo campo para email
   private String telefono;
   @NotEmpty
   private String login;
@@ -20,13 +22,13 @@ public class AccountDTO {
   private String password;
   private String puesto;
   private String autoridad;
-  private int edad;
+  private LocalDate fechaNacimiento; // Reemplaza al campo edad
   private double salario;
   private String contrato;
-  private int citas;  // Nuevo campo para el número de citas del cliente
-  private String primeraCita;  // Nuevo campo para la fecha de la primera cita
-  private String horario;  // Nuevo campo para empleados
-  private String descripcion;  // Nuevo campo para empleados
+  private int citas;  // Campo para el número de citas del cliente
+  private String primeraCita;  // Campo para la fecha de la primera cita
+  private String horario;  // Campo para empleados
+  private String descripcion;  // Campo para empleados
 
   public AccountDTO() {
   }
@@ -35,23 +37,24 @@ public class AccountDTO {
     this.id = usuario.getId();
     this.nombre = usuario.getNombre();
     this.apellido = usuario.getApellido();
+    this.email = usuario.getEmail(); // Asignar el nuevo campo email
     this.telefono = usuario.getTelefono();
     this.login = usuario.getLogin();
-    this.edad = usuario.getEdad();
 
-    // Si es un empleado, llenamos los campos adicionales para empleados
+    // Si es un cliente, llenamos campos adicionales para clientes
+    if (usuario instanceof Cliente cliente) {
+      this.citas = cliente.getCitas();
+      this.primeraCita = cliente.getPrimeraCita();
+      this.fechaNacimiento = cliente.getFechaNacimiento(); // Campo fechaNacimiento
+    }
+
+    // Si es un empleado, llenamos campos adicionales para empleados
     if (usuario instanceof Empleado empleado) {
       this.puesto = empleado.getPuesto();
       this.salario = empleado.getSalario();
       this.contrato = empleado.getContrato();
-      this.horario = empleado.getHorario();  // Asignar el campo de horario
-      this.descripcion = empleado.getDescripcion();  // Asignar el campo de descripción
-    }
-
-    // Si es un cliente, llenamos los campos adicionales para clientes
-    if (usuario instanceof Cliente cliente) {
-      this.citas = cliente.getCitas();
-      this.primeraCita = cliente.getPrimeraCita();
+      this.horario = empleado.getHorario();
+      this.descripcion = empleado.getDescripcion();
     }
 
     this.autoridad = usuario.getAutoridad().name();
@@ -81,6 +84,14 @@ public class AccountDTO {
 
   public void setApellido(String apellido) {
     this.apellido = apellido;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   public String getTelefono() {
@@ -123,12 +134,12 @@ public class AccountDTO {
     this.autoridad = autoridad;
   }
 
-  public int getEdad() {
-    return edad;
+  public LocalDate getFechaNacimiento() {
+    return fechaNacimiento;
   }
 
-  public void setEdad(int edad) {
-    this.edad = edad;
+  public void setFechaNacimiento(LocalDate fechaNacimiento) {
+    this.fechaNacimiento = fechaNacimiento;
   }
 
   public double getSalario() {

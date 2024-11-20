@@ -2,6 +2,8 @@ package es.udc.asi.postexamplerest.model.service.dto;
 
 import es.udc.asi.postexamplerest.model.domain.Cliente;
 
+import java.time.LocalDate;
+
 public class ClienteListaDTO {
 
   private Long id;
@@ -9,7 +11,7 @@ public class ClienteListaDTO {
   private String nombre;
   private String apellido;
   private String telefono;
-  private int edad;
+  private LocalDate fechaNacimiento; // Cambiado de edad a fechaNacimiento
   private int citas;
   private String primeraCita; // Fecha de la primera cita en formato String
 
@@ -19,7 +21,7 @@ public class ClienteListaDTO {
     this.nombre = cliente.getNombre();
     this.apellido = cliente.getApellido();
     this.telefono = cliente.getTelefono();
-    this.edad = cliente.getEdad();
+    this.fechaNacimiento = cliente.getFechaNacimiento(); // Asignar fechaNacimiento
     this.citas = cliente.getCitas();
     this.primeraCita = cliente.getPrimeraCita();
   }
@@ -65,12 +67,12 @@ public class ClienteListaDTO {
     this.telefono = telefono;
   }
 
-  public int getEdad() {
-    return edad;
+  public LocalDate getFechaNacimiento() {
+    return fechaNacimiento;
   }
 
-  public void setEdad(int edad) {
-    this.edad = edad;
+  public void setFechaNacimiento(LocalDate fechaNacimiento) {
+    this.fechaNacimiento = fechaNacimiento;
   }
 
   public int getCitas() {

@@ -9,8 +9,8 @@ import es.udc.asi.postexamplerest.model.exception.OperationNotAllowed;
 import es.udc.asi.postexamplerest.model.exception.UserLoginExistsException;
 import es.udc.asi.postexamplerest.model.repository.UsuarioDao;
 import es.udc.asi.postexamplerest.model.service.dto.AccountDTO;
-import es.udc.asi.postexamplerest.model.service.dto.EmpleadoListaDTO;
 import es.udc.asi.postexamplerest.model.service.dto.ClienteListaDTO;
+import es.udc.asi.postexamplerest.model.service.dto.EmpleadoListaDTO;
 import es.udc.asi.postexamplerest.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,12 +18,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,26 +36,6 @@ public class UsuarioService {
   @Autowired
   private PasswordEncoder passwordEncoder;
 
-  // Método para subir imagen de perfil
-  /*@Transactional(readOnly = false)
-  public String uploadProfileImage(Long userId, MultipartFile file) throws NotFoundException, IOException {
-    Usuario usuario = usuarioDAO.findById(userId);
-    if (usuario == null) {
-      throw new NotFoundException(userId.toString(), Usuario.class);
-    }
-
-    // Guardar la imagen en el servidor
-    String fileName = file.getOriginalFilename();
-    Path filePath = Paths.get(uploadPath, fileName);
-    Files.copy(file.getInputStream(), filePath);
-
-    // Actualizar la URL de la imagen en el usuario
-    usuario.setProfileImageUrl(filePath.toString());
-    usuarioDAO.update(usuario); // Actualizar el usuario con la nueva imagen
-
-    return usuario.getProfileImageUrl();
-  }*/
-
   // Método para obtener la URL de la imagen de perfil
   public String getProfileImageUrl(Long userId) throws NotFoundException {
     Usuario usuario = usuarioDAO.findById(userId);
@@ -73,22 +49,22 @@ public class UsuarioService {
   @PreAuthorize("hasAuthority('JEFE')")
   public List<ClienteListaDTO> findAllClientes() {
     return usuarioDAO.findAllClientes().stream()
-      .map(cliente -> new ClienteListaDTO(cliente))
-      .collect(Collectors.toList());
+            .map(cliente -> new ClienteListaDTO(cliente))
+            .collect(Collectors.toList());
   }
 
   @PreAuthorize("hasAuthority('JEFE')")
   public List<EmpleadoListaDTO> findAllEmpleados() {
     return usuarioDAO.findAllEmpleados().stream()
-      .map(empleado -> new EmpleadoListaDTO(empleado))
-      .collect(Collectors.toList());
+            .map(empleado -> new EmpleadoListaDTO(empleado))
+            .collect(Collectors.toList());
   }
 
   @PreAuthorize("hasAuthority('CLIENTE')")
   public List<EmpleadoListaDTO> findAllBarberos() {
     return usuarioDAO.findAllBarberos().stream()
-      .map(empleado -> new EmpleadoListaDTO(empleado))
-      .collect(Collectors.toList());
+            .map(empleado -> new EmpleadoListaDTO(empleado))
+            .collect(Collectors.toList());
   }
 
   // Método para buscar un usuario por ID
@@ -100,9 +76,11 @@ public class UsuarioService {
     return new AccountDTO(usuario);
   }
 
-  // Registrar Cliente con la edad, citas y primera cita
+  // Registrar Cliente con fecha de nacimiento
   @Transactional(readOnly = false)
-  public void registerCliente(String nombre, String apellido, String telefono, int edad, String login, String password, int citas, String primeraCita) throws UserLoginExistsException {
+  public void registerCliente(String nombre, String apellido, String telefono, LocalDate fechaNacimiento,
+                              String email, String login, String password, int citas, String primeraCita)
+          throws UserLoginExistsException {
     if (usuarioDAO.findByLogin(login) != null) {
       throw new UserLoginExistsException(login);
     }
@@ -113,7 +91,8 @@ public class UsuarioService {
     cliente.setNombre(nombre);
     cliente.setApellido(apellido);
     cliente.setTelefono(telefono);
-    cliente.setEdad(edad);
+    cliente.setFechaNacimiento(fechaNacimiento); // Establecer fecha de nacimiento
+    cliente.setEmail(email); // Establecer email
     cliente.setLogin(login);
     cliente.setPassword(encryptedPassword);
     cliente.setCitas(citas); // Número total de citas del cliente
@@ -122,9 +101,12 @@ public class UsuarioService {
     usuarioDAO.create(cliente);
   }
 
-  // Registrar Empleado con los campos edad, salario, contrato, horario y descripción
+  // Registrar Empleado con todos los campos adicionales
   @Transactional(readOnly = false)
-  public void registerEmpleado(String nombre, String apellido, String telefono, int edad, String puesto, String login, String password, double salario, String contrato, String horario, String descripcion) throws UserLoginExistsException {
+  public void registerEmpleado(String nombre, String apellido, String telefono, LocalDate fechaNacimiento,
+                               String puesto, String email, String login, String password, double salario,
+                               String contrato, String horario, String descripcion)
+          throws UserLoginExistsException {
     if (usuarioDAO.findByLogin(login) != null) {
       throw new UserLoginExistsException(login);
     }
@@ -135,21 +117,23 @@ public class UsuarioService {
     empleado.setNombre(nombre);
     empleado.setApellido(apellido);
     empleado.setTelefono(telefono);
-    empleado.setEdad(edad);
-    empleado.setPuesto(puesto);
+    empleado.setFechaNacimiento(fechaNacimiento); // Establecer fecha de nacimiento
+    empleado.setEmail(email); // Establecer email
     empleado.setLogin(login);
     empleado.setPassword(encryptedPassword);
+    empleado.setPuesto(puesto);
     empleado.setSalario(salario);
     empleado.setContrato(contrato);
-    empleado.setHorario(horario);  // Nuevo campo horario
-    empleado.setDescripcion(descripcion);  // Nuevo campo descripción
+    empleado.setHorario(horario); // Nuevo campo horario
+    empleado.setDescripcion(descripcion); // Nuevo campo descripción
 
     usuarioDAO.create(empleado);
   }
 
   // Registrar Jefe
   @Transactional(readOnly = false)
-  public void registerJefe(String nombre, String apellido, String telefono, String login, String password) throws UserLoginExistsException {
+  public void registerJefe(String nombre, String apellido, String telefono, String email, String login,
+                           String password) throws UserLoginExistsException {
     if (usuarioDAO.findByLogin(login) != null) {
       throw new UserLoginExistsException(login);
     }
@@ -160,6 +144,7 @@ public class UsuarioService {
     jefe.setNombre(nombre);
     jefe.setApellido(apellido);
     jefe.setTelefono(telefono);
+    jefe.setEmail(email); // Establecer email
     jefe.setLogin(login);
     jefe.setPassword(encryptedPassword);
 
