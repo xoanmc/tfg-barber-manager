@@ -12,10 +12,12 @@
     "@vuepic/vue-datepicker": "^10.0.0",
     "axios": "^1.5.0",
     "bootstrap": "^5.3.1",
+    "flatpickr": "^4.6.13",
     "sass": "^1.67.0",
     "sass-loader": "^13.3.2",
     "tfg-barber": "file:",
     "vue": "^3.3.4",
+    "vue-flatpickr-component": "^11.0.5",
     "vue-router": "^4.2.4",
     "vue3-datepicker": "^0.4.0"
   },

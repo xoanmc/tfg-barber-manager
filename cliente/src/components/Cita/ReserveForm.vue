@@ -1,11 +1,11 @@
 <template>
   <div class="reserva-container">
-    <h2>Reserva tu Cita</h2>
+    <h2 class="reserva-titulo">Reserva tu Cita</h2>
 
     <!-- Lista de barberos disponibles -->
-    <div>
-      <label for="barbero">Selecciona Barbero:</label>
-      <select v-model="cita.barberoId" id="barbero">
+    <div class="form-group">
+      <label for="barbero" class="form-label">Selecciona Barbero:</label>
+      <select v-model="cita.barberoId" id="barbero" class="form-select">
         <option
           v-for="barbero in barberos"
           :key="barbero.id"
@@ -17,9 +17,9 @@
     </div>
 
     <!-- Lista de servicios disponibles -->
-    <div>
-      <label for="servicio">Selecciona Servicio:</label>
-      <select v-model="cita.servicioId" id="servicio">
+    <div class="form-group">
+      <label for="servicio" class="form-label">Selecciona Servicio:</label>
+      <select v-model="cita.servicioId" id="servicio" class="form-select">
         <option
           v-for="servicio in servicios"
           :key="servicio.id"
@@ -30,17 +30,13 @@
       </select>
     </div>
 
-    <!-- Calendario siempre visible con selector de fecha y hora -->
+    <!-- Calendario con Flatpickr -->
     <div class="datepicker-container">
-      <label for="fecha">Selecciona Fecha y Hora:</label>
-      <Datepicker
+      <label for="fecha" class="form-label">Selecciona Fecha y Hora:</label>
+      <flat-pickr
         v-model="cita.fechaHora"
-        :inline="true"
-        :disable-dates="disablePastDates"
-        :enable-time-picker="true"
-        :time-picker-options="{ step: 30 }"
-        :translations="translations"
-        :format="'yyyy-MM-dd HH:mm'"
+        :config="flatpickrConfig"
+        class="datepicker"
       />
     </div>
 
@@ -54,15 +50,16 @@
 </template>
 
 <script>
+import flatPickr from "vue-flatpickr-component";
+import "flatpickr/dist/flatpickr.css";
+import { Spanish } from "flatpickr/dist/l10n/es.js";
 import CitaRepository from "@/repositories/CitaRepository";
 import UsuarioRepository from "@/repositories/UsuarioRepository";
 import ServicesRepository from "@/repositories/ServicesRepository";
-import Datepicker from "@vuepic/vue-datepicker";
-import "@vuepic/vue-datepicker/dist/main.css";
 
 export default {
   components: {
-    Datepicker,
+    flatPickr,
   },
   data() {
     return {
@@ -74,28 +71,15 @@ export default {
         fechaHora: null,
         clienteId: 1,
       },
-      translations: {
-        weekDays: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
-        months: [
-          "Enero",
-          "Febrero",
-          "Marzo",
-          "Abril",
-          "Mayo",
-          "Junio",
-          "Julio",
-          "Agosto",
-          "Septiembre",
-          "Octubre",
-          "Noviembre",
-          "Diciembre",
-        ],
-        pickHour: "Selecciona Hora",
-        pickMinute: "Selecciona Minutos",
-        pickSecond: "Selecciona Segundos",
-        ok: "Aceptar",
-        cancel: "Cancelar",
-      },
+      flatpickrConfig: {
+  enableTime: true,
+  dateFormat: "Y-m-d\\TH:i:S", // Cambiar formato a 'yyyy-MM-ddTHH:mm:ss'
+  minDate: "today",
+  time_24hr: true,
+  minuteIncrement: 30,
+  locale: Spanish,
+}
+
     };
   },
   mounted() {
@@ -119,9 +103,6 @@ export default {
         console.error("Error cargando servicios", error);
       }
     },
-    disablePastDates(date) {
-      return date < new Date();
-    },
     async reservarCita() {
       try {
         const citaData = {
@@ -142,8 +123,9 @@ export default {
 };
 </script>
 
+
 <style scoped>
-/* Estilo para centrar contenedor principal */
+/* Contenedor principal */
 .reserva-container {
   display: flex;
   flex-direction: column;
@@ -151,34 +133,85 @@ export default {
   justify-content: center;
   height: 100vh;
   text-align: center;
+  font-family: Arial, sans-serif;
+  padding: 20px;
 }
 
-/* Centra contenedor del calendario */
+/* Estilo del título principal */
+.reserva-titulo {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  margin-top: 10px;
+  color: #333;
+}
+
+/* Ajustes para pantallas más pequeñas (menos de 768px) */
+@media (max-width: 768px) {
+  .reserva-titulo {
+    margin-top: 20px; /* Aumentar margen superior en pantallas pequeñas */
+    font-size: 1.8rem; /* Reducir el tamaño del texto para móviles */
+  }
+}
+
+/* Ajustes para pantallas muy pequeñas (menos de 480px) */
+@media (max-width: 480px) {
+  .reserva-titulo {
+    margin-top: 30px; /* Espacio adicional para teléfonos más compactos */
+    font-size: 1.6rem; /* Ajustar tamaño del texto aún más */
+  }
+}
+
+/* Estilo para etiquetas de formularios */
+.form-label {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+  text-align: left;
+  color: #444;
+}
+
+/* Grupo de formulario */
+.form-group {
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 400px;
+  text-align: left;
+}
+
+/* Campos de selección */
+.form-select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenedor del calendario */
 .datepicker-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   margin: 20px 0;
 }
 
-/* botón esté alineado correctamente */
+/* Estilo del botón */
 button {
   background-color: #007bff;
   color: white;
-  padding: 10px 15px;
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 20px;
+  font-size: 1rem;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
 
 button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
-}
-
-.datepicker {
-  max-width: 400px;
-  margin: 0 auto;
 }
 </style>
