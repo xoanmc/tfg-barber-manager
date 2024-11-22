@@ -30,6 +30,7 @@ es\udc\asi\postexamplerest\model\repository\CitaDaoJpa.class
 es\udc\asi\postexamplerest\security\CustomUserPrincipal.class
 es\udc\asi\postexamplerest\model\domain\About.class
 es\udc\asi\postexamplerest\model\repository\UsuarioDao.class
+es\udc\asi\postexamplerest\model\service\MailService.class
 es\udc\asi\postexamplerest\config\SecurityConfiguration$1.class
 es\udc\asi\postexamplerest\security\MyUnauthorizedEntryPoint.class
 es\udc\asi\postexamplerest\web\HomePageInfoResource.class

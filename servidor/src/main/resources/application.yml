@@ -2,9 +2,9 @@ spring:
   datasource:
     host: localhost
     port: 5432
-    database: asi
-    username: asi
-    password: asi
+    database: tfg
+    username: tfg
+    password: tfg
     url: jdbc:postgresql://${spring.datasource.host}:${spring.datasource.port}/${spring.datasource.database}
     hikari:
       connectionTimeout: 20000
@@ -22,14 +22,25 @@ spring:
       encoding: UTF-8
       mode: always
       continue-on-error: false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: tu-email@gmail.com
+    password: tu-contraseña
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 logging:
   pattern:
     console: "%d{yyyy-MMM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg %n"
   level:
-   root: INFO
-   com.example.demo: DEBUG
-   org.hibernate.SQL: DEBUG
-   org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    root: INFO
+    com.example.demo: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 properties:
   clientHost: http://localhost:1234
   jwtSecretKey: iuabhsdfiasddfioasddfoa7w9earh324982h397239u23badswfasd2i9238723

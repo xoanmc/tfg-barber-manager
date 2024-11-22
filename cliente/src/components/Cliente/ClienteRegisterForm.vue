@@ -1,92 +1,65 @@
 <template>
-  <div class="register-container">
-    <h2>Registrarse</h2>
-    <form @submit.prevent="handleRegister">
+  <div class="reserva-container">
+    <h2 class="reserva-titulo">Formulario de Registro</h2>
+    <form @submit.prevent="handleRegister" class="register-form">
+      <!-- Nombre -->
       <div class="form-group">
-        <label for="name">Nombre:</label>
+        <label for="name" class="form-label">Nombre:</label>
         <input type="text" id="name" v-model="nombre" class="form-control" required />
       </div>
+
+      <!-- Apellido -->
       <div class="form-group">
-        <label for="apellido">Apellido:</label>
-        <input
-          type="text"
-          id="apellido"
-          v-model="apellido"
-          class="form-control"
-          required
-        />
+        <label for="apellido" class="form-label">Apellido:</label>
+        <input type="text" id="apellido" v-model="apellido" class="form-control" required />
       </div>
+
+      <!-- Email -->
       <div class="form-group">
-        <label for="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          v-model="email"
-          class="form-control"
-          required
-        />
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" id="email" v-model="email" class="form-control" required />
       </div>
+
+      <!-- Login -->
       <div class="form-group">
-        <label for="login">Login:</label>
-        <input
-          type="text"
-          id="login"
-          v-model="login"
-          class="form-control"
-          minlength="4"
-          required
-        />
+        <label for="login" class="form-label">Login:</label>
+        <input type="text" id="login" v-model="login" class="form-control" minlength="4" required />
       </div>
+
+      <!-- Contraseña -->
       <div class="form-group">
-        <label for="password">Contraseña:</label>
-        <input
-          type="password"
-          id="password"
-          v-model="password"
-          class="form-control"
-          minlength="4"
-          required
-        />
+        <label for="password" class="form-label">Contraseña:</label>
+        <input type="password" id="password" v-model="password" class="form-control" minlength="4" required />
       </div>
+
+      <!-- Fecha de Nacimiento -->
       <div class="form-group">
-        <label for="confirmPassword">Confirmar Contraseña:</label>
-        <input
-          type="password"
-          id="confirmPassword"
-          v-model="confirmPassword"
-          class="form-control"
-          required
-        />
-      </div>
-      <div class="form-group">
-        <label>Fecha de Nacimiento:</label>
+        <label class="form-label">Fecha de Nacimiento:</label>
         <div class="fecha-nacimiento">
-          <select v-model="fechaNacimiento.dia" required>
+          <select v-model="fechaNacimiento.dia" class="form-control-select" required>
             <option disabled value="">Día</option>
             <option v-for="dia in 31" :key="dia" :value="dia">{{ dia }}</option>
           </select>
-          <select v-model="fechaNacimiento.mes" required>
+          <select v-model="fechaNacimiento.mes" class="form-control-select" required>
             <option disabled value="">Mes</option>
             <option v-for="(mes, index) in meses" :key="index" :value="index + 1">{{ mes }}</option>
           </select>
-          <select v-model="fechaNacimiento.anio" required>
+          <select v-model="fechaNacimiento.anio" class="form-control-select" required>
             <option disabled value="">Año</option>
             <option v-for="anio in anios" :key="anio" :value="anio">{{ anio }}</option>
           </select>
         </div>
       </div>
+
+      <!-- Teléfono -->
       <div class="form-group">
-        <label for="telefono">Teléfono:</label>
-        <input
-          type="text"
-          id="telefono"
-          v-model="telefono"
-          class="form-control"
-          required
-        />
+        <label for="telefono" class="form-label">Teléfono:</label>
+        <input type="text" id="telefono" v-model="telefono" class="form-control" required />
       </div>
-      <div class="d-grid gap-2">
-        <button class="btn btn-primary">Registrarse</button>
+
+      <!-- Botón Registrarse -->
+      <div>
+        <button class="btn-primary" type="submit">Registrarse</button>
       </div>
     </form>
     <div v-if="error" class="error-message">
@@ -103,12 +76,11 @@ export default {
     return {
       nombre: "",
       apellido: "",
-      email: "", // Nuevo campo
+      email: "",
       telefono: "",
-      fechaNacimiento: { dia: "", mes: "", anio: "" }, // Fecha de nacimiento
+      fechaNacimiento: { dia: "", mes: "", anio: "" },
       login: "",
       password: "",
-      confirmPassword: "",
       error: "",
       meses: [
         "Enero",
@@ -124,35 +96,25 @@ export default {
         "Noviembre",
         "Diciembre",
       ],
-      anios: Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i), // Últimos 100 años
+      anios: Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i),
     };
   },
   methods: {
     async handleRegister() {
       try {
-        if (this.password !== this.confirmPassword) {
-          this.error = "Las contraseñas no coinciden.";
-          return;
-        }
-
         const fechaNacimiento = `${this.fechaNacimiento.anio}-${this.fechaNacimiento.mes}-${this.fechaNacimiento.dia}`;
         await auth.registerCliente({
           nombre: this.nombre,
           apellido: this.apellido,
-          email: this.email, // Nuevo campo
+          email: this.email,
           telefono: this.telefono,
-          fechaNacimiento, // Formateo de fecha
+          fechaNacimiento,
           login: this.login,
           password: this.password,
         });
 
-        // Autenticar automáticamente después del registro
-        await auth.login({
-          login: this.login,
-          password: this.password,
-        });
-
-        this.$router.push("/"); // Redirige a la página principal tras el registro
+        alert("Registro exitoso. Por favor, revisa tu correo para confirmar tu cuenta.");
+        this.$router.push("/");
       } catch (e) {
         console.error(e);
         if (e.response?.data?.message) {
@@ -167,26 +129,84 @@ export default {
 </script>
 
 <style scoped>
-.register-container {
-  max-width: 400px;
-  margin: auto;
+/* Contenedor principal */
+.reserva-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: Arial, sans-serif;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Título */
+.reserva-titulo {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+/* Estilo de los campos de formulario */
+.form-label {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+  text-align: left;
+  color: #444;
 }
 
 .form-group {
-  margin-bottom: 15px;
-}
-
-.fecha-nacimiento select {
-  margin-right: 5px;
-  padding: 5px;
-  font-size: 1em;
-}
-
-.btn-primary {
+  margin-bottom: 20px;
   width: 100%;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para los select en "Fecha de Nacimiento" */
+.form-control-select {
+  width: 32%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  margin-right: 2%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-control-select:last-child {
+  margin-right: 0;
+}
+
+/* Botón */
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
 }
 </style>
