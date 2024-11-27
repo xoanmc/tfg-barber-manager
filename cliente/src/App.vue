@@ -39,32 +39,33 @@
           </li>
         </ul>
         <ul class="navbar-nav">
+          <li class="nav-item dropdown" v-if="store.state.user.logged">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="userDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Hola, {{ store.state.user.login }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li>
+                <a class="dropdown-item" @click="irAPerfil">Perfil</a>
+              </li>
+              <li>
+                <a class="dropdown-item" @click="verMisCitas">Mis citas</a>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a class="dropdown-item text-danger" @click="desautenticarme">Cerrar Sesión</a>
+              </li>
+            </ul>
+          </li>
           <li class="nav-item" v-if="!store.state.user.logged">
             <router-link class="nav-link" to="/login" active-class="active">
-              Login
-            </router-link>
-          </li>
-          <li class="nav-item" v-if="!store.state.user.logged">
-            <router-link class="nav-link" to="/register" active-class="active">
-              Registrarse
-            </router-link>
-          </li>
-          <li class="nav-item" v-if="store.state.user.logged">
-            <a class="nav-link" @click="desautenticarme()"> Logout </a>
-          </li>
-          <li class="nav-item" v-if="isCliente">
-            <router-link class="nav-link" to="/perfilCliente" active-class="active">
-              Perfil
-            </router-link>
-          </li>
-          <li class="nav-item" v-if="isEmpleado">
-            <router-link class="nav-link" to="/perfilEmpleado" active-class="active">
-              Perfil
-            </router-link>
-          </li>
-          <li class="nav-item" v-if="isJefe">
-            <router-link class="nav-link" to="/perfilJefe" active-class="active">
-              Perfil
+              Iniciar Sesión
             </router-link>
           </li>
         </ul>
@@ -111,6 +112,19 @@ export default {
         this.$router.push("/login");
       }
     },
+    irAPerfil() {
+      if (this.isCliente) {
+        this.$router.push("/perfilCliente");
+      } else if (this.isEmpleado) {
+        this.$router.push("/perfilEmpleado");
+      } else if (this.isJefe) {
+        this.$router.push("/perfilJefe");
+      }
+    },
+    verMisCitas() {
+      // Redirigir al usuario a su página de citas
+      this.$router.push("/misCitas");
+    },
   },
 };
 </script>
@@ -134,8 +148,14 @@ nav a {
   cursor: pointer;
 }
 
-/* fixing popper warning in bootstrap 5.2: */
+/* Estilo para el dropdown */
 .dropdown-menu {
-  margin-top: 0px !important;
+  right: 0;
+  left: auto;
+}
+
+.dropdown-item.text-danger:hover {
+  background-color: #f8d7da;
+  color: #721c24;
 }
 </style>

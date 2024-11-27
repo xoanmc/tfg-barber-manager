@@ -1,4 +1,3 @@
-vue
 <template>
   <div class="form-container">
     <form class="form" @submit.prevent="autenticarme">
@@ -15,11 +14,11 @@ vue
           v-model="auxPass"
         />
       </span>
-      <span class="span"><a href="#">Forgot password?</a></span>
+      <span class="span"><a href="#">¿Olvidaste tu contraseña?</a></span>
       <input class="submit" type="submit" value="Log in" />
       <span class="span"
-        >Don't have an account?
-        <router-link to="/register">Sign up</router-link></span
+        >¿Todavía no eres miembro?
+        <router-link to="/register">Regístrate</router-link></span
       >
     </form>
   </div>

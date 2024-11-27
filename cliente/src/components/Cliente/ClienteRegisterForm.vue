@@ -1,6 +1,6 @@
 <template>
   <div class="reserva-container">
-    <h2 class="reserva-titulo">Formulario de Registro</h2>
+    <h2 class="reserva-titulo">¡Hazte miembro!</h2>
     <form @submit.prevent="handleRegister" class="register-form">
       <!-- Nombre -->
       <div class="form-group">
