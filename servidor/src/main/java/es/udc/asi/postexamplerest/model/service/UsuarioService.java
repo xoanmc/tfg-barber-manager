@@ -76,10 +76,9 @@ public class UsuarioService {
     return new AccountDTO(usuario);
   }
 
-  // Registrar Cliente con fecha de nacimiento
   @Transactional(readOnly = false)
-  public void registerCliente(String nombre, String apellido, String telefono, LocalDate fechaNacimiento,
-                              String email, String login, String password, int citas, String primeraCita)
+  public Cliente registerCliente(String nombre, String apellido, String telefono, LocalDate fechaNacimiento,
+                                 String email, String login, String password, int citas, String primeraCita)
           throws UserLoginExistsException {
     if (usuarioDAO.findByLogin(login) != null) {
       throw new UserLoginExistsException(login);
@@ -91,14 +90,29 @@ public class UsuarioService {
     cliente.setNombre(nombre);
     cliente.setApellido(apellido);
     cliente.setTelefono(telefono);
-    cliente.setFechaNacimiento(fechaNacimiento); // Establecer fecha de nacimiento
-    cliente.setEmail(email); // Establecer email
+    cliente.setFechaNacimiento(fechaNacimiento);
+    cliente.setEmail(email);
     cliente.setLogin(login);
     cliente.setPassword(encryptedPassword);
-    cliente.setCitas(citas); // Número total de citas del cliente
-    cliente.setPrimeraCita(primeraCita); // Fecha de la primera cita
+    cliente.setCitas(citas);
+    cliente.setPrimeraCita(primeraCita);
+    cliente.setActivo(false); // Cliente inactivo hasta que confirme el correo
 
     usuarioDAO.create(cliente);
+    return cliente; // Retornamos el cliente creado para usar su ID en la confirmación
+  }
+
+  // Confirmar registro del cliente mediante token
+  @Transactional(readOnly = false)
+  public void confirmarRegistro(String userId) throws NotFoundException {
+    Usuario usuario = usuarioDAO.findById(Long.parseLong(userId));
+    if (usuario == null || !(usuario instanceof Cliente)) {
+      throw new NotFoundException(userId, Usuario.class);
+    }
+
+    Cliente cliente = (Cliente) usuario;
+    cliente.setActivo(true); // Activamos al cliente
+    usuarioDAO.update(cliente);
   }
 
   // Registrar Empleado con todos los campos adicionales

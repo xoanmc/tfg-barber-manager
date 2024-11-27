@@ -42,7 +42,7 @@ public class DatabaseLoader {
             "perez",
             "+34 22222222",
             LocalDate.of(1988, 5, 15), // Fecha de nacimiento
-            "pepe.perez@gmail.com", // Email
+            "pepe11.perez91@gmail.com", // Email
             "pepe",
             "pepe",
             5,

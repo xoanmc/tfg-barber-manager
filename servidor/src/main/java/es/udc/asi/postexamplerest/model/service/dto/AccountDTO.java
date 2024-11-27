@@ -1,5 +1,6 @@
 package es.udc.asi.postexamplerest.model.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import es.udc.asi.postexamplerest.model.domain.Usuario;
 import es.udc.asi.postexamplerest.model.domain.Empleado;
 import es.udc.asi.postexamplerest.model.domain.Cliente;
@@ -22,7 +23,10 @@ public class AccountDTO {
   private String password;
   private String puesto;
   private String autoridad;
+
+  @JsonFormat(pattern = "yyyy-MM-dd") // Formato explícito para la fecha
   private LocalDate fechaNacimiento; // Reemplaza al campo edad
+
   private double salario;
   private String contrato;
   private int citas;  // Campo para el número de citas del cliente

@@ -1,5 +1,9 @@
 package es.udc.asi.postexamplerest.security;
 
+/*
+* Estructura para enviar el token en una respuesta HTTP
+* */
+
 public class JWTToken {
   private String token;
 

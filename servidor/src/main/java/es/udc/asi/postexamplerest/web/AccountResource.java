@@ -1,6 +1,11 @@
 package es.udc.asi.postexamplerest.web;
 
+import es.udc.asi.postexamplerest.config.Properties;
+import es.udc.asi.postexamplerest.model.domain.Cliente;
+import es.udc.asi.postexamplerest.model.domain.Usuario;
+import es.udc.asi.postexamplerest.model.exception.NotFoundException;
 import es.udc.asi.postexamplerest.model.exception.UserLoginExistsException;
+import es.udc.asi.postexamplerest.model.service.MailService;
 import es.udc.asi.postexamplerest.model.service.UsuarioService;
 import es.udc.asi.postexamplerest.model.service.dto.AccountDTO;
 import es.udc.asi.postexamplerest.model.service.dto.LoginDTO;
@@ -39,6 +44,12 @@ public class AccountResource {
   @Autowired
   private UsuarioService userService;
 
+  @Autowired
+  private MailService mailService;
+
+  @Autowired
+  private Properties properties;
+
   @PostMapping("/authenticate")
   public JWTToken authenticate(@Valid @RequestBody LoginDTO loginDTO) throws CredentialsAreNotValidException {
 
@@ -60,48 +71,66 @@ public class AccountResource {
     return userService.getCurrentUserWithAuthority();
   }
 
-  // Registro de cliente con los nuevos campos (fechaNacimiento y email)
   @PostMapping("/register")
-  public void registerClient(@Valid @RequestBody AccountDTO account,
-                             Errors errors)
+  public void registerClient(@Valid @RequestBody AccountDTO account, Errors errors)
           throws UserLoginExistsException, RequestBodyNotValidException {
     if (errors.hasErrors()) {
       throw new RequestBodyNotValidException(errors);
     }
 
-
-    // Registro del cliente con los nuevos campos
-    userService.registerCliente(
+    // Registro del cliente
+    Cliente cliente = userService.registerCliente(
             account.getNombre(),
             account.getApellido(),
             account.getTelefono(),
             account.getFechaNacimiento(),
-            account.getEmail(), // Nuevo campo email
+            account.getEmail(),
             account.getLogin(),
             account.getPassword(),
             account.getCitas(),
             account.getPrimeraCita()
     );
+
+    // Generar token de verificación
+    String token = tokenProvider.createEmailVerificationToken(cliente.getId().toString());
+
+    // Crear enlace de verificación
+    String verificationUrl = properties.getClientHost() + "/confirm-email?token=" + token;
+
+    // Enviar correo de confirmación
+    String subject = "Confirma tu registro en Barbería";
+    String text = "Haz clic en el siguiente enlace para confirmar tu registro: " + verificationUrl;
+
+    mailService.sendConfirmationEmail(cliente.getEmail(), subject, text);
   }
 
-  // Contratar empleado con los nuevos campos (fechaNacimiento, email, salario, contrato, horario, descripción)
+  @GetMapping("/confirm-email")
+  public String confirmEmail(@RequestParam("token") String token) {
+    try {
+      String userId = tokenProvider.validateEmailVerificationToken(token);
+      userService.confirmarRegistro(userId);
+      return "Registro confirmado exitosamente.";
+    } catch (IllegalArgumentException e) {
+      return "El enlace de confirmación es inválido o ha expirado.";
+    } catch (NotFoundException e) {
+      return "Usuario no encontrado.";
+    }
+  }
+
   @PostMapping("/contratar")
-  public void registerEmpleado(@Valid @RequestBody AccountDTO account,
-                               Errors errors)
+  public void registerEmpleado(@Valid @RequestBody AccountDTO account, Errors errors)
           throws UserLoginExistsException, RequestBodyNotValidException {
     if (errors.hasErrors()) {
       throw new RequestBodyNotValidException(errors);
     }
 
-
-    // Registro del empleado con los nuevos campos
     userService.registerEmpleado(
             account.getNombre(),
             account.getApellido(),
             account.getTelefono(),
-            account.getFechaNacimiento(), // Nuevo campo fechaNacimiento
+            account.getFechaNacimiento(),
             account.getPuesto(),
-            account.getEmail(), // Nuevo campo email
+            account.getEmail(),
             account.getLogin(),
             account.getPassword(),
             account.getSalario(),

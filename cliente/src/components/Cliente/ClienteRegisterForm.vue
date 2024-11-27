@@ -102,7 +102,16 @@ export default {
   methods: {
     async handleRegister() {
       try {
-        const fechaNacimiento = `${this.fechaNacimiento.anio}-${this.fechaNacimiento.mes}-${this.fechaNacimiento.dia}`;
+
+        // Limpiar los valores antes de construir la fecha
+        const dia = String(this.fechaNacimiento.dia).padStart(2, '0').trim();
+        const mes = String(this.fechaNacimiento.mes).padStart(2, '0').trim();
+        const anio = String(this.fechaNacimiento.anio).trim();
+
+        // Construir la fecha en formato 'yyyy-MM-dd'
+        const fechaNacimiento = `${anio}-${mes}-${dia}`;
+
+        // Realizar el registro
         await auth.registerCliente({
           nombre: this.nombre,
           apellido: this.apellido,

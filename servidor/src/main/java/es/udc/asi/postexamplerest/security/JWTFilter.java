@@ -20,6 +20,10 @@ import es.udc.asi.postexamplerest.config.Properties;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 
+/*
+* Este filtro se centra en proteger rutas API tras la autenticación
+* */
+
 public class JWTFilter extends GenericFilterBean {
   private final Logger logger = LoggerFactory.getLogger(JWTFilter.class);
 

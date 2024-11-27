@@ -44,12 +44,12 @@ public class TokenProvider {
     SecretKey key = Keys.hmacShaKeyFor(properties.getJwtSecretKey().getBytes(StandardCharsets.UTF_8));
     Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken).getBody();
 
-    // Obtén el login (nombre de usuario) desde el token
+    // Obtiene login (nombre de usuario) desde el token
     String login = claims.getSubject();
     GrantedAuthority authority = new SimpleGrantedAuthority(claims.get(AUTHORITIES_KEY).toString());
     Collection<GrantedAuthority> authorities = Collections.singleton(authority);
 
-    // Carga el usuario desde la base de datos
+    // Carga usuario desde la base de datos
     Usuario usuario = userDAO.findByLogin(login); // Asegúrate de tener acceso a `userDAO` en esta clase
     if (usuario == null) {
       throw new UsernameNotFoundException("User " + login + " not found");
@@ -71,4 +71,28 @@ public class TokenProvider {
     return Jwts.builder().setSubject(authentication.getName()).claim(AUTHORITIES_KEY, authority).signWith(key)
         .setExpiration(validity).compact();
   }
+
+  public String createEmailVerificationToken(String userId) {
+    long now = System.currentTimeMillis();
+    Date expiryDate = new Date(now + 24 * 60 * 60 * 1000); // 24 horas
+
+    SecretKey key = Keys.hmacShaKeyFor(properties.getJwtSecretKey().getBytes(StandardCharsets.UTF_8));
+    return Jwts.builder()
+            .setSubject(userId)
+            .setIssuedAt(new Date(now))
+            .setExpiration(expiryDate)
+            .signWith(key)
+            .compact();
+  }
+
+  public String validateEmailVerificationToken(String token) {
+    try {
+      SecretKey key = Keys.hmacShaKeyFor(properties.getJwtSecretKey().getBytes(StandardCharsets.UTF_8));
+      Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+      return claims.getSubject(); // Devuelve el ID del usuario
+    } catch (Exception e) {
+      throw new IllegalArgumentException("Token inválido o expirado");
+    }
+  }
+
 }

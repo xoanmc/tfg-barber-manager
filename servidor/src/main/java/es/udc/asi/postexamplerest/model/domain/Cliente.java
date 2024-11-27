@@ -15,10 +15,18 @@ public class Cliente extends Usuario {
   @Column
   private String primeraCita; // Fecha de la primera cita
 
+  @Column
+  private boolean activo = false; // Campo específico para validar el registro de clientes
+
   public Cliente() {
     setAutoridad(AutoridadUsuario.CLIENTE);
   }
 
+  public Cliente(int citas, String primeraCita, boolean activo) {
+    this.citas = citas;
+    this.primeraCita = primeraCita;
+    this.activo = activo;
+  }
 
   public int getCitas() {
     return citas;
@@ -35,5 +43,14 @@ public class Cliente extends Usuario {
   public void setPrimeraCita(String primeraCita) {
     this.primeraCita = primeraCita;
   }
+
+  public boolean isActivo() {
+    return activo;
+  }
+
+  public void setActivo(boolean activo) {
+    this.activo = activo;
+  }
+
 
 }
