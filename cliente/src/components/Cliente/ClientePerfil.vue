@@ -1,18 +1,29 @@
 <template>
-  <div v-if="user">
-    <div class="container">
-      <!-- Usar el componente ProfileImage para la imagen de perfil -->
-      <ProfileImage
-        :userId="myuser.id"
-        :currentImageUrl="imageUrl"
-        @imageUploaded="handleImageUpload"
-      />
+  <div class="container py-5">
+    <div v-if="loading" class="text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
 
-      <!-- Mostrar Detalles del Usuario -->
-      <h1>{{ myuser.nombre + " " + myuser.apellido }}</h1>
-      <h4>{{ "login: " + myuser.login }}</h4>
-      <h4>{{ "telefono: " + myuser.telefono }}</h4>
+    <div v-else-if="myuser">
+      <div class="row justify-content-center">
+        <div class="col-lg-6">
+          <div class="card shadow-lg">
+            <div class="card-body text-center">
+              <ProfileImage :userId="myuser.id" :currentImageUrl="imageUrl" @imageUploaded="handleImageUpload" />
+              <h3 class="text-primary mt-3">{{ myuser.nombre + " " + myuser.apellido }}</h3>
+              <p class="text-muted">{{ "@" + myuser.login }}</p>
+              <p><strong>Teléfono:</strong> {{ myuser.telefono }}</p>
+              <button class="btn btn-primary mt-4">Editar Perfil</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <div v-else class="text-center text-danger">
+      <p>Error al cargar los datos del perfil.</p>
     </div>
   </div>
 </template>
@@ -28,40 +39,45 @@ export default {
   },
   data() {
     return {
-      myuser: "",
-      user: "",
-      imageUrl: "", // URL de la imagen de perfil
+      myuser: null,
+      imageUrl: "",
+      loading: true,
     };
   },
-  mounted() {
-    this.fetchData();
+  async mounted() {
+    await this.fetchData();
   },
   methods: {
     async fetchData() {
       try {
         this.myuser = await AccountRepository.getAccount();
-        this.user = await UsuarioRepository.findOne(this.myuser.id);
-
-        // Obtener la imagen de perfil desde la base de datos si existe
-        if (this.user && this.user.profileImageUrl) {
-          this.imageUrl = this.user.profileImageUrl;
-        }
+        const user = await UsuarioRepository.findOne(this.myuser.id);
+        if (user?.profileImageUrl) this.imageUrl = user.profileImageUrl;
       } catch (err) {
-        console.error("Error al obtener los datos del perfil:", err);
+        console.error("Error cargando el perfil del cliente:", err);
+      } finally {
+        this.loading = false;
       }
     },
     handleImageUpload(newImageUrl) {
-      this.imageUrl = newImageUrl; // Actualiza la imagen tras la subida
+      this.imageUrl = newImageUrl;
     },
   },
 };
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.card {
+  border-radius: 15px;
+  background-color: #f8f9fa;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.text-primary {
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 </style>

@@ -1,27 +1,49 @@
 <template>
-  <div class="container">
-    <div v-if="user">
-      <!-- Usar el componente ProfileImage para la imagen de perfil -->
-      <ProfileImage
-        :userId="myuser.id"
-        :currentImageUrl="imageUrl"
-        @imageUploaded="handleImageUpload"
-      />
-
-      <!-- Mostrar Detalles del Jefe -->
-      <h1>{{ myuser.nombre + " " + myuser.apellido }}</h1>
-      <h4>{{ "login: " + myuser.login }}</h4>
-      <h4>{{ "telefono: " + myuser.telefono }}</h4>
-
-      <!-- Botón para acceder a la Gestión de Empleados -->
-      <div class="button-container">
-        <button @click="irAGestionEmpleados">Gestión de Empleados</button>
+  <div class="container py-5">
+    <!-- Mostrar mensaje de carga mientras se obtienen los datos -->
+    <div v-if="loading" class="text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
       </div>
+    </div>
 
-      <!-- Botón para acceder a la Gestión de Clientes -->
-      <div class="button-container">
-        <button @click="irAGestionClientes">Gestión de Clientes</button>
+    <!-- Mostrar datos del perfil una vez cargados -->
+    <div v-else-if="myuser">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card shadow-lg">
+            <div class="card-body text-center">
+              <ProfileImage
+                :userId="myuser.id"
+                :currentImageUrl="imageUrl"
+                @imageUploaded="handleImageUpload"
+              />
+              <h3 class="text-primary mt-3">{{ myuser.nombre + " " + myuser.apellido }}</h3>
+              <p class="text-muted">{{ "@" + myuser.login }}</p>
+              <p><strong>Teléfono:</strong> {{ myuser.telefono }}</p>
+
+              <div class="d-flex justify-content-around mt-4">
+                <button class="btn btn-outline-primary" @click="irAGestionEmpleados">
+                  Gestión Empleados
+                </button>
+                <button class="btn btn-outline-secondary" @click="irAGestionClientes">
+                  Gestión Clientes
+                </button>
+                <button class="btn btn-outline-success" @click="irAGestionPromociones">
+                  Gestión Promociones
+                </button>
+              </div>
+
+              <button class="btn btn-primary mt-4">Editar Perfil</button>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+
+    <!-- Mostrar mensaje de error si no se pudo cargar el perfil -->
+    <div v-else class="text-center text-danger">
+      <p>No se pudo cargar la información del perfil.</p>
     </div>
   </div>
 </template>
@@ -37,69 +59,65 @@ export default {
   },
   data() {
     return {
-      myuser: null,
-      user: null,
+      myuser: null, // Datos del jefe
       imageUrl: "", // URL de la imagen de perfil
+      loading: true, // Estado de carga
     };
   },
-  mounted() {
-    this.fetchData();
+  async mounted() {
+    await this.fetchData();
   },
   methods: {
     async fetchData() {
       try {
+        // Obtener los datos del jefe autenticado
         this.myuser = await AccountRepository.getAccount();
-        this.user = await UsuarioRepository.findOne(this.myuser.id);
+        const user = await UsuarioRepository.findOne(this.myuser.id);
 
-        // Obtener la imagen de perfil desde la base de datos si existe
-        if (this.user && this.user.profileImageUrl) {
-          this.imageUrl = this.user.profileImageUrl;
+        // Cargar la URL de la imagen de perfil si existe
+        if (user?.profileImageUrl) {
+          this.imageUrl = user.profileImageUrl;
         }
       } catch (err) {
-        console.error(err);
+        console.error("Error al cargar el perfil del jefe:", err);
+      } finally {
+        this.loading = false; // Finalizar la carga independientemente del resultado
       }
     },
     handleImageUpload(newImageUrl) {
       this.imageUrl = newImageUrl;
     },
-    // Método para redirigir a la gestión de empleados
     irAGestionEmpleados() {
       this.$router.push("/users/empleados");
     },
-    // Método para redirigir a la gestión de clientes
     irAGestionClientes() {
       this.$router.push("/users/clientes");
+    },
+    irAGestionPromociones() {
+      this.$router.push("/promotions");
     },
   },
 };
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.button-container {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-button {
-  background-color: #4d4c4c;
-  color: #fff;
-  padding: 10px 20px;
+.card {
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
+  border-radius: 15px;
+  background-color: #f8f9fa;
 }
-
-button:hover {
-  background-color: #3dad6c;
+.card-body {
+  padding: 2rem;
+}
+.text-primary {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.btn {
+  width: 30%;
+}
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
 }
 </style>

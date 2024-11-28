@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid">
-      <router-link class="navbar-brand" to="/home"> TFG Barber </router-link>
+      <router-link class="navbar-brand" to="/home">TFG Barber</router-link>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -33,9 +33,6 @@
               Tendencias
             </router-link>
           </li>
-          <li class="nav-item" v-if="isCliente">
-            <a class="nav-link" @click="irAReservar">Reservar</a>
-          </li>
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item dropdown" v-if="store.state.user.logged">
@@ -44,12 +41,36 @@
               Hola, {{ store.state.user.login }}
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-              <li>
-                <a class="dropdown-item" @click="irAPerfil">Perfil</a>
-              </li>
-              <li>
-                <a class="dropdown-item" @click="verMisCitas">Mis citas</a>
-              </li>
+              <template v-if="isCliente">
+                <li>
+                  <a class="dropdown-item" @click="irAPerfil">Perfil</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" @click="verMisCitas">Mis citas</a>
+                </li>
+              </template>
+              <template v-if="isEmpleado">
+                <li>
+                  <a class="dropdown-item" @click="irAPerfil">Perfil</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" @click="verMisCitas">Mis citas</a>
+                </li>
+              </template>
+              <template v-if="isJefe">
+                <li>
+                  <a class="dropdown-item" @click="irAPerfil">Perfil</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" @click="irAGestionEmpleados">Gestión Empleados</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" @click="irAGestionClientes">Gestión Clientes</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" @click="irAGestionPromociones">Gestión Promociones</a>
+                </li>
+              </template>
               <li>
                 <hr class="dropdown-divider" />
               </li>
@@ -99,14 +120,6 @@ export default {
       auth.logout();
       this.$router.push("/login");
     },
-    irAReservar() {
-      // Verificación de autenticación antes de redirigir
-      if (this.isLogged) {
-        this.$router.push("/reserve");
-      } else {
-        this.$router.push("/login");
-      }
-    },
     irAPerfil() {
       if (this.isCliente) {
         this.$router.push("/perfilCliente");
@@ -117,14 +130,30 @@ export default {
       }
     },
     verMisCitas() {
-      const userId = this.store.state.user.id; // Obtener el ID del usuario desde el store
-      this.$router.push({ name: "MisCitas", query: { userId } }); // Redirigir con el userId como parámetro
+      const autoridad = this.store.state.user.autoridad;
+      if (autoridad === "CLIENTE") {
+        this.$router.push({ name: "MisCitas" });
+      } else if (autoridad === "EMPLEADO") {
+        this.$router.push({ name: "EmpleadoCitas" });
+      } else {
+        alert("Esta funcionalidad no está disponible para tu rol.");
+      }
+    },
+    irAGestionEmpleados() {
+      this.$router.push("/users/empleados");
+    },
+    irAGestionClientes() {
+      this.$router.push("/users/clientes");
+    },
+    irAGestionPromociones() {
+      this.$router.push("/promotions"); // Define esta ruta en el router si aún no existe.
     },
   },
 };
 </script>
 
 <style>
+/* Estilos básicos del menú */
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -143,7 +172,6 @@ nav a {
   cursor: pointer;
 }
 
-/* Estilo para el dropdown */
 .dropdown-menu {
   right: 0;
   left: auto;

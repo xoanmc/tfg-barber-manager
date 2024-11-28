@@ -1,26 +1,56 @@
 <template>
-  <div class="form-container">
-    <form class="form" @submit.prevent="autenticarme">
-      <span class="input-span">
-        <label for="username" class="label">Login</label>
-        <input type="text" name="username" id="username" v-model="auxLogin" />
-      </span>
-      <span class="input-span">
-        <label for="password" class="label">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          v-model="auxPass"
-        />
-      </span>
-      <span class="span"><a href="#">¿Olvidaste tu contraseña?</a></span>
-      <input class="submit" type="submit" value="Log in" />
-      <span class="span"
-        >¿Todavía no eres miembro?
-        <router-link to="/register">Regístrate</router-link></span
-      >
-    </form>
+  <div class="container py-5 d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg" style="max-width: 400px; width: 100%; border-radius: 15px;">
+      <div class="card-body p-4">
+        <form @submit.prevent="autenticarme">
+          <!-- Campo de Login -->
+          <div class="mb-4">
+            <label for="username" class="form-label fs-5 fw-semibold text-secondary">Login</label>
+            <input
+              type="text"
+              id="username"
+              class="form-control"
+              v-model="auxLogin"
+              placeholder="ingresa tu login"
+              required
+            />
+          </div>
+
+          <!-- Campo de Password -->
+          <div class="mb-4">
+            <label for="password" class="form-label fs-5 fw-semibold text-secondary">Contraseña</label>
+            <input
+              type="password"
+              id="password"
+              class="form-control"
+              v-model="auxPass"
+              placeholder="ingresa tu contraseña"
+              required
+            />
+          </div>
+
+          <!-- Enlace para contraseña olvidada -->
+          <div class="text-center mb-4">
+            <a href="#" class="text-muted small">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <!-- Botón de Login -->
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-lg rounded-pill">
+              Iniciar Sesión
+            </button>
+          </div>
+        </form>
+
+        <!-- Registro y redirección -->
+        <div class="text-center mt-4">
+          <p class="small">
+            ¿Todavía no eres miembro?
+            <router-link to="/register" class="text-primary fw-normal" style="font-size: 0.95rem;">Regístrate</router-link>
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -55,75 +85,74 @@ export default {
 </script>
 
 <style scoped>
-.form-container {
-  display: flex;
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
-  height: 100vh; /* Altura completa de la ventana del navegador */
-}
-.form {
-  --bg-light: #efefef;
-  --bg-dark: #4d4c4c;
-  --clr: #3dad6c;
-  --clr-alpha: #9c9c9c60;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  max-width: 300px;
-}
-.form .input-span {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.form input[type="text"],
-.form input[type="password"] {
-  border-radius: 0.5rem;
-  padding: 1rem 0.75rem;
-  width: 100%;
+/* Estilo del contenedor */
+.card {
   border: none;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: var(--clr-alpha);
-  outline: 2px solid var(--bg-dark);
+  border-radius: 15px;
+  background-color: #f8f9fa;
 }
-.form input[type="text"]:focus,
-.form input[type="password"]:focus {
-  outline: 2px solid var(--clr);
+
+.card-body {
+  padding: 2rem;
 }
-.label {
-  align-self: flex-start;
-  color: var(--clr); /* Color aplicado a las etiquetas */
+
+.text-primary {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+/* Estilo de los campos del formulario */
+.form-control {
+  border-radius: 10px;
+  background-color: #f8f9fa;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+  border-color: #007bff;
+}
+
+/* Estilo de los títulos de los campos */
+.form-label {
+  font-size: 1.1rem;
   font-weight: 600;
+  color: #6c757d;
 }
-.form .submit {
-  padding: 1rem 0.75rem;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  border-radius: 3rem;
-  background-color: var(--bg-dark); /* Color de fondo del botón */
-  color: var(--bg-light); /* Color del texto del botón */
-  border: none;
-  cursor: pointer;
-  transition: all 300ms;
-  font-weight: 600;
+
+/* Estilo del botón */
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+
+/* Enlace centrado */
+.text-muted {
   font-size: 0.9rem;
 }
-.form .submit:hover {
-  background-color: var(--clr); /* Cambia el fondo al color verde en hover */
-  color: var(--bg-dark); /* Cambia el texto al color oscuro en hover */
-}
-.span {
+
+.text-muted a {
   text-decoration: none;
-  color: var(--bg-dark); /* Color aplicado a los textos en .span */
+  color: #6c757d;
 }
-.span a {
-  color: var(--clr); /* Color aplicado a los enlaces */
+
+.text-muted a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* Reducir tamaño del enlace "Regístrate" */
+.text-primary.small {
+  font-size: 0.85rem; /* Tamaño ligeramente más pequeño */
+}
+
+.vh-100 {
+  height: 100vh !important;
 }
 </style>

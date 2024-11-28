@@ -22,6 +22,7 @@ import EmpleadoPerfil from "@/components/Empleado/EmpleadoPerfil.vue";
 import EmpleadoRegisterForm from "@/components/Empleado/EmpleadoRegisterForm.vue";
 import EmpleadoList from "@/components/Empleado/EmpleadoList.vue";
 import ClienteCitas from "@/components/Cliente/ClienteCitas.vue";
+import EmpleadoCitas from "@/components/Empleado/EmpleadoCitas.vue";
 
 const routes = [
   {
@@ -59,6 +60,12 @@ const routes = [
     name: "MisCitas",
     component: ClienteCitas,
     meta: { authority: "CLIENTE" },
+  },
+  {
+    path: "/empleadoCitas",
+    name: "EmpleadoCitas",
+    component: EmpleadoCitas,
+    meta: { authority: "EMPLEADO" },
   },
   {
     path: "/perfilEmpleado",

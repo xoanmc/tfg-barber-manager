@@ -1,15 +1,30 @@
 <template>
-  <div>
-    <!-- Mostrar Imagen de Perfil -->
-    <div class="profile-picture">
-      <img :src="imageUrl" alt="Profile Image" v-if="imageUrl" />
+  <div class="text-center position-relative">
+    <!-- Imagen de perfil -->
+    <div class="profile-picture position-relative d-inline-block">
+      <img
+        :src="imageUrl || defaultImageUrl"
+        alt="Imagen de Perfil"
+        class="rounded-circle shadow img-fluid"
+      />
+      <!-- Botón para cambiar imagen -->
+      <button
+        type="button"
+        class="btn btn-sm btn-primary position-absolute btn-edit-profile"
+        @click="triggerFileInput"
+        title="Editar imagen"
+      >
+        <i class="bi bi-pencil"></i>
+      </button>
     </div>
 
-    <!-- Formulario para subir la imagen -->
-    <form @submit.prevent="uploadImage">
-      <input type="file" @change="onFileSelected" />
-      <button type="submit">Subir Imagen</button>
-    </form>
+    <!-- Input oculto para seleccionar archivo -->
+    <input
+      type="file"
+      ref="fileInput"
+      class="d-none"
+      @change="onFileSelected"
+    />
   </div>
 </template>
 
@@ -24,22 +39,24 @@ export default {
     },
     currentImageUrl: {
       type: String,
-      default: "", // Imagen por defecto si no hay imagen
+      default: "",
     },
   },
   data() {
     return {
-      selectedImage: null, // Imagen seleccionada
-      imageUrl: this.currentImageUrl || "", // URL de la imagen
+      selectedImage: null,
+      imageUrl: this.currentImageUrl || "",
+      defaultImageUrl: "https://via.placeholder.com/150",
     };
   },
   methods: {
-    // Manejador para seleccionar la imagen
+    triggerFileInput() {
+      this.$refs.fileInput.click();
+    },
     onFileSelected(event) {
       this.selectedImage = event.target.files[0];
+      this.uploadImage(); // Llama automáticamente a la función para subir la imagen
     },
-
-    // Subir la imagen al servidor
     async uploadImage() {
       if (!this.selectedImage) {
         alert("Por favor selecciona una imagen.");
@@ -50,20 +67,20 @@ export default {
       formData.append("file", this.selectedImage);
 
       try {
-        const token = localStorage.getItem("token"); // Obtener el token JWT
+        const token = localStorage.getItem("token");
         const response = await axios.post(
           `/api/users/upload/${this.userId}`,
           formData,
           {
             headers: {
               "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`, // Incluye el token JWT
+              Authorization: `Bearer ${token}`,
             },
           }
         );
 
         this.imageUrl = response.data.imageUrl;
-        this.$emit("imageUploaded", this.imageUrl); // Emitir evento de éxito para que el componente padre sepa que se subió la imagen
+        this.$emit("imageUploaded", this.imageUrl);
         alert("Imagen subida con éxito.");
       } catch (error) {
         console.error("Error al subir la imagen:", error);
@@ -80,14 +97,36 @@ export default {
 </script>
 
 <style scoped>
-.profile-picture img {
+.profile-picture {
   width: 150px;
   height: 150px;
-  border-radius: 50%;
+  margin: 0 auto;
+  position: relative;
+}
+
+.profile-picture img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
-form {
-  margin-top: 20px;
+.btn-edit-profile {
+  width: 40px;
+  height: 40px;
+  bottom: 5px;
+  right: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.btn-edit-profile:hover {
+  background-color: #0056b3;
+  color: #fff;
+  opacity: 0.9;
 }
 </style>
