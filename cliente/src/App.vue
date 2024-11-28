@@ -33,21 +33,14 @@
               Tendencias
             </router-link>
           </li>
-          <!-- Botón para reservar con verificación -->
           <li class="nav-item" v-if="isCliente">
             <a class="nav-link" @click="irAReservar">Reservar</a>
           </li>
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item dropdown" v-if="store.state.user.logged">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              id="userDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
               Hola, {{ store.state.user.login }}
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
@@ -57,7 +50,9 @@
               <li>
                 <a class="dropdown-item" @click="verMisCitas">Mis citas</a>
               </li>
-              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
               <li>
                 <a class="dropdown-item text-danger" @click="desautenticarme">Cerrar Sesión</a>
               </li>
@@ -122,8 +117,8 @@ export default {
       }
     },
     verMisCitas() {
-      // Redirigir al usuario a su página de citas
-      this.$router.push("/misCitas");
+      const userId = this.store.state.user.id; // Obtener el ID del usuario desde el store
+      this.$router.push({ name: "MisCitas", query: { userId } }); // Redirigir con el userId como parámetro
     },
   },
 };
