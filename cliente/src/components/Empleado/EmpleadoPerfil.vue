@@ -1,13 +1,11 @@
 <template>
   <div class="container py-5">
-    <!-- Mostrar Spinner mientras carga -->
     <div v-if="loading" class="text-center">
       <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Cargando...</span>
       </div>
     </div>
 
-    <!-- Mostrar información del empleado -->
     <div v-else-if="myuser">
       <div class="row justify-content-center">
         <div class="col-lg-8">
@@ -20,23 +18,19 @@
               <p><strong>Puesto:</strong> {{ myuser.puesto }}</p>
               <p><strong>Horario:</strong> {{ myuser.horario }}</p>
               <p><strong>Descripción:</strong> {{ myuser.descripcion }}</p>
-              <button class="btn btn-primary mt-4">Editar Perfil</button>
+              <button class="btn btn-primary mt-4" @click="goToEditProfile">Editar Perfil</button>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Mostrar mensaje de error si no se cargan los datos -->
     <div v-else class="text-center text-danger">
       <p>Error al cargar los datos del perfil. Por favor, intenta de nuevo más tarde.</p>
     </div>
   </div>
 </template>
 
-### Script
-
-```javascript
 <script>
 import AccountRepository from "@/repositories/AccountRepository";
 import UsuarioRepository from "@/repositories/UsuarioRepository";
@@ -51,37 +45,46 @@ export default {
       myuser: null,
       imageUrl: "",
       loading: true,
-      error: false, // Bandera para detectar errores
     };
   },
   async mounted() {
-    try {
-      await this.fetchData(); // Carga los datos al montar el componente
-    } catch (err) {
-      console.error("Error en la carga inicial:", err);
-      this.error = true; // Establece un error si ocurre un fallo
-    } finally {
-      this.loading = false; // Siempre desactiva el spinner al finalizar
-    }
+    await this.fetchData();
   },
   methods: {
     async fetchData() {
       try {
-        this.myuser = await AccountRepository.getAccount(); // Obtener los datos del usuario autenticado
-        if (this.myuser?.id) {
-          const user = await UsuarioRepository.findOne(this.myuser.id); // Consultar los datos adicionales
-          if (user?.profileImageUrl) this.imageUrl = user.profileImageUrl;
-        } else {
-          throw new Error("El ID del usuario no es válido."); // Lanzar un error si falta el ID
-        }
+        this.myuser = await AccountRepository.getAccount();
+        const user = await UsuarioRepository.findOne(this.myuser.id);
+        if (user?.profileImageUrl) this.imageUrl = user.profileImageUrl;
       } catch (err) {
-        console.error("Error al cargar los datos del perfil:", err);
-        this.error = true;
+        console.error("Error cargando el perfil del empleado:", err);
+      } finally {
+        this.loading = false;
       }
     },
     handleImageUpload(newImageUrl) {
-      this.imageUrl = newImageUrl; // Actualiza la imagen al subir una nueva
+      this.imageUrl = newImageUrl;
+    },
+    goToEditProfile() {
+      this.$router.push("/editProfile");
     },
   },
 };
 </script>
+
+<style scoped>
+.card {
+  border-radius: 15px;
+  background-color: #f8f9fa;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.text-primary {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+</style>
+

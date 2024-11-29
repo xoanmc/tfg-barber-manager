@@ -15,7 +15,7 @@
               <h3 class="text-primary mt-3">{{ myuser.nombre + " " + myuser.apellido }}</h3>
               <p class="text-muted">{{ "@" + myuser.login }}</p>
               <p><strong>Teléfono:</strong> {{ myuser.telefono }}</p>
-              <button class="btn btn-primary mt-4">Editar Perfil</button>
+              <button class="btn btn-primary mt-4" @click="goToEditProfile">Editar Perfil</button>
             </div>
           </div>
         </div>
@@ -62,9 +62,13 @@ export default {
     handleImageUpload(newImageUrl) {
       this.imageUrl = newImageUrl;
     },
+    goToEditProfile() {
+      this.$router.push("/editProfile");
+    },
   },
 };
 </script>
+
 
 <style scoped>
 .card {

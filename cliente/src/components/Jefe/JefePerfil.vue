@@ -1,23 +1,17 @@
 <template>
   <div class="container py-5">
-    <!-- Mostrar mensaje de carga mientras se obtienen los datos -->
     <div v-if="loading" class="text-center">
       <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Cargando...</span>
       </div>
     </div>
 
-    <!-- Mostrar datos del perfil una vez cargados -->
     <div v-else-if="myuser">
       <div class="row justify-content-center">
         <div class="col-lg-8">
           <div class="card shadow-lg">
             <div class="card-body text-center">
-              <ProfileImage
-                :userId="myuser.id"
-                :currentImageUrl="imageUrl"
-                @imageUploaded="handleImageUpload"
-              />
+              <ProfileImage :userId="myuser.id" :currentImageUrl="imageUrl" @imageUploaded="handleImageUpload" />
               <h3 class="text-primary mt-3">{{ myuser.nombre + " " + myuser.apellido }}</h3>
               <p class="text-muted">{{ "@" + myuser.login }}</p>
               <p><strong>Teléfono:</strong> {{ myuser.telefono }}</p>
@@ -34,14 +28,13 @@
                 </button>
               </div>
 
-              <button class="btn btn-primary mt-4">Editar Perfil</button>
+              <button class="btn btn-primary mt-4" @click="goToEditProfile">Editar Perfil</button>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Mostrar mensaje de error si no se pudo cargar el perfil -->
     <div v-else class="text-center text-danger">
       <p>No se pudo cargar la información del perfil.</p>
     </div>
@@ -59,9 +52,9 @@ export default {
   },
   data() {
     return {
-      myuser: null, // Datos del jefe
-      imageUrl: "", // URL de la imagen de perfil
-      loading: true, // Estado de carga
+      myuser: null,
+      imageUrl: "",
+      loading: true,
     };
   },
   async mounted() {
@@ -70,22 +63,20 @@ export default {
   methods: {
     async fetchData() {
       try {
-        // Obtener los datos del jefe autenticado
         this.myuser = await AccountRepository.getAccount();
         const user = await UsuarioRepository.findOne(this.myuser.id);
-
-        // Cargar la URL de la imagen de perfil si existe
-        if (user?.profileImageUrl) {
-          this.imageUrl = user.profileImageUrl;
-        }
+        if (user?.profileImageUrl) this.imageUrl = user.profileImageUrl;
       } catch (err) {
-        console.error("Error al cargar el perfil del jefe:", err);
+        console.error("Error cargando el perfil del jefe:", err);
       } finally {
-        this.loading = false; // Finalizar la carga independientemente del resultado
+        this.loading = false;
       }
     },
     handleImageUpload(newImageUrl) {
       this.imageUrl = newImageUrl;
+    },
+    goToEditProfile() {
+      this.$router.push("/editProfile");
     },
     irAGestionEmpleados() {
       this.$router.push("/users/empleados");
@@ -99,6 +90,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .card {

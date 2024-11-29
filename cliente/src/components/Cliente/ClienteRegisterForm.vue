@@ -1,69 +1,114 @@
 <template>
-  <div class="reserva-container">
-    <h2 class="reserva-titulo">¡Hazte miembro!</h2>
-    <form @submit.prevent="handleRegister" class="register-form">
-      <!-- Nombre -->
-      <div class="form-group">
-        <label for="name" class="form-label">Nombre:</label>
-        <input type="text" id="name" v-model="nombre" class="form-control" required />
-      </div>
+  <div class="container py-5 d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg w-100" style="max-width: 400px; border-radius: 15px;">
+      <div class="card-body p-4">
+        <h2 class="text-center text-primary fw-bold mb-4">¡Hazte Miembro!</h2>
+        <form @submit.prevent="handleRegister">
+          <!-- Nombre -->
+          <div class="mb-3">
+            <label for="name" class="form-label">Nombre</label>
+            <input
+              type="text"
+              id="name"
+              v-model="nombre"
+              class="form-control"
+              required
+            />
+          </div>
 
-      <!-- Apellido -->
-      <div class="form-group">
-        <label for="apellido" class="form-label">Apellido:</label>
-        <input type="text" id="apellido" v-model="apellido" class="form-control" required />
-      </div>
+          <!-- Apellido -->
+          <div class="mb-3">
+            <label for="apellido" class="form-label">Apellido</label>
+            <input
+              type="text"
+              id="apellido"
+              v-model="apellido"
+              class="form-control"
+              required
+            />
+          </div>
 
-      <!-- Email -->
-      <div class="form-group">
-        <label for="email" class="form-label">Email:</label>
-        <input type="email" id="email" v-model="email" class="form-control" required />
-      </div>
+          <!-- Email -->
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              id="email"
+              v-model="email"
+              class="form-control"
+              required
+            />
+          </div>
 
-      <!-- Login -->
-      <div class="form-group">
-        <label for="login" class="form-label">Login:</label>
-        <input type="text" id="login" v-model="login" class="form-control" minlength="4" required />
-      </div>
+          <!-- Login -->
+          <div class="mb-3">
+            <label for="login" class="form-label">Login</label>
+            <input
+              type="text"
+              id="login"
+              v-model="login"
+              class="form-control"
+              minlength="4"
+              required
+            />
+          </div>
 
-      <!-- Contraseña -->
-      <div class="form-group">
-        <label for="password" class="form-label">Contraseña:</label>
-        <input type="password" id="password" v-model="password" class="form-control" minlength="4" required />
-      </div>
+          <!-- Contraseña -->
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input
+              type="password"
+              id="password"
+              v-model="password"
+              class="form-control"
+              minlength="4"
+              required
+            />
+          </div>
 
-      <!-- Fecha de Nacimiento -->
-      <div class="form-group">
-        <label class="form-label">Fecha de Nacimiento:</label>
-        <div class="fecha-nacimiento">
-          <select v-model="fechaNacimiento.dia" class="form-control-select" required>
-            <option disabled value="">Día</option>
-            <option v-for="dia in 31" :key="dia" :value="dia">{{ dia }}</option>
-          </select>
-          <select v-model="fechaNacimiento.mes" class="form-control-select" required>
-            <option disabled value="">Mes</option>
-            <option v-for="(mes, index) in meses" :key="index" :value="index + 1">{{ mes }}</option>
-          </select>
-          <select v-model="fechaNacimiento.anio" class="form-control-select" required>
-            <option disabled value="">Año</option>
-            <option v-for="anio in anios" :key="anio" :value="anio">{{ anio }}</option>
-          </select>
+          <!-- Teléfono -->
+          <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input
+              type="text"
+              id="telefono"
+              v-model="telefono"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <!-- Fecha de Nacimiento -->
+          <div class="mb-3">
+            <label class="form-label">Fecha de Nacimiento</label>
+            <div class="d-flex gap-2">
+              <select v-model="fechaNacimiento.dia" class="form-control" required>
+                <option disabled value="">Día</option>
+                <option v-for="dia in 31" :key="dia" :value="dia">{{ dia }}</option>
+              </select>
+              <select v-model="fechaNacimiento.mes" class="form-control" required>
+                <option disabled value="">Mes</option>
+                <option v-for="(mes, index) in meses" :key="index" :value="index + 1">{{ mes }}</option>
+              </select>
+              <select v-model="fechaNacimiento.anio" class="form-control" required>
+                <option disabled value="">Año</option>
+                <option v-for="anio in anios" :key="anio" :value="anio">{{ anio }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Botón Registrarse -->
+          <div class="d-grid">
+            <button class="btn btn-primary btn-lg rounded-pill" type="submit">
+              Registrarse
+            </button>
+          </div>
+        </form>
+
+        <div v-if="error" class="text-danger mt-3 text-center">
+          {{ error }}
         </div>
       </div>
-
-      <!-- Teléfono -->
-      <div class="form-group">
-        <label for="telefono" class="form-label">Teléfono:</label>
-        <input type="text" id="telefono" v-model="telefono" class="form-control" required />
-      </div>
-
-      <!-- Botón Registrarse -->
-      <div>
-        <button class="btn-primary" type="submit">Registrarse</button>
-      </div>
-    </form>
-    <div v-if="error" class="error-message">
-      {{ error }}
     </div>
   </div>
 </template>
@@ -102,16 +147,11 @@ export default {
   methods: {
     async handleRegister() {
       try {
-
-        // Limpiar los valores antes de construir la fecha
-        const dia = String(this.fechaNacimiento.dia).padStart(2, '0').trim();
-        const mes = String(this.fechaNacimiento.mes).padStart(2, '0').trim();
+        const dia = String(this.fechaNacimiento.dia).padStart(2, "0").trim();
+        const mes = String(this.fechaNacimiento.mes).padStart(2, "0").trim();
         const anio = String(this.fechaNacimiento.anio).trim();
-
-        // Construir la fecha en formato 'yyyy-MM-dd'
         const fechaNacimiento = `${anio}-${mes}-${dia}`;
 
-        // Realizar el registro
         await auth.registerCliente({
           nombre: this.nombre,
           apellido: this.apellido,
@@ -127,9 +167,9 @@ export default {
       } catch (e) {
         console.error(e);
         if (e.response?.data?.message) {
-          alert(e.response.data.message);
+          this.error = e.response.data.message;
         } else {
-          alert(e.message);
+          this.error = "Ocurrió un error inesperado.";
         }
       }
     },
@@ -138,84 +178,64 @@ export default {
 </script>
 
 <style scoped>
-/* Contenedor principal */
-.reserva-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-family: Arial, sans-serif;
-  padding: 20px;
-  max-width: 400px;
-  margin: 0 auto;
+.card {
+  border: none;
+  border-radius: 15px;
+  background-color: #f8f9fa;
+  margin-top: 70px; /* Asegura que no se superponga al menú superior */
 }
 
-/* Título */
-.reserva-titulo {
-  font-size: 2rem;
+.card-body {
+  padding: 2rem;
+}
+
+h2 {
+  font-size: 1.8rem;
   font-weight: bold;
-  margin-bottom: 30px;
-  color: #333;
 }
 
-/* Estilo de los campos de formulario */
 .form-label {
   font-size: 1rem;
-  font-weight: bold;
-  margin-bottom: 5px;
-  display: block;
-  text-align: left;
-  color: #444;
-}
-
-.form-group {
-  margin-bottom: 20px;
-  width: 100%;
+  font-weight: 600;
+  color: #6c757d;
 }
 
 .form-control {
-  width: 100%;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilo para los select en "Fecha de Nacimiento" */
-.form-control-select {
-  width: 32%;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  margin-right: 2%;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.form-control:focus {
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+  border-color: #007bff;
 }
 
-.form-control-select:last-child {
-  margin-right: 0;
-}
-
-/* Botón */
 .btn-primary {
   background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-  width: 100%;
+  border-color: #007bff;
 }
 
 .btn-primary:hover {
   background-color: #0056b3;
+  border-color: #004085;
 }
 
-.error-message {
-  color: red;
-  margin-top: 10px;
+.text-danger {
+  font-size: 0.9rem;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .btn-primary {
+    font-size: 0.9rem;
+  }
 }
 </style>

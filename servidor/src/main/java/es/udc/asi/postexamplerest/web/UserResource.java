@@ -86,4 +86,20 @@ public class UserResource {
   public void delete(@PathVariable Long id) throws NotFoundException, OperationNotAllowed {
     userService.deleteById(id);
   }
+
+  @PutMapping("/me")
+  public ResponseEntity<AccountDTO> updateProfile(@RequestBody AccountDTO accountDTO) {
+    try {
+      AccountDTO updatedAccount = userService.updateProfile(accountDTO);
+      return ResponseEntity.ok(updatedAccount);
+    } catch (NotFoundException e) {
+      return ResponseEntity.status(404).body(null);
+    } catch (OperationNotAllowed e) {
+      return ResponseEntity.status(403).body(null);
+    } catch (Exception e) {
+      return ResponseEntity.status(500).body(null);
+    }
+
+  }
+
 }

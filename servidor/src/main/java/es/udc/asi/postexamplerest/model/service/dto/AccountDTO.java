@@ -14,7 +14,7 @@ public class AccountDTO {
   private Long id;
   private String nombre;
   private String apellido;
-  private String email; // Nuevo campo para email
+  private String email;
   private String telefono;
   @NotEmpty
   private String login;
@@ -25,7 +25,7 @@ public class AccountDTO {
   private String autoridad;
 
   @JsonFormat(pattern = "yyyy-MM-dd") // Formato explícito para la fecha
-  private LocalDate fechaNacimiento; // Reemplaza al campo edad
+  private LocalDate fechaNacimiento;
 
   private double salario;
   private String contrato;

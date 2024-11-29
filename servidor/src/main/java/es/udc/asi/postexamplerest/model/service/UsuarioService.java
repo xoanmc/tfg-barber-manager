@@ -188,4 +188,57 @@ public class UsuarioService {
     }
     usuarioDAO.delete(theUser);
   }
+
+  @Transactional(readOnly = false)
+  public AccountDTO updateProfile(AccountDTO accountDTO) throws NotFoundException, OperationNotAllowed {
+    // Obtener el usuario autenticado
+    String currentUserLogin = SecurityUtils.getCurrentUserLogin();
+    if (currentUserLogin == null) {
+      throw new OperationNotAllowed("No se puede identificar al usuario actual");
+    }
+
+    Usuario user = usuarioDAO.findByLogin(currentUserLogin);
+    if (user == null) {
+      throw new NotFoundException("Usuario no encontrado: " + currentUserLogin, Usuario.class);
+    }
+
+    // Validar que el ID proporcionado en el DTO coincide con el usuario autenticado
+    if (!user.getId().equals(accountDTO.getId())) {
+      throw new OperationNotAllowed("No puedes editar el perfil de otro usuario");
+    }
+
+    // Validar que el email no esté en uso por otro usuario
+    if (accountDTO.getEmail() != null && !accountDTO.getEmail().equals(user.getEmail())) {
+      Usuario existingUser = usuarioDAO.findByEmail(accountDTO.getEmail());
+      if (existingUser != null) {
+        throw new OperationNotAllowed("El email ya está en uso por otro usuario");
+      }
+    }
+
+    // Validar que el login no pueda ser cambiado
+    if (accountDTO.getLogin() != null && !accountDTO.getLogin().equals(user.getLogin())) {
+      throw new OperationNotAllowed("No se permite cambiar el login del usuario");
+    }
+
+    // Actualizar los datos permitidos
+    if (accountDTO.getNombre() != null) user.setNombre(accountDTO.getNombre());
+    if (accountDTO.getApellido() != null) user.setApellido(accountDTO.getApellido());
+    if (accountDTO.getEmail() != null) user.setEmail(accountDTO.getEmail());
+    if (accountDTO.getTelefono() != null) user.setTelefono(accountDTO.getTelefono());
+    if (accountDTO.getFechaNacimiento() != null) user.setFechaNacimiento(accountDTO.getFechaNacimiento());
+
+    // Campos adicionales para empleados
+    if (user instanceof Empleado empleado) {
+      if (accountDTO.getHorario() != null) empleado.setHorario(accountDTO.getHorario());
+      if (accountDTO.getDescripcion() != null) empleado.setDescripcion(accountDTO.getDescripcion());
+    }
+
+    // Guardar los cambios
+    usuarioDAO.update(user);
+
+    // Retornar los datos actualizados
+    return new AccountDTO(user);
+  }
+
+
 }

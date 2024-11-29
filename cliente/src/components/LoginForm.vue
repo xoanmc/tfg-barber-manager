@@ -11,7 +11,6 @@
               id="username"
               class="form-control"
               v-model="auxLogin"
-              placeholder="ingresa tu login"
               required
             />
           </div>
@@ -24,7 +23,6 @@
               id="password"
               class="form-control"
               v-model="auxPass"
-              placeholder="ingresa tu contraseña"
               required
             />
           </div>

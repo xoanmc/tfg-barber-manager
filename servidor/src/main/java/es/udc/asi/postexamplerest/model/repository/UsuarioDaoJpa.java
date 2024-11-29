@@ -61,4 +61,13 @@ public class UsuarioDaoJpa extends GenericDaoJpa implements UsuarioDao {
       .setParameter("login", login);
     return DataAccessUtils.singleResult(query.getResultList());
   }
+
+  public Usuario findByEmail(String email) {
+    return entityManager.createQuery("SELECT u FROM Usuario u WHERE u.email = :email", Usuario.class)
+            .setParameter("email", email)
+            .getResultStream()
+            .findFirst()
+            .orElse(null);
+  }
+
 }

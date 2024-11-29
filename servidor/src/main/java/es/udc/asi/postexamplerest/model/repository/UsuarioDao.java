@@ -23,4 +23,6 @@ public interface UsuarioDao {
   Cliente findClienteById(Long id);
 
   Usuario findByLogin(String login);
+
+  Usuario findByEmail(String Email);
 }
