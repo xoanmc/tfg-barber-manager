@@ -16,6 +16,7 @@ import es.udc.asi.postexamplerest.web.exceptions.RequestBodyNotValidException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -78,8 +79,8 @@ public class AccountResource {
       throw new RequestBodyNotValidException(errors);
     }
 
-    // Registro del cliente
-    Cliente cliente = userService.registerCliente(
+    // Registrar el cliente, el correo se enviará desde UsuarioService si es necesario
+    userService.registerCliente(
             account.getNombre(),
             account.getApellido(),
             account.getTelefono(),
@@ -88,34 +89,33 @@ public class AccountResource {
             account.getLogin(),
             account.getPassword(),
             account.getCitas(),
-            account.getPrimeraCita()
+            account.getPrimeraCita(),
+            true // Activar el envío de correo desde UsuarioService
     );
-
-    // Generar token de verificación
-    String token = tokenProvider.createEmailVerificationToken(cliente.getId().toString());
-
-    // Crear enlace de verificación
-    String verificationUrl = properties.getClientHost() + "/confirm-email?token=" + token;
-
-    // Enviar correo de confirmación
-    String subject = "Confirma tu registro en Barbería";
-    String text = "Haz clic en el siguiente enlace para confirmar tu registro: " + verificationUrl;
-
-    mailService.sendConfirmationEmail(cliente.getEmail(), subject, text);
   }
 
-  @GetMapping("/confirm-email")
-  public String confirmEmail(@RequestParam("token") String token) {
+  @GetMapping("/confirm-registration")
+  public ResponseEntity<String> confirmRegistration(@RequestParam("token") String token) {
     try {
-      String userId = tokenProvider.validateEmailVerificationToken(token);
-      userService.confirmarRegistro(userId);
-      return "Registro confirmado exitosamente.";
+      // Validar el token JWT y obtener el login del usuario
+      String login = tokenProvider.validateEmailVerificationToken(token);
+      logger.info("Token válido. Usuario login: {}", login);
+
+      // Confirmar el registro del usuario
+      userService.confirmarRegistro(login);
+
+      // Responder con un mensaje de éxito
+      return ResponseEntity.ok("Registro confirmado exitosamente.<br>Puedes cerrar esta ventana.");
     } catch (IllegalArgumentException e) {
-      return "El enlace de confirmación es inválido o ha expirado.";
+      logger.error("Error de token inválido: {}", e.getMessage());
+      return ResponseEntity.badRequest().body("El enlace de confirmación es inválido o ha expirado.");
     } catch (NotFoundException e) {
-      return "Usuario no encontrado.";
+      logger.error("Usuario no encontrado: {}", e.getMessage());
+      return ResponseEntity.status(404).body("Usuario no encontrado.");
     }
   }
+
+
 
   @PostMapping("/contratar")
   public void registerEmpleado(@Valid @RequestBody AccountDTO account, Errors errors)

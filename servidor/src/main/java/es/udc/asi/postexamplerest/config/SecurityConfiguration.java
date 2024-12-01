@@ -35,80 +35,81 @@ y realizar acciones específicas.
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration {
 
-  @Autowired
-  private Properties properties;
+    @Autowired
+    private Properties properties;
 
-  @Autowired
-  private MyUnauthorizedEntryPoint myUnauthorizedEntryPoint;
+    @Autowired
+    private MyUnauthorizedEntryPoint myUnauthorizedEntryPoint;
 
-  @Autowired
-  private MyAccessDeniedHandler myAccessDeniedHandler;
+    @Autowired
+    private MyAccessDeniedHandler myAccessDeniedHandler;
 
-  @Autowired
-  private TokenProvider tokenProvider;
+    @Autowired
+    private TokenProvider tokenProvider;
 
-  @Autowired
-  private MyUserDetailsService myUserDetailsService;
+    @Autowired
+    private MyUserDetailsService myUserDetailsService;
 
-  @Autowired
-  private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    // @formatter:off
-    http.csrf().disable().exceptionHandling()
-      .authenticationEntryPoint(myUnauthorizedEntryPoint)
-      .accessDeniedHandler(myAccessDeniedHandler).and()
-      .headers().frameOptions().disable().and()
-      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-      .authorizeRequests()
-      .antMatchers("/api/authenticate").permitAll() // Autenticación
-      .antMatchers(HttpMethod.POST, "/api/register").permitAll() // Registro
-      .antMatchers("/api/home").permitAll() // Permitir acceso público a la página de inicio
-      .antMatchers("/api/update").hasAuthority("JEFE") // Solo jefes pueden actualizar la info
-      .antMatchers("/api/about/**").permitAll() // Acceso público a la sección "about"
-      .antMatchers("/api/reserve").permitAll()
-      .antMatchers("/api/servicios/**").permitAll() // Acceso público a servicios
-      .antMatchers(HttpMethod.GET, "/api/users/**").permitAll() // Ver usuarios
-      .antMatchers(HttpMethod.POST, "/api/users/upload/**").permitAll() // Subida de archivos permitida
-      .antMatchers("/**").authenticated() // Todas las demás rutas requieren autenticación
-      .and()
-      .apply(securityConfigurerAdapter());
-    // @formatter:on
-    return http.build();
-  }
-
-  @Bean
-  public WebSecurityCustomizer webSecurityCustomizer() {
-    return (web) -> web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**"); // Ignorar las solicitudes OPTIONS (CORS)
-  }
-
-  @Bean
-  public WebMvcConfigurer corsConfigurer() {
-    return new WebMvcConfigurer() {
-      @Override
-      public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedMethods("*").allowedOrigins(properties.getClientHost());
-      }
-    };
-  }
-
-  @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-    throws Exception {
-    return authenticationConfiguration.getAuthenticationManager();
-  }
-
-  @Autowired
-  public void configureAuth(AuthenticationManagerBuilder auth) {
-    try {
-      auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder);
-    } catch (Exception e) {
-      throw new BeanInitializationException("SecurityConfiguration.configureAuth failed", e);
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // @formatter:off
+        http.csrf().disable().exceptionHandling()
+                .authenticationEntryPoint(myUnauthorizedEntryPoint)
+                .accessDeniedHandler(myAccessDeniedHandler).and()
+                .headers().frameOptions().disable().and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests()
+                .antMatchers("/api/authenticate").permitAll() // Autenticación
+                .antMatchers(HttpMethod.POST, "/api/register").permitAll() // Registro
+                .antMatchers("/api/confirm-registration").permitAll() // Permitir confirmación de registro
+                .antMatchers("/api/home").permitAll() // Permitir acceso público a la página de inicio
+                .antMatchers("/api/update").hasAuthority("JEFE") // Solo jefes pueden actualizar la info
+                .antMatchers("/api/about/**").permitAll() // Acceso público a la sección "about"
+                .antMatchers("/api/reserve").permitAll()
+                .antMatchers("/api/servicios/**").permitAll() // Acceso público a servicios
+                .antMatchers(HttpMethod.GET, "/api/users/**").permitAll() // Ver usuarios
+                .antMatchers(HttpMethod.POST, "/api/users/upload/**").permitAll() // Subida de archivos permitida
+                .antMatchers("/**").authenticated() // Todas las demás rutas requieren autenticación
+                .and()
+                .apply(securityConfigurerAdapter());
+        // @formatter:on
+        return http.build();
     }
-  }
 
-  private JWTConfigurer securityConfigurerAdapter() {
-    return new JWTConfigurer(tokenProvider);
-  }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**"); // Ignorar las solicitudes OPTIONS (CORS)
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**").allowedMethods("*").allowedOrigins(properties.getClientHost());
+            }
+        };
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Autowired
+    public void configureAuth(AuthenticationManagerBuilder auth) {
+        try {
+            auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder);
+        } catch (Exception e) {
+            throw new BeanInitializationException("SecurityConfiguration.configureAuth failed", e);
+        }
+    }
+
+    private JWTConfigurer securityConfigurerAdapter() {
+        return new JWTConfigurer(tokenProvider);
+    }
 }

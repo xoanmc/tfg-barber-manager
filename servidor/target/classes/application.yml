@@ -25,8 +25,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: pedrodapedra39@gmail.com
-    password: pedras_varias00
+    username: pepe11.perez91@gmail.com
+    password: dhvc hfet nieo afpr
     properties:
       mail:
         smtp:
@@ -47,3 +47,6 @@ properties:
   jwtValidity: 7200
   upload:
     path: ./uploads # ruta donde se guardaran los archivos de subida
+app:
+  base:
+    url: http://localhost:8080

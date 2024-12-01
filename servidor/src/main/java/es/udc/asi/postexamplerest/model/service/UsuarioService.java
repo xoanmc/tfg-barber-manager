@@ -12,6 +12,7 @@ import es.udc.asi.postexamplerest.model.service.dto.AccountDTO;
 import es.udc.asi.postexamplerest.model.service.dto.ClienteListaDTO;
 import es.udc.asi.postexamplerest.model.service.dto.EmpleadoListaDTO;
 import es.udc.asi.postexamplerest.security.SecurityUtils;
+import es.udc.asi.postexamplerest.security.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +37,15 @@ public class UsuarioService {
 
   @Autowired
   private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private MailService mailService;
+
+  @Autowired
+  private TokenProvider tokenProvider;
+
+  @Value("${app.base.url}")
+  private String appBaseUrl; // Base URL para generar enlaces de confirmación
 
   // Método para obtener la URL de la imagen de perfil
   public String getProfileImageUrl(Long userId) throws NotFoundException {
@@ -78,8 +89,8 @@ public class UsuarioService {
 
   @Transactional(readOnly = false)
   public Cliente registerCliente(String nombre, String apellido, String telefono, LocalDate fechaNacimiento,
-                                 String email, String login, String password, int citas, String primeraCita)
-          throws UserLoginExistsException {
+                                 String email, String login, String password, int citas, String primeraCita,
+                                 boolean sendEmail) throws UserLoginExistsException {
     if (usuarioDAO.findByLogin(login) != null) {
       throw new UserLoginExistsException(login);
     }
@@ -98,22 +109,46 @@ public class UsuarioService {
     cliente.setPrimeraCita(primeraCita);
     cliente.setActivo(false); // Cliente inactivo hasta que confirme el correo
 
-    usuarioDAO.create(cliente);
-    return cliente; // Retornamos el cliente creado para usar su ID en la confirmación
-  }
+    // Generar token JWT de confirmación
+    String confirmationToken = tokenProvider.createEmailVerificationToken(cliente.getLogin());
+    cliente.setConfirmationToken(confirmationToken);
 
-  // Confirmar registro del cliente mediante token
-  @Transactional(readOnly = false)
-  public void confirmarRegistro(String userId) throws NotFoundException {
-    Usuario usuario = usuarioDAO.findById(Long.parseLong(userId));
-    if (usuario == null || !(usuario instanceof Cliente)) {
-      throw new NotFoundException(userId, Usuario.class);
+    usuarioDAO.create(cliente);
+
+    // Enviar correo solo si sendEmail es true
+    if (sendEmail) {
+      sendConfirmationEmail(cliente, confirmationToken);
     }
 
-    Cliente cliente = (Cliente) usuario;
-    cliente.setActivo(true); // Activamos al cliente
+    return cliente;
+  }
+
+
+
+  // Método para enviar el correo de confirmación
+  private void sendConfirmationEmail(Cliente cliente, String token) {
+    String confirmationUrl = appBaseUrl + "/api/confirm-registration?token=" + token;
+    String subject = "Confirma tu registro";
+    String message = String.format(
+            "Hola %s,\n\nPor favor, confirma tu registro haciendo clic en el siguiente enlace:\n\n%s\n\nGracias.",
+            cliente.getNombre(), confirmationUrl
+    );
+
+    mailService.sendConfirmationEmail(cliente.getEmail(), subject, message);
+  }
+
+  @Transactional(readOnly = false)
+  public void confirmarRegistro(String login) throws NotFoundException {
+    Cliente cliente = (Cliente) usuarioDAO.findByLogin(login);
+    if (cliente == null) {
+      throw new NotFoundException("Usuario no encontrado", Cliente.class);
+    }
+
+    cliente.setActivo(true); // Activar cliente
+    cliente.setConfirmationToken(null); // Limpiar el token
     usuarioDAO.update(cliente);
   }
+
 
   // Registrar Empleado con todos los campos adicionales
   @Transactional(readOnly = false)

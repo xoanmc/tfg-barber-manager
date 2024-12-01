@@ -70,4 +70,14 @@ public class UsuarioDaoJpa extends GenericDaoJpa implements UsuarioDao {
             .orElse(null);
   }
 
+  @Override
+  public Cliente findByConfirmationToken(String confirmationToken) {
+    return entityManager.createQuery("SELECT c FROM Cliente c WHERE c.confirmationToken = :token", Cliente.class)
+            .setParameter("token", confirmationToken)
+            .getResultStream()
+            .findFirst()
+            .orElse(null);
+  }
+
+
 }

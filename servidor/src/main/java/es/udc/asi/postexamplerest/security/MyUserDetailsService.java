@@ -2,6 +2,7 @@
 
   import java.util.Collections;
 
+  import es.udc.asi.postexamplerest.model.domain.Cliente;
   import org.slf4j.Logger;
   import org.slf4j.LoggerFactory;
   import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,12 @@
       if (user == null) {
         throw new UsernameNotFoundException("User " + login + " not found");
       }
+
+      // Verificar si el usuario es un cliente y si está activo
+      if (user instanceof Cliente cliente && !cliente.isActivo()) {
+        throw new UsernameNotFoundException("User " + login + " has not confirmed registration yet.");
+      }
+
       logger.info("Loaded user {} with authority {}", login, user.getAutoridad().name());
       return new CustomUserPrincipal(user);  // Asegúrate de devolver CustomUserPrincipal
     }

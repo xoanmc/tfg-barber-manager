@@ -46,7 +46,8 @@ public class DatabaseLoader {
             "pepe",
             "pepe",
             5,
-            "01/01/2020"
+            "01/01/2020",
+            false // No enviar correo
     );
 
     Cliente pepe = userDAO.findClienteById(userDAO.findByLogin("pepe").getId());
@@ -60,7 +61,8 @@ public class DatabaseLoader {
             "maria",
             "maria",
             3,
-            "15/03/2021"
+            "15/03/2021",
+            false // No enviar correo
     );
 
     Cliente maria = userDAO.findClienteById(userDAO.findByLogin("maria").getId());

@@ -15,6 +15,9 @@ public class Cliente extends Usuario {
   @Column
   private String primeraCita; // Fecha de la primera cita
 
+  @Column(name = "confirmation_token", unique = true)
+  private String confirmationToken;
+
   @Column
   private boolean activo = false; // Campo específico para validar el registro de clientes
 
@@ -52,5 +55,12 @@ public class Cliente extends Usuario {
     this.activo = activo;
   }
 
+  public String getConfirmationToken() {
+    return confirmationToken;
+  }
+
+  public void setConfirmationToken(String confirmationToken) {
+    this.confirmationToken = confirmationToken;
+  }
 
 }

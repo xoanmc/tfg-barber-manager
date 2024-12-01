@@ -9,6 +9,8 @@ import javax.crypto.SecretKey;
 
 import es.udc.asi.postexamplerest.model.domain.Usuario;
 import es.udc.asi.postexamplerest.model.repository.UsuarioDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +20,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+
 import es.udc.asi.postexamplerest.config.Properties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -26,6 +29,8 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class TokenProvider {
   private static final String AUTHORITIES_KEY = "auth";
+
+  private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
 
   @Autowired
   private Properties properties;
@@ -72,13 +77,13 @@ public class TokenProvider {
         .setExpiration(validity).compact();
   }
 
-  public String createEmailVerificationToken(String userId) {
+  public String createEmailVerificationToken(String login) {
     long now = System.currentTimeMillis();
     Date expiryDate = new Date(now + 24 * 60 * 60 * 1000); // 24 horas
 
     SecretKey key = Keys.hmacShaKeyFor(properties.getJwtSecretKey().getBytes(StandardCharsets.UTF_8));
     return Jwts.builder()
-            .setSubject(userId)
+            .setSubject(login)
             .setIssuedAt(new Date(now))
             .setExpiration(expiryDate)
             .signWith(key)
@@ -91,8 +96,10 @@ public class TokenProvider {
       Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
       return claims.getSubject(); // Devuelve el ID del usuario
     } catch (Exception e) {
+      logger.error("Error al validar el token: {}", e.getMessage(), e);
       throw new IllegalArgumentException("Token inválido o expirado");
     }
+
   }
 
 }
