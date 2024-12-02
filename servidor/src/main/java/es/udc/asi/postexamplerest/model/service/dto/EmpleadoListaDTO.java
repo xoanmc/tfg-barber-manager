@@ -11,12 +11,13 @@ public class EmpleadoListaDTO {
   private String apellido;
   private String telefono;
   private String puesto;
-  private LocalDate fechaNacimiento; // Fecha de nacimiento
+  private LocalDate fechaNacimiento;
   private double salario;
   private String contrato;
   private String login;
-  private String horario;      // Nuevo campo horario
-  private String descripcion;  // Nuevo campo descripción
+  private String horario;
+  private String descripcion;
+  private boolean despedido;
 
   // Constructor
   public EmpleadoListaDTO(Empleado empleado) {
@@ -31,6 +32,7 @@ public class EmpleadoListaDTO {
     this.login = empleado.getLogin();
     this.horario = empleado.getHorario();       // Asignar horario
     this.descripcion = empleado.getDescripcion(); // Asignar descripción
+    this.despedido = empleado.isDespedido();
   }
 
   // Getters y setters

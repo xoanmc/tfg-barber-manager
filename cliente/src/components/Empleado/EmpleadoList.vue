@@ -25,7 +25,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="empleado in empleados" :key="empleado.id">
+          <tr 
+            v-for="empleado in empleados" 
+            :key="empleado.id" 
+            :class="{ 'table-secondary': empleado.despedido }"
+          >
             <td>{{ empleado.id }}</td>
             <td>{{ empleado.nombre }}</td>
             <td>{{ empleado.apellido }}</td>
@@ -35,12 +39,13 @@
             <td>{{ empleado.salario }}</td>
             <td>{{ empleado.contrato }}</td>
             <td>
-              <!-- Botón para eliminar el empleado -->
               <button
-                @click="eliminarEmpleado(empleado.id)"
-                class="btn btn-danger"
+                :disabled="empleado.despedido" 
+                @click="despedirEmpleado(empleado.id)"
+                class="btn"
+                :class="empleado.despedido ? 'btn-secondary' : 'btn-warning'"
               >
-                Despedir
+                {{ empleado.despedido ? "Despedido" : "Despedir" }}
               </button>
             </td>
           </tr>
@@ -60,11 +65,9 @@ export default {
     };
   },
   mounted() {
-    // Llamada al servicio para obtener la lista de empleados al montar el componente
-    this.obtenerEmpleados();
+    this.obtenerEmpleados(); // Llamada al servicio para obtener la lista de empleados al montar el componente
   },
   methods: {
-    // Método para obtener la lista de empleados
     async obtenerEmpleados() {
       try {
         const response = await UsuarioRepository.findAllEmpleados();
@@ -73,16 +76,19 @@ export default {
         console.error("Error obteniendo la lista de empleados", error);
       }
     },
-    // Método para eliminar un empleado
-    async eliminarEmpleado(id) {
-      if (confirm("¿Estás seguro de que deseas eliminar este empleado?")) {
+    async despedirEmpleado(id) {
+      if (confirm("¿Estás seguro de que deseas despedir a este empleado?")) {
         try {
-          await UsuarioRepository.delete(id);
-          alert("Empleado eliminado con éxito.");
-          this.obtenerEmpleados(); // Recargar la lista de empleados después de la eliminación
+          await UsuarioRepository.despedir(id);
+          alert("Empleado despedido con éxito.");
+          // Actualiza el estado de 'despedido' directamente en el array de empleados
+          const empleado = this.empleados.find((e) => e.id === id);
+          if (empleado) {
+            empleado.despedido = true;
+          }
         } catch (error) {
-          console.error("Error eliminando el empleado", error);
-          alert("Hubo un error al eliminar el empleado.");
+          console.error("Error al despedir al empleado", error);
+          alert("Hubo un error al despedir al empleado.");
         }
       }
     },
@@ -102,5 +108,16 @@ export default {
 
 .float-end {
   margin-bottom: 10px;
+}
+
+.table-secondary {
+  background-color: #f8d7da;
+  opacity: 0.8;
+}
+
+.btn-secondary {
+  cursor: not-allowed;
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
 }
 </style>

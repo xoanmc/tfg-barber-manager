@@ -8,63 +8,74 @@ import javax.persistence.Entity;
 @DiscriminatorValue("EMPLEADO")
 public class Empleado extends Usuario {
 
-  @Column
-  private String puesto;
+    @Column
+    private String puesto;
 
-  @Column
-  private double salario;
+    @Column
+    private double salario;
 
-  @Column
-  private String contrato;
+    @Column
+    private String contrato;
 
-  @Column
-  private String horario;  // Nuevo campo para el horario de trabajo
+    @Column
+    private String horario;  // Nuevo campo para el horario de trabajo
 
-  @Column
-  private String descripcion;  // Nuevo campo para la descripción del empleado
+    @Column
+    private String descripcion;  // Nuevo campo para la descripción del empleado
 
-  public Empleado() {
-    setAutoridad(AutoridadUsuario.EMPLEADO);
-  }
+    @Column(nullable = true)
+    private boolean despedido = false;
+
+    public Empleado() {
+        setAutoridad(AutoridadUsuario.EMPLEADO);
+    }
 
 
-  public String getPuesto() {
-    return puesto;
-  }
+    public String getPuesto() {
+        return puesto;
+    }
 
-  public void setPuesto(String puesto) {
-    this.puesto = puesto;
-  }
+    public void setPuesto(String puesto) {
+        this.puesto = puesto;
+    }
 
-  public double getSalario() {
-    return salario;
-  }
+    public double getSalario() {
+        return salario;
+    }
 
-  public void setSalario(double salario) {
-    this.salario = salario;
-  }
+    public void setSalario(double salario) {
+        this.salario = salario;
+    }
 
-  public String getContrato() {
-    return contrato;
-  }
+    public String getContrato() {
+        return contrato;
+    }
 
-  public void setContrato(String contrato) {
-    this.contrato = contrato;
-  }
+    public void setContrato(String contrato) {
+        this.contrato = contrato;
+    }
 
-  public String getHorario() {
-    return horario;
-  }
+    public String getHorario() {
+        return horario;
+    }
 
-  public void setHorario(String horario) {
-    this.horario = horario;
-  }
+    public void setHorario(String horario) {
+        this.horario = horario;
+    }
 
-  public String getDescripcion() {
-    return descripcion;
-  }
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-  public void setDescripcion(String descripcion) {
-    this.descripcion = descripcion;
-  }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public boolean isDespedido() {
+        return despedido;
+    }
+
+    public void setDespedido(boolean despedido) {
+        this.despedido = despedido;
+    }
 }

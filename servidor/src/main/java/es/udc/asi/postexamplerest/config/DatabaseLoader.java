@@ -1,6 +1,7 @@
 package es.udc.asi.postexamplerest.config;
 
 import es.udc.asi.postexamplerest.model.domain.Cliente;
+import es.udc.asi.postexamplerest.model.domain.Empleado;
 import es.udc.asi.postexamplerest.model.domain.HomePageInfo;
 import es.udc.asi.postexamplerest.model.domain.Servicio;
 import es.udc.asi.postexamplerest.model.exception.UserLoginExistsException;
@@ -18,118 +19,119 @@ import java.time.LocalDate;
 @Configuration
 public class DatabaseLoader {
 
-  @Autowired
-  private UsuarioService userService;
+    @Autowired
+    private UsuarioService userService;
 
-  @Autowired
-  private UsuarioDao userDAO;
+    @Autowired
+    private UsuarioDao userDAO;
 
-  @Autowired
-  private HomePageInfoService homePageInfoService;
+    @Autowired
+    private HomePageInfoService homePageInfoService;
 
-  @Autowired
-  private HomePageInfoDao homePageInfoDao;
+    @Autowired
+    private HomePageInfoDao homePageInfoDao;
 
-  @Autowired
-  private ServiciosDao serviciosDao;
+    @Autowired
+    private ServiciosDao serviciosDao;
 
-  @Transactional(readOnly = false, rollbackFor = Exception.class)
-  public void loadData() throws UserLoginExistsException {
+    @Transactional(readOnly = false, rollbackFor = Exception.class)
+    public void loadData() throws UserLoginExistsException {
 
-    // Registro de clientes
-    userService.registerCliente(
-            "pepe",
-            "perez",
-            "+34 22222222",
-            LocalDate.of(1988, 5, 15), // Fecha de nacimiento
-            "pepe11.perez91@gmail.com", // Email
-            "pepe",
-            "pepe",
-            5,
-            "01/01/2020",
-            false // No enviar correo
-    );
+        // Registro de clientes
+        userService.registerCliente(
+                "pepe",
+                "perez",
+                "+34 22222222",
+                LocalDate.of(1988, 5, 15), // Fecha de nacimiento
+                "pepe11.perez91@gmail.com", // Email
+                "pepe",
+                "pepe",
+                5,
+                "01/01/2020",
+                false // No enviar correo
+        );
 
-    Cliente pepe = userDAO.findClienteById(userDAO.findByLogin("pepe").getId());
+        Cliente pepe = userDAO.findClienteById(userDAO.findByLogin("pepe").getId());
 
-    userService.registerCliente(
-            "maria",
-            "martinez",
-            "+34 4444444",
-            LocalDate.of(1983, 11, 25), // Fecha de nacimiento
-            "maria.martinez@gmail.com", // Email
-            "maria",
-            "maria",
-            3,
-            "15/03/2021",
-            false // No enviar correo
-    );
+        userService.registerCliente(
+                "maria",
+                "martinez",
+                "+34 4444444",
+                LocalDate.of(1983, 11, 25), // Fecha de nacimiento
+                "maria.martinez@gmail.com", // Email
+                "maria",
+                "maria",
+                3,
+                "15/03/2021",
+                false // No enviar correo
+        );
 
-    Cliente maria = userDAO.findClienteById(userDAO.findByLogin("maria").getId());
+        Cliente maria = userDAO.findClienteById(userDAO.findByLogin("maria").getId());
 
-    // Registro de empleados (incluidos los barberos)
-    userService.registerEmpleado(
-            "ronaldo",
-            "nazario",
-            "+34 333333333",
-            LocalDate.of(1976, 9, 22), // Fecha de nacimiento
-            "barbero",
-            "ronaldo.nazario@gmail.com", // Email
-            "ronaldo",
-            "ronaldo",
-            2500.00,
-            "01/01/2023",
-            "LUN-SAB 9:00-18:00",
-            "Especialista en cortes y afeitado tradicional"
-    );
+        Empleado empleado1 = new Empleado();
+        empleado1.setNombre("ronaldo");
+        empleado1.setApellido("nazario");
+        empleado1.setTelefono("+34 333333333");
+        empleado1.setFechaNacimiento(LocalDate.of(1976, 9, 22));
+        empleado1.setPuesto("barbero");
+        empleado1.setEmail("ronaldo.nazario@gmail.com");
+        empleado1.setLogin("ronaldo");
+        empleado1.setPassword("ronaldo");
+        empleado1.setSalario(2500.00);
+        empleado1.setContrato("01/01/2023");
+        empleado1.setHorario("LUN-SAB 9:00-18:00");
+        empleado1.setDescripcion("Especialista en cortes y afeitado tradicional");
+        empleado1.setDespedido(false); // Inicializar explícitamente
+        userDAO.create(empleado1);
 
-    userService.registerEmpleado(
-            "lionel",
-            "messi",
-            "+34 666666666",
-            LocalDate.of(1987, 6, 24), // Fecha de nacimiento
-            "barbero",
-            "lionel.messi@gmail.com", // Email
-            "messi",
-            "messi",
-            3000.00,
-            "01/06/2022",
-            "LUN-VIE 10:00-19:00",
-            "Experto en cortes modernos y degradados"
-    );
+        Empleado empleado2 = new Empleado();
+        empleado2.setNombre("lionel");
+        empleado2.setApellido("messi");
+        empleado2.setTelefono("+34 666666666");
+        empleado2.setFechaNacimiento(LocalDate.of(1987, 6, 24));
+        empleado2.setPuesto("barbero");
+        empleado2.setEmail("lionel.messi@gmail.com");
+        empleado2.setLogin("messi");
+        empleado2.setPassword("messi");
+        empleado2.setSalario(3000.00);
+        empleado2.setContrato("01/06/2022");
+        empleado2.setHorario("LUN-VIE 10:00-19:00");
+        empleado2.setDescripcion("Experto en cortes modernos y degradados");
+        empleado2.setDespedido(false); // Inicializar explícitamente
+        userDAO.create(empleado2);
 
-    // Registro de jefes
-    userService.registerJefe(
-            "lucia",
-            "lopez",
-            "+34 555555555",
-            "lucia.lopez@gmail.com", // Email
-            "lucia",
-            "lucia"
-    );
+        // Registro de jefes
+        userService.registerJefe(
+                "lucia",
+                "lopez",
+                "+34 555555555",
+                "lucia.lopez@gmail.com", // Email
+                "lucia",
+                "lucia"
+        );
 
-    // Cargar datos por defecto en la tabla de HomePageInfo
-    if (homePageInfoDao.find() == null) {
-      HomePageInfo homePageInfo = new HomePageInfo("TFG Barber", "La mejor barbería de la ciudad.");
-      homePageInfoService.updateHomePageInfo(homePageInfo);
-      System.out.println("Datos por defecto de HomePageInfo cargados.");
-    } else {
-      System.out.println("HomePageInfo ya está cargado.");
+        // Cargar datos por defecto en la tabla de HomePageInfo
+        if (homePageInfoDao.find() == null) {
+            HomePageInfo homePageInfo = new HomePageInfo("TFG Barber", "La mejor barbería de la ciudad.");
+            homePageInfoService.updateHomePageInfo(homePageInfo);
+            System.out.println("Datos por defecto de HomePageInfo cargados.");
+        } else {
+            System.out.println("HomePageInfo ya está cargado.");
+        }
+
+        // Cargar servicios predeterminados si no existen
+        if (serviciosDao.findAll().isEmpty()) {
+            Servicio cortar = new Servicio("Cortar", "Corte de cabello estándar", 15.00);
+            Servicio afeitar = new Servicio("Afeitar", "Afeitado tradicional con toalla caliente", 10.00);
+            Servicio cortarAfeitar = new Servicio("Cortar + Afeitar", "Paquete completo de corte y afeitado", 22.00);
+
+            serviciosDao.create(cortar);
+            serviciosDao.create(afeitar);
+            serviciosDao.create(cortarAfeitar);
+
+            System.out.println("Servicios por defecto cargados.");
+        } else {
+            System.out.println("Los servicios ya están cargados.");
+        }
     }
-
-    // Cargar servicios predeterminados si no existen
-    if (serviciosDao.findAll().isEmpty()) {
-      Servicio cortar = new Servicio("Cortar", "Corte de cabello estándar", 15.00);
-      Servicio afeitar = new Servicio("Afeitar", "Afeitado tradicional con toalla caliente", 10.00);
-      Servicio cortarAfeitar = new Servicio("Cortar + Afeitar", "Paquete completo de corte y afeitado", 22.00);
-
-      serviciosDao.create(cortar);
-      serviciosDao.create(afeitar);
-      serviciosDao.create(cortarAfeitar);
-
-      System.out.println("Servicios por defecto cargados.");
-    } else {
-      System.out.println("Los servicios ya están cargados.");
-    }
-  }
 }

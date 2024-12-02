@@ -1,6 +1,14 @@
 <template>
   <div class="container py-5 d-flex justify-content-center align-items-center vh-100">
-    <div class="card shadow-lg w-100" style="max-width: 400px; border-radius: 15px;">
+    <!-- Banner de éxito -->
+    <div v-if="showBanner" class="alert alert-success text-center fade-in" role="alert">
+      <p class="mb-2 fw-bold">¡Registro exitoso!</p>
+      <p>Hemos enviado un correo para confirmar tu cuenta. Por favor, revisa tu bandeja de entrada.</p>
+      <button class="btn btn-primary mt-3" @click="redirectToHome">Aceptar</button>
+    </div>
+
+    <!-- Formulario de registro -->
+    <div v-else class="card shadow-lg w-100" style="max-width: 400px; border-radius: 15px;">
       <div class="card-body p-4">
         <h2 class="text-center text-primary fw-bold mb-4">¡Hazte Miembro!</h2>
         <form @submit.prevent="handleRegister">
@@ -127,6 +135,7 @@ export default {
       login: "",
       password: "",
       error: "",
+      showBanner: false, // Controla si se muestra el banner
       meses: [
         "Enero",
         "Febrero",
@@ -152,6 +161,7 @@ export default {
         const anio = String(this.fechaNacimiento.anio).trim();
         const fechaNacimiento = `${anio}-${mes}-${dia}`;
 
+        // Llamada al backend
         await auth.registerCliente({
           nombre: this.nombre,
           apellido: this.apellido,
@@ -162,16 +172,34 @@ export default {
           password: this.password,
         });
 
-        alert("Registro exitoso. Por favor, revisa tu correo para confirmar tu cuenta.");
-        this.$router.push("/");
+        // Mostrar el banner de éxito
+        this.showBanner = true;
+
+        // Limpiar el formulario
+        this.clearForm();
+
+        // Resetear cualquier error previo
+        this.error = "";
       } catch (e) {
         console.error(e);
-        if (e.response?.data?.message) {
-          this.error = e.response.data.message;
-        } else {
-          this.error = "Ocurrió un error inesperado.";
-        }
+
+        // Captura el error del backend o muestra un mensaje genérico
+        this.error = e.response?.data?.message || "Ocurrió un error inesperado.";
       }
+    },
+    clearForm() {
+      // Limpia todos los campos del formulario
+      this.nombre = "";
+      this.apellido = "";
+      this.email = "";
+      this.telefono = "";
+      this.fechaNacimiento = { dia: "", mes: "", anio: "" };
+      this.login = "";
+      this.password = "";
+    },
+    redirectToHome() {
+      // Redirigir a la pantalla de inicio
+      this.$router.push("/");
     },
   },
 };
@@ -182,7 +210,13 @@ export default {
   border: none;
   border-radius: 15px;
   background-color: #f8f9fa;
-  margin-top: 70px; /* Asegura que no se superponga al menú superior */
+}
+
+.alert {
+  max-width: 400px;
+  margin: 0 auto;
+  border-radius: 15px;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
 .card-body {
@@ -222,6 +256,19 @@ h2 {
 
 .text-danger {
   font-size: 0.9rem;
+}
+
+/* Animación del banner */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Ajustes responsivos */

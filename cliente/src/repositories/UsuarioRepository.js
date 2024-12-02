@@ -26,4 +26,9 @@ export default {
     async delete(id) {
         return await HTTP.delete(`${resource}/${id}`);
     },
+
+    async despedir(id) {
+        return await HTTP.patch(`${resource}/${id}/despedir`);
+    },
+
 };
