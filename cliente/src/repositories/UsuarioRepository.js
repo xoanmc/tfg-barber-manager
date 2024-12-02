@@ -31,4 +31,12 @@ export default {
         return await HTTP.patch(`${resource}/${id}/despedir`);
     },
 
+    async bloquearCliente(id) {
+        return await HTTP.patch(`${resource}/${id}/bloquear`);
+    },
+
+    async activarCliente(id) {
+        return await HTTP.patch(`${resource}/${id}/activar`);
+    },
+
 };

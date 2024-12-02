@@ -38,7 +38,7 @@ public class DatabaseLoader {
     public void loadData() throws UserLoginExistsException {
 
         // Registro de clientes
-        userService.registerCliente(
+        Cliente pepe = userService.registerCliente(
                 "pepe",
                 "perez",
                 "+34 22222222",
@@ -50,10 +50,10 @@ public class DatabaseLoader {
                 "01/01/2020",
                 false // No enviar correo
         );
+        pepe.setActivo(true); // Marcar como activo
+        userDAO.update(pepe);
 
-        Cliente pepe = userDAO.findClienteById(userDAO.findByLogin("pepe").getId());
-
-        userService.registerCliente(
+        Cliente maria = userService.registerCliente(
                 "maria",
                 "martinez",
                 "+34 4444444",
@@ -65,8 +65,8 @@ public class DatabaseLoader {
                 "15/03/2021",
                 false // No enviar correo
         );
-
-        Cliente maria = userDAO.findClienteById(userDAO.findByLogin("maria").getId());
+        maria.setActivo(true); // Marcar como activo
+        userDAO.update(maria);
 
         Empleado empleado1 = new Empleado();
         empleado1.setNombre("ronaldo");

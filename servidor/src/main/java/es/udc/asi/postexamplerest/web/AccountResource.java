@@ -53,30 +53,32 @@ public class AccountResource {
     @Autowired
     private Properties properties;
 
-  @Autowired
-  private UsuarioDao usuarioDAO;
+    @Autowired
+    private UsuarioDao usuarioDAO;
 
-  @PostMapping("/authenticate")
-  public JWTToken authenticate(@Valid @RequestBody LoginDTO loginDTO) throws CredentialsAreNotValidException {
-    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-            loginDTO.getLogin(), loginDTO.getPassword());
-    try {
-      Authentication authentication = authenticationManager.authenticate(authenticationToken);
-      Usuario usuario = usuarioDAO.findByLogin(loginDTO.getLogin());
-      if (usuario instanceof Empleado && ((Empleado) usuario).isDespedido()) {
-        throw new CredentialsAreNotValidException("El empleado ha sido despedido y no puede iniciar sesión.");
-      }
-      SecurityContextHolder.getContext().setAuthentication(authentication);
-      String jwt = tokenProvider.createToken(authentication);
-      return new JWTToken(jwt);
-    } catch (AuthenticationException e) {
-      logger.warn(e.getMessage(), e);
-      throw new CredentialsAreNotValidException(e.getMessage());
+    @PostMapping("/authenticate")
+    public JWTToken authenticate(@Valid @RequestBody LoginDTO loginDTO) throws CredentialsAreNotValidException {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                loginDTO.getLogin(), loginDTO.getPassword());
+        try {
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            Usuario usuario = usuarioDAO.findByLogin(loginDTO.getLogin());
+            if (usuario instanceof Empleado && ((Empleado) usuario).isDespedido()) {
+                throw new CredentialsAreNotValidException("El empleado ha sido despedido y no puede iniciar sesión.");
+            }
+            if (usuario instanceof Cliente && !((Cliente) usuario).isActivo()) {
+                throw new CredentialsAreNotValidException("El cliente está inactivo y no puede iniciar sesión.");
+            }
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = tokenProvider.createToken(authentication);
+            return new JWTToken(jwt);
+        } catch (AuthenticationException e) {
+            logger.warn(e.getMessage(), e);
+            throw new CredentialsAreNotValidException(e.getMessage());
+        }
     }
-  }
 
-
-  @GetMapping("/account")
+    @GetMapping("/account")
     public AccountDTO getAccount() {
         return userService.getCurrentUserWithAuthority();
     }
@@ -147,10 +149,22 @@ public class AccountResource {
         );
     }
 
-  @PatchMapping("/users/{id}/despedir")
-  public ResponseEntity<Void> despedirEmpleado(@PathVariable Long id) throws NotFoundException {
-    userService.despedirEmpleado(id);
-    return ResponseEntity.noContent().build();
-  }
+    @PatchMapping("/users/{id}/despedir")
+    public ResponseEntity<Void> despedirEmpleado(@PathVariable Long id) throws NotFoundException {
+        userService.despedirEmpleado(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/users/{id}/bloquear")
+    public ResponseEntity<Void> bloquearCliente(@PathVariable Long id) throws NotFoundException {
+        userService.bloquearCliente(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/users/{id}/activar")
+    public ResponseEntity<Void> activarCliente(@PathVariable Long id) throws NotFoundException {
+        userService.cambiarEstadoCliente(id, true);
+        return ResponseEntity.noContent().build();
+    }
 
 }

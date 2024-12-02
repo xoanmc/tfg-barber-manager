@@ -14,10 +14,15 @@
             <th>Edad</th>
             <th>Citas</th>
             <th>Primera Cita</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="cliente in clientes" :key="cliente.id">
+          <tr
+            v-for="cliente in clientes"
+            :key="cliente.id"
+            :class="{ 'table-secondary': !cliente.activo }"
+          >
             <td>{{ cliente.id }}</td>
             <td>{{ cliente.nombre }}</td>
             <td>{{ cliente.apellido }}</td>
@@ -25,9 +30,18 @@
             <td>{{ cliente.edad ?? "N/A" }}</td>
             <!-- Edad -->
             <td>{{ cliente.citas ?? "N/A" }}</td>
-            <!-- Citas (por ahora null) -->
+            <!-- Citas -->
             <td>{{ cliente.primeraCita ?? "N/A" }}</td>
-            <!-- Primera cita (por ahora null) -->
+            <!-- Primera cita -->
+            <td>
+              <button
+                @click="toggleClienteEstado(cliente.id, cliente.activo)"
+                class="btn"
+                :class="cliente.activo ? 'btn-warning' : 'btn-success'"
+              >
+                {{ cliente.activo ? "Bloquear" : "Activar" }}
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -41,7 +55,6 @@
 </template>
 
 <script>
-// Importamos el repositorio para obtener la lista de clientes
 import UsuarioRepository from "@/repositories/UsuarioRepository";
 
 export default {
@@ -51,18 +64,42 @@ export default {
     };
   },
   mounted() {
-    // Al montar el componente, cargamos la lista de clientes
-    this.obtenerClientes();
+    this.obtenerClientes(); // Carga la lista de clientes al montar el componente
   },
   methods: {
     async obtenerClientes() {
       try {
-        // Llamamos al método findAllClientes del repositorio
         const response = await UsuarioRepository.findAllClientes();
-        this.clientes = response; // Asignamos la respuesta a la variable clientes
+        this.clientes = response;
       } catch (e) {
         console.error("Error obteniendo la lista de clientes", e);
-        this.clientes = []; // En caso de error, aseguramos que el array esté vacío
+        this.clientes = []; // Asegura que el array esté vacío en caso de error
+      }
+    },
+    async toggleClienteEstado(id, estadoActual) {
+      const accion = estadoActual ? "bloquear" : "activar";
+      if (
+        confirm(
+          `¿Estás seguro de que deseas ${accion} a este cliente?`
+        )
+      ) {
+        try {
+          if (estadoActual) {
+            await UsuarioRepository.bloquearCliente(id);
+            alert("Cliente bloqueado con éxito.");
+          } else {
+            await UsuarioRepository.activarCliente(id);
+            alert("Cliente activado con éxito.");
+          }
+          // Actualiza directamente el estado del cliente
+          const cliente = this.clientes.find((c) => c.id === id);
+          if (cliente) {
+            cliente.activo = !estadoActual;
+          }
+        } catch (e) {
+          console.error(`Error al ${accion} al cliente`, e);
+          alert(`Hubo un error al ${accion} al cliente.`);
+        }
       }
     },
   },
@@ -77,5 +114,20 @@ export default {
 .table th,
 .table td {
   text-align: center;
+}
+
+.table-secondary {
+  background-color: #f8d7da;
+  opacity: 0.8;
+}
+
+.btn-warning {
+  background-color: #ffc107 !important;
+  border-color: #ffc107 !important;
+}
+
+.btn-success {
+  background-color: #28a745 !important;
+  border-color: #28a745 !important;
 }
 </style>

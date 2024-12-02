@@ -286,6 +286,26 @@ public class UsuarioService {
     usuarioDAO.update(empleado);
   }
 
+  @Transactional(readOnly = false)
+  public void bloquearCliente(Long id) throws NotFoundException {
+    Usuario usuario = usuarioDAO.findById(id);
+    if (usuario == null || !(usuario instanceof Cliente)) {
+      throw new NotFoundException("Cliente no encontrado", Cliente.class);
+    }
+    Cliente cliente = (Cliente) usuario;
+    cliente.setActivo(false); // Marcar cliente como inactivo
+    usuarioDAO.update(cliente);
+  }
 
+  @Transactional(readOnly = false)
+  public void cambiarEstadoCliente(Long id, boolean activo) throws NotFoundException {
+    Usuario usuario = usuarioDAO.findById(id);
+    if (usuario == null || !(usuario instanceof Cliente)) {
+      throw new NotFoundException("Cliente no encontrado", Cliente.class);
+    }
+    Cliente cliente = (Cliente) usuario;
+    cliente.setActivo(activo);
+    usuarioDAO.update(cliente);
+  }
 
 }
