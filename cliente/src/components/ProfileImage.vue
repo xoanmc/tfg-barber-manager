@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import ImageRepository from "@/repositories/ImageRepository";
 
 export default {
   props: {
@@ -39,14 +39,14 @@ export default {
     },
     currentImageUrl: {
       type: String,
-      default: "",
+      default: "", // Asegura que tenga un valor por defecto
     },
   },
   data() {
     return {
-      selectedImage: null,
-      imageUrl: this.currentImageUrl || "",
-      defaultImageUrl: "https://via.placeholder.com/150",
+      selectedImage: null, // Archivo seleccionado para subir
+      imageUrl: this.currentImageUrl, // URL de la imagen actual
+      defaultImageUrl: "https://via.placeholder.com/150", // Imagen predeterminada
     };
   },
   methods: {
@@ -63,24 +63,10 @@ export default {
         return;
       }
 
-      const formData = new FormData();
-      formData.append("file", this.selectedImage);
-
       try {
-        const token = localStorage.getItem("token");
-        const response = await axios.post(
-          `/api/users/upload/${this.userId}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        this.imageUrl = response.data.imageUrl;
-        this.$emit("imageUploaded", this.imageUrl);
+        const imageUrl = await ImageRepository.uploadProfileImage(this.userId, this.selectedImage);
+        this.imageUrl = imageUrl; // Actualiza la imagen mostrada
+        this.$emit("imageUploaded", imageUrl);
         alert("Imagen subida con éxito.");
       } catch (error) {
         console.error("Error al subir la imagen:", error);
@@ -90,7 +76,7 @@ export default {
   },
   watch: {
     currentImageUrl(newVal) {
-      this.imageUrl = newVal;
+      this.imageUrl = newVal; // Sincroniza la URL de la imagen con la prop
     },
   },
 };

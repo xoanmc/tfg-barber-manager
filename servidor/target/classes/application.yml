@@ -46,7 +46,7 @@ properties:
   jwtSecretKey: iuabhsdfiasddfioasddfoa7w9earh324982h397239u23badswfasd2i9238723
   jwtValidity: 7200
   upload:
-    path: ./uploads # ruta donde se guardaran los archivos de subida
+    path: D:\TFG\tfg-barber\tfg\servidor\uploads # ruta donde se guardaran los archivos de subida
 app:
   base:
     url: http://localhost:8080

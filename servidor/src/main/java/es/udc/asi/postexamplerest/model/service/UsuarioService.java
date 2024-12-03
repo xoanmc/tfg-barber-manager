@@ -19,7 +19,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -46,6 +49,9 @@ public class UsuarioService {
 
     @Value("${app.base.url}")
     private String appBaseUrl; // Base URL para generar enlaces de confirmación
+
+    @Value("${properties.upload.path}")
+    private String uploadBasePath;
 
     // Método para obtener la URL de la imagen de perfil
     public String getProfileImageUrl(Long userId) throws NotFoundException {
@@ -307,5 +313,44 @@ public class UsuarioService {
     cliente.setActivo(activo);
     usuarioDAO.update(cliente);
   }
+
+    @Transactional
+    public String uploadProfileImage(Long userId, MultipartFile file) throws NotFoundException, IOException {
+        Usuario user = usuarioDAO.findById(userId);
+        if (user == null) {
+            System.out.println("Usuario no encontrado para ID: " + userId);
+            throw new NotFoundException(userId.toString(), Usuario.class);
+        }
+
+        // Crear directorio si no existe
+        String uploadDir = uploadBasePath + "/profile-images/";
+        File directory = new File(uploadDir);
+        if (!directory.exists()) {
+            System.out.println("Creando directorio: " + uploadDir);
+            if (!directory.mkdirs()) {
+                throw new IOException("No se pudo crear el directorio de subida: " + uploadDir);
+            }
+        }
+
+        // Guardar el archivo
+        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        File destinationFile = new File(uploadDir + fileName);
+
+        System.out.println("Guardando archivo en: " + destinationFile.getAbsolutePath());
+
+        try {
+            file.transferTo(destinationFile);
+        } catch (IOException e) {
+            throw new IOException("Error al guardar el archivo: " + e.getMessage(), e);
+        }
+
+        // Actualizar la URL en el modelo y guardarla en la base de datos
+        String imageUrl = appBaseUrl + "/api/images/profile/" + fileName;
+        user.setProfileImageUrl(imageUrl);
+        usuarioDAO.update(user);
+
+        System.out.println("Imagen subida con éxito: " + imageUrl);
+        return imageUrl;
+    }
 
 }

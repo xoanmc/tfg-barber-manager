@@ -44,23 +44,30 @@ public class UserResource {
   }
 
   // Endpoint para subir la imagen de perfil
-  /*@PostMapping("/upload/{userId}")
+  @PostMapping("/upload/{userId}")
   public ResponseEntity<Map<String, String>> uploadProfileImage(@PathVariable Long userId, @RequestParam("file") MultipartFile file) {
     if (file.isEmpty()) {
       return ResponseEntity.badRequest().body(null); // Si el archivo está vacío, retornar un error
     }
 
     try {
+      // Prints para depuración
+      System.out.println("Subiendo imagen para usuario ID: " + userId);
+      System.out.println("Nombre del archivo: " + file.getOriginalFilename());
+      System.out.println("Tamaño del archivo: " + file.getSize());
+
       String imageUrl = userService.uploadProfileImage(userId, file);
       Map<String, String> response = new HashMap<>();
       response.put("imageUrl", imageUrl);
       return ResponseEntity.ok(response);
     } catch (NotFoundException e) {
+      e.printStackTrace(); // Imprime el error en el log
       return ResponseEntity.status(404).body(null);
     } catch (IOException e) {
+      e.printStackTrace();
       return ResponseEntity.status(500).body(null);
     }
-  }*/
+  }
 
   // Endpoint para obtener la URL de la imagen de perfil
   @GetMapping("/profile-image/{userId}")

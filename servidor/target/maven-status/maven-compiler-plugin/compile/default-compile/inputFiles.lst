@@ -1,6 +1,7 @@
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\config\PasswordEncoderBean.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\domain\Estado.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\repository\UsuarioDao.java
+D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\web\ProfileImageResource.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\security\MyUserDetailsService.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\domain\Usuario.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\security\JWTFilter.java

@@ -36,7 +36,7 @@
     </div>
 
     <div v-else class="text-center text-danger">
-      <p>No se pudo cargar la información del perfil.</p>
+      <p>Error al cargar los datos del perfil del jefe.</p>
     </div>
   </div>
 </template>
@@ -45,6 +45,7 @@
 import AccountRepository from "@/repositories/AccountRepository";
 import UsuarioRepository from "@/repositories/UsuarioRepository";
 import ProfileImage from "@/components/ProfileImage";
+import ImageRepository from "@/repositories/ImageRepository";
 
 export default {
   components: {
@@ -64,6 +65,8 @@ export default {
     async fetchData() {
       try {
         this.myuser = await AccountRepository.getAccount();
+        // Intentar cargar la URL de la imagen de perfil
+        this.imageUrl = await ImageRepository.getProfileImage(this.myuser.id);
         const user = await UsuarioRepository.findOne(this.myuser.id);
         if (user?.profileImageUrl) this.imageUrl = user.profileImageUrl;
       } catch (err) {
@@ -91,23 +94,26 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .card {
   border: none;
   border-radius: 15px;
   background-color: #f8f9fa;
 }
+
 .card-body {
   padding: 2rem;
 }
+
 .text-primary {
   font-size: 1.5rem;
   font-weight: bold;
 }
+
 .btn {
   width: 30%;
 }
+
 .spinner-border {
   width: 3rem;
   height: 3rem;

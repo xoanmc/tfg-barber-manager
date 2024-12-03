@@ -72,6 +72,7 @@ public class SecurityConfiguration {
                 .antMatchers("/api/servicios/**").permitAll() // Acceso público a servicios
                 .antMatchers(HttpMethod.GET, "/api/users/**").permitAll() // Ver usuarios
                 .antMatchers(HttpMethod.POST, "/api/users/upload/**").permitAll() // Subida de archivos permitida
+                .antMatchers("/api/images/profile/**").permitAll() // Permitir acceso sin autenticación
                 .antMatchers("/**").authenticated() // Todas las demás rutas requieren autenticación
                 .and()
                 .apply(securityConfigurerAdapter());

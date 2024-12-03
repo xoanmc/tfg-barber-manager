@@ -12,6 +12,7 @@ import es.udc.asi.postexamplerest.model.service.HomePageInfoService;
 import es.udc.asi.postexamplerest.model.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -34,6 +35,9 @@ public class DatabaseLoader {
     @Autowired
     private ServiciosDao serviciosDao;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     public void loadData() throws UserLoginExistsException {
 
@@ -42,7 +46,7 @@ public class DatabaseLoader {
                 "pepe",
                 "perez",
                 "+34 22222222",
-                LocalDate.of(1988, 5, 15), // Fecha de nacimiento
+                LocalDate.of(1998, 5, 15), // Fecha de nacimiento
                 "pepe.perez@gmail.com", // Email
                 "pepe",
                 "pepe",
@@ -57,7 +61,7 @@ public class DatabaseLoader {
                 "maria",
                 "martinez",
                 "+34 4444444",
-                LocalDate.of(1983, 11, 25), // Fecha de nacimiento
+                LocalDate.of(1993, 11, 25), // Fecha de nacimiento
                 "maria.martinez@gmail.com", // Email
                 "maria",
                 "maria",
@@ -76,7 +80,7 @@ public class DatabaseLoader {
         empleado1.setPuesto("barbero");
         empleado1.setEmail("ronaldo.nazario@gmail.com");
         empleado1.setLogin("ronaldo");
-        empleado1.setPassword("ronaldo");
+        empleado1.setPassword(passwordEncoder.encode("ronaldo"));
         empleado1.setSalario(2500.00);
         empleado1.setContrato("01/01/2023");
         empleado1.setHorario("LUN-SAB 9:00-18:00");
@@ -92,7 +96,7 @@ public class DatabaseLoader {
         empleado2.setPuesto("barbero");
         empleado2.setEmail("lionel.messi@gmail.com");
         empleado2.setLogin("messi");
-        empleado2.setPassword("messi");
+        empleado2.setPassword(passwordEncoder.encode("messi"));
         empleado2.setSalario(3000.00);
         empleado2.setContrato("01/06/2022");
         empleado2.setHorario("LUN-VIE 10:00-19:00");
