@@ -1,49 +1,48 @@
 <template>
-  <div class="container">
-    <h1>Lista de Empleados</h1>
-
-    <!-- Botón para redirigir a la página de registro de empleados -->
-    <div class="float-end">
-      <router-link class="btn btn-success" :to="{ name: 'EmpleadoCreate' }">
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="text-primary">Plantilla de Empleados</h1>
+      <!-- Botón para redirigir a la página de registro de empleados -->
+      <router-link class="btn btn-success btn-lg" :to="{ name: 'EmpleadoCreate' }">
         Contratar
       </router-link>
     </div>
 
     <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
+      <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
           <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Teléfono</th>
-            <th>Puesto</th>
-            <th>Edad</th>
-            <th>Salario</th>
-            <th>Contrato</th>
-            <th>Acciones</th>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Login</th>
+            <th scope="col">Email</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Puesto</th>
+            <th scope="col">Salario</th>
+            <th scope="col">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr 
-            v-for="empleado in empleados" 
-            :key="empleado.id" 
-            :class="{ 'table-secondary': empleado.despedido }"
+          <tr
+            v-for="empleado in empleados"
+            :key="empleado.id"
+            :class="{ 'table-warning': empleado.despedido }"
           >
             <td>{{ empleado.id }}</td>
             <td>{{ empleado.nombre }}</td>
             <td>{{ empleado.apellido }}</td>
+            <td>{{ empleado.login }}</td>
+            <td>{{ empleado.email }}</td>
             <td>{{ empleado.telefono }}</td>
             <td>{{ empleado.puesto }}</td>
-            <td>{{ empleado.edad }}</td>
             <td>{{ empleado.salario }}</td>
-            <td>{{ empleado.contrato }}</td>
             <td>
               <button
-                :disabled="empleado.despedido" 
+                :disabled="empleado.despedido"
                 @click="despedirEmpleado(empleado.id)"
-                class="btn"
-                :class="empleado.despedido ? 'btn-secondary' : 'btn-warning'"
+                class="btn btn-sm"
+                :class="empleado.despedido ? 'btn-secondary' : 'btn-danger'"
               >
                 {{ empleado.despedido ? "Despedido" : "Despedir" }}
               </button>
@@ -102,22 +101,43 @@ export default {
 }
 
 .table {
-  width: 100%;
   margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.float-end {
-  margin-bottom: 10px;
+.table-warning {
+  background-color: #fff3cd !important;
 }
 
-.table-secondary {
-  background-color: #f8d7da;
-  opacity: 0.8;
+.btn-danger {
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+}
+
+.btn-danger:hover {
+  background-color: #c82333 !important;
+  border-color: #bd2130 !important;
 }
 
 .btn-secondary {
   cursor: not-allowed;
   background-color: #6c757d !important;
   border-color: #6c757d !important;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.table-dark th {
+  color: #fff;
+  background-color: #343a40;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
 }
 </style>

@@ -7,6 +7,7 @@ import java.time.LocalDate;
 public class ClienteListaDTO {
 
     private Long id;
+    private String email;
     private String login;
     private String nombre;
     private String apellido;
@@ -19,6 +20,7 @@ public class ClienteListaDTO {
     public ClienteListaDTO(Cliente cliente) {
         this.id = cliente.getId();
         this.login = cliente.getLogin();
+        this.email = cliente.getEmail();
         this.nombre = cliente.getNombre();
         this.apellido = cliente.getApellido();
         this.telefono = cliente.getTelefono();
@@ -43,6 +45,14 @@ public class ClienteListaDTO {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getNombre() {

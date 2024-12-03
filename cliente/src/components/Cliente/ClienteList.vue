@@ -1,42 +1,45 @@
 <template>
-  <div class="container">
-    <h1>Lista de Clientes</h1>
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="text-primary">Lista de Clientes</h1>
+    </div>
 
     <!-- Muestra la tabla solo si hay clientes disponibles -->
     <div class="table-responsive" v-if="clientes.length > 0">
-      <table class="table table-striped">
-        <thead>
+      <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
           <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Teléfono</th>
-            <th>Edad</th>
-            <th>Citas</th>
-            <th>Primera Cita</th>
-            <th>Acciones</th>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Login</th>
+            <th scope="col">Email</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Fecha de Nacimiento</th>
+            <th scope="col">Citas</th>
+            <th scope="col">Registro</th>
+            <th scope="col">Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr
             v-for="cliente in clientes"
             :key="cliente.id"
-            :class="{ 'table-secondary': !cliente.activo }"
+            :class="{ 'table-warning': !cliente.activo }"
           >
             <td>{{ cliente.id }}</td>
             <td>{{ cliente.nombre }}</td>
             <td>{{ cliente.apellido }}</td>
+            <td>{{ cliente.login }}</td>
+            <td>{{ cliente.email }}</td>
             <td>{{ cliente.telefono }}</td>
-            <td>{{ cliente.edad ?? "N/A" }}</td>
-            <!-- Edad -->
+            <td>{{ cliente.fechaNacimiento ?? "N/A" }}</td>
             <td>{{ cliente.citas ?? "N/A" }}</td>
-            <!-- Citas -->
             <td>{{ cliente.primeraCita ?? "N/A" }}</td>
-            <!-- Primera cita -->
             <td>
               <button
                 @click="toggleClienteEstado(cliente.id, cliente.activo)"
-                class="btn"
+                class="btn btn-sm"
                 :class="cliente.activo ? 'btn-warning' : 'btn-success'"
               >
                 {{ cliente.activo ? "Bloquear" : "Activar" }}
@@ -48,8 +51,8 @@
     </div>
 
     <!-- Mensaje mostrado mientras se cargan los clientes -->
-    <div v-else>
-      <p>Cargando lista de clientes...</p>
+    <div v-else class="text-center py-5">
+      <p class="text-muted">Cargando lista de clientes...</p>
     </div>
   </div>
 </template>
@@ -78,11 +81,7 @@ export default {
     },
     async toggleClienteEstado(id, estadoActual) {
       const accion = estadoActual ? "bloquear" : "activar";
-      if (
-        confirm(
-          `¿Estás seguro de que deseas ${accion} a este cliente?`
-        )
-      ) {
+      if (confirm(`¿Estás seguro de que deseas ${accion} a este cliente?`)) {
         try {
           if (estadoActual) {
             await UsuarioRepository.bloquearCliente(id);
@@ -107,18 +106,23 @@ export default {
 </script>
 
 <style scoped>
-.table-responsive {
+.container {
+  padding: 20px;
+}
+
+.table {
   margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.table th,
-.table td {
-  text-align: center;
+.table-warning {
+  background-color: #fff3cd !important;
 }
 
-.table-secondary {
-  background-color: #f8d7da;
-  opacity: 0.8;
+.table-dark th {
+  color: #fff;
+  background-color: #343a40;
 }
 
 .btn-warning {
@@ -129,5 +133,19 @@ export default {
 .btn-success {
   background-color: #28a745 !important;
   border-color: #28a745 !important;
+}
+
+.btn-warning:hover {
+  background-color: #e0a800 !important;
+  border-color: #d39e00 !important;
+}
+
+.btn-success:hover {
+  background-color: #218838 !important;
+  border-color: #1e7e34 !important;
+}
+
+.text-muted {
+  font-size: 1.2rem;
 }
 </style>
