@@ -2,7 +2,6 @@
   <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1 class="text-primary">Plantilla de Empleados</h1>
-      <!-- Botón para redirigir a la página de registro de empleados -->
       <router-link class="btn btn-success btn-lg" :to="{ name: 'EmpleadoCreate' }">
         Contratar
       </router-link>
@@ -60,11 +59,11 @@ import UsuarioRepository from "@/repositories/UsuarioRepository";
 export default {
   data() {
     return {
-      empleados: [], // Array para almacenar los empleados
+      empleados: [],
     };
   },
   mounted() {
-    this.obtenerEmpleados(); // Llamada al servicio para obtener la lista de empleados al montar el componente
+    this.obtenerEmpleados();
   },
   methods: {
     async obtenerEmpleados() {
@@ -80,7 +79,6 @@ export default {
         try {
           await UsuarioRepository.despedir(id);
           alert("Empleado despedido con éxito.");
-          // Actualiza el estado de 'despedido' directamente en el array de empleados
           const empleado = this.empleados.find((e) => e.id === id);
           if (empleado) {
             empleado.despedido = true;

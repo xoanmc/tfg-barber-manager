@@ -7,7 +7,6 @@
       </div>
     </div>
 
-    <!-- Mostrar los datos del cliente -->
     <div v-else-if="myuser">
       <div class="row justify-content-center">
         <div class="col-lg-6">
@@ -29,7 +28,6 @@
       </div>
     </div>
 
-    <!-- Mostrar mensaje de error si no se pudieron cargar los datos -->
     <div v-else class="text-center text-danger">
       <p>Error al cargar los datos del perfil.</p>
     </div>
@@ -47,33 +45,31 @@ export default {
   },
   data() {
     return {
-      myuser: null, // Datos del usuario autenticado
-      imageUrl: "", // URL de la imagen de perfil
-      loading: true, // Controla si los datos están cargándose
+      myuser: null,
+      imageUrl: "",
+      loading: true,
     };
   },
   async mounted() {
-    await this.fetchData(); // Cargar los datos al montar el componente
+    await this.fetchData();
   },
   methods: {
     async fetchData() {
       try {
-        // Obtener los datos del usuario autenticado
         this.myuser = await AccountRepository.getAccount();
 
-        // Intentar cargar la URL de la imagen de perfil
         this.imageUrl = await ImageRepository.getProfileImage(this.myuser.id);
       } catch (err) {
         console.error("Error cargando el perfil del cliente:", err);
       } finally {
-        this.loading = false; // Desactivar el estado de carga
+        this.loading = false;
       }
     },
     handleImageUpload(newImageUrl) {
-      this.imageUrl = newImageUrl; // Actualizar la imagen de perfil
+      this.imageUrl = newImageUrl;
     },
     goToEditProfile() {
-      this.$router.push("/editProfile"); // Redirigir a la página de edición de perfil
+      this.$router.push("/editProfile");
     },
   },
 };

@@ -146,14 +146,13 @@ export default {
       this.$router.push("/users/clientes");
     },
     irAGestionPromociones() {
-      this.$router.push("/promotions"); // Define esta ruta en el router si aún no existe.
+      this.$router.push("/promotions"); // definir esta ruta en el router
     },
   },
 };
 </script>
 
 <style>
-/* Estilos básicos del menú */
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

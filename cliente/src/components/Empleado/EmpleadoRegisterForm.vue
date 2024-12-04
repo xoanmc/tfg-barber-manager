@@ -1,18 +1,15 @@
 <template>
   <div class="container py-5 d-flex justify-content-center align-items-center vh-100">
-    <!-- Banner de éxito -->
     <div v-if="showBanner" class="alert alert-success text-center fade-in" role="alert">
       <p class="mb-2 fw-bold">¡Empleado registrado exitosamente!</p>
       <p>El empleado ha sido añadido correctamente al sistema.</p>
       <button class="btn btn-primary mt-3" @click="redirectToEmployeeList">Aceptar</button>
     </div>
 
-    <!-- Formulario de registro -->
     <div v-else class="card shadow-lg w-100 mx-3" style="max-width: 400px; border-radius: 15px;">
       <div class="card-body p-4">
         <h2 class="text-center text-primary fw-bold mb-4">Registrar Empleado</h2>
         <form @submit.prevent="handleRegister">
-          <!-- Nombre -->
           <div class="mb-3">
             <label for="name" class="form-label">Nombre</label>
             <input
@@ -24,7 +21,6 @@
             />
           </div>
 
-          <!-- Apellido -->
           <div class="mb-3">
             <label for="apellido" class="form-label">Apellido</label>
             <input
@@ -36,7 +32,6 @@
             />
           </div>
 
-          <!-- Email -->
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input
@@ -48,7 +43,6 @@
             />
           </div>
 
-          <!-- Login -->
           <div class="mb-3">
             <label for="login" class="form-label">Login</label>
             <input
@@ -61,7 +55,6 @@
             />
           </div>
 
-          <!-- Contraseña -->
           <div class="mb-3">
             <label for="password" class="form-label">Contraseña</label>
             <input
@@ -74,7 +67,6 @@
             />
           </div>
 
-          <!-- Puesto -->
           <div class="mb-3">
             <label for="puesto" class="form-label">Puesto</label>
             <input
@@ -86,7 +78,6 @@
             />
           </div>
 
-          <!-- Salario -->
           <div class="mb-3">
             <label for="salario" class="form-label">Salario</label>
             <input
@@ -100,7 +91,6 @@
             />
           </div>
 
-          <!-- Teléfono -->
           <div class="mb-3">
             <label for="telefono" class="form-label">Teléfono</label>
             <input
@@ -112,7 +102,6 @@
             />
           </div>
 
-          <!-- Botón Registrarse -->
           <div class="d-grid">
             <button class="btn btn-primary btn-lg rounded-pill" type="submit">
               Registrar Empleado
@@ -120,7 +109,6 @@
           </div>
         </form>
 
-        <!-- Mensaje de error -->
         <div v-if="error" class="text-danger mt-3 text-center">
           {{ error }}
         </div>
@@ -144,13 +132,12 @@ export default {
       salario: 0,
       telefono: "",
       error: "",
-      showBanner: false, // Controla si se muestra el banner de éxito
+      showBanner: false,
     };
   },
   methods: {
     async handleRegister() {
       try {
-        // Llamar a la API para registrar el nuevo empleado
         await AccountRepository.registerEmpleado({
           nombre: this.nombre,
           apellido: this.apellido,
@@ -162,22 +149,17 @@ export default {
           telefono: this.telefono,
         });
 
-        // Mostrar el banner de éxito
         this.showBanner = true;
 
-        // Limpiar el formulario
         this.clearForm();
 
-        // Resetear cualquier error previo
         this.error = "";
       } catch (e) {
         console.error(e);
-        // Captura el error del backend o muestra un mensaje genérico
         this.error = e.response?.data?.message || "Ocurrió un error inesperado.";
       }
     },
     clearForm() {
-      // Limpia todos los campos del formulario
       this.nombre = "";
       this.apellido = "";
       this.email = "";
@@ -188,7 +170,6 @@ export default {
       this.telefono = "";
     },
     redirectToEmployeeList() {
-      // Redirigir a la lista de empleados
       this.$router.push("/users/empleados");
     },
   },
@@ -248,7 +229,7 @@ h2 {
   font-size: 0.9rem;
 }
 
-/* Animación del banner */
+/* animación del banner */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -261,7 +242,6 @@ h2 {
   }
 }
 
-/* Ajustes responsivos */
 @media (max-width: 768px) {
   .container {
     margin-top: 10vh;

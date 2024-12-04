@@ -2,7 +2,6 @@
   <div class="container py-5">
     <h2 class="text-center mb-4">Citas Programadas</h2>
 
-    <!-- Mostrar citas programadas -->
     <div v-if="citas.length" class="row g-3">
       <div class="col-12" v-for="cita in citas" :key="cita.id">
         <div class="card shadow-sm">
@@ -11,7 +10,7 @@
             <p class="card-text"><strong>Fecha y Hora:</strong> {{ new Date(cita.fechaHora).toLocaleString() }}</p>
             <p class="card-text"><strong>Cliente:</strong> {{ cita.cliente.nombre }}</p>
             <p class="card-text"><strong>Estado:</strong> {{ cita.estado }}</p>
-            <!-- Botones para confirmar o rechazar -->
+
             <div class="mt-3">
               <button class="btn btn-success me-2" @click="confirmarCita(cita.id)">Confirmar</button>
               <button class="btn btn-danger" @click="rechazarCita(cita.id)">Rechazar</button>
@@ -21,7 +20,6 @@
       </div>
     </div>
 
-    <!-- Mostrar mensaje si no hay citas -->
     <div v-else class="text-center">
       <p class="text-muted">No tienes citas programadas.</p>
     </div>

@@ -55,7 +55,6 @@ export default {
     async fetchData() {
       try {
         this.myuser = await AccountRepository.getAccount();
-        // Intentar cargar la URL de la imagen de perfil
         this.imageUrl = await ImageRepository.getProfileImage(this.myuser.id);
         const user = await UsuarioRepository.findOne(this.myuser.id);
         if (user?.profileImageUrl) this.imageUrl = user.profileImageUrl;

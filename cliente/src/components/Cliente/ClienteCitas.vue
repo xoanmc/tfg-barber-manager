@@ -2,7 +2,6 @@
   <div class="container py-5">
     <h2 class="text-center mb-4">Mis Citas</h2>
 
-    <!-- Mostrar citas reservadas -->
     <div v-if="citas.length" class="row g-3">
       <div class="col-12" v-for="cita in citas" :key="cita.id">
         <div class="card shadow-sm">
@@ -16,7 +15,6 @@
       </div>
     </div>
 
-    <!-- Mostrar mensaje si no hay citas -->
     <div v-else class="text-center">
       <p class="text-muted">No tienes citas reservadas.</p>
       <router-link to="/reserve" class="btn btn-primary mt-3">¿Quieres hacer una reserva?</router-link>

@@ -7,7 +7,6 @@
           </h2>
   
           <form @submit.prevent="handleEditProfile">
-            <!-- Campos comunes: nombre, apellido, email -->
             <div class="mb-3">
               <label for="nombre" class="form-label">Nombre</label>
               <input
@@ -43,8 +42,7 @@
                 required
               />
             </div>
-  
-            <!-- Campo de teléfono -->
+
             <div class="mb-3">
               <label for="telefono" class="form-label">Teléfono</label>
               <input
@@ -56,8 +54,7 @@
                 required
               />
             </div>
-  
-            <!-- Campos específicos según la autoridad -->
+
             <div v-if="profile.autoridad === 'EMPLEADO'" class="mb-3">
               <label for="horario" class="form-label">Horario</label>
               <input
@@ -79,16 +76,14 @@
                 rows="3"
               ></textarea>
             </div>
-  
-            <!-- Botón para guardar -->
+
             <div class="d-grid mt-4">
               <button type="submit" class="btn btn-success btn-lg rounded-pill">
-                Guardar Cambios
+                Guardar
               </button>
             </div>
           </form>
   
-          <!-- Mensaje de error -->
           <div v-if="error" class="text-danger mt-3 text-center">{{ error }}</div>
         </div>
       </div>

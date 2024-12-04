@@ -27,7 +27,7 @@ import EmpleadoCitas from "@/components/Empleado/EmpleadoCitas.vue";
 
 const routes = [{
         path: "/",
-        redirect: "/home", // Redirigir la raíz a /home
+        redirect: "/home",
     },
     {
         path: "/login",
@@ -83,7 +83,7 @@ const routes = [{
         path: "/editProfile",
         name: "EditProfile",
         component: EditProfile,
-        meta: { requiresAuth: true }, // Solo requiere estar autenticado
+        meta: { requiresAuth: true },
     },
     {
         path: "/home",

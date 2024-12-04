@@ -3,7 +3,6 @@
     <div class="card shadow-lg" style="max-width: 400px; width: 100%; border-radius: 15px;">
       <div class="card-body p-4">
         <form @submit.prevent="autenticarme">
-          <!-- Campo de Login -->
           <div class="mb-4">
             <label for="username" class="form-label fs-5 fw-semibold text-secondary">Login</label>
             <input
@@ -15,7 +14,6 @@
             />
           </div>
 
-          <!-- Campo de Password -->
           <div class="mb-4">
             <label for="password" class="form-label fs-5 fw-semibold text-secondary">Contraseña</label>
             <input
@@ -27,12 +25,10 @@
             />
           </div>
 
-          <!-- Enlace para contraseña olvidada -->
           <div class="text-center mb-4">
             <a href="#" class="text-muted small">¿Olvidaste tu contraseña?</a>
           </div>
 
-          <!-- Botón de Login -->
           <div class="d-grid">
             <button type="submit" class="btn btn-primary btn-lg rounded-pill">
               Iniciar Sesión
@@ -40,7 +36,6 @@
           </div>
         </form>
 
-        <!-- Registro y redirección -->
         <div class="text-center mt-4">
           <p class="small">
             ¿Todavía no eres miembro?
@@ -83,7 +78,6 @@ export default {
 </script>
 
 <style scoped>
-/* Estilo del contenedor */
 .card {
   border: none;
   border-radius: 15px;
@@ -99,7 +93,6 @@ export default {
   font-size: 1.5rem;
 }
 
-/* Estilo de los campos del formulario */
 .form-control {
   border-radius: 10px;
   background-color: #f8f9fa;
@@ -112,14 +105,12 @@ export default {
   border-color: #007bff;
 }
 
-/* Estilo de los títulos de los campos */
 .form-label {
   font-size: 1.1rem;
   font-weight: 600;
   color: #6c757d;
 }
 
-/* Estilo del botón */
 .btn-primary {
   background-color: #007bff;
   border-color: #007bff;
@@ -130,7 +121,6 @@ export default {
   border-color: #004085;
 }
 
-/* Enlace centrado */
 .text-muted {
   font-size: 0.9rem;
 }
@@ -145,9 +135,8 @@ export default {
   text-decoration: underline;
 }
 
-/* Reducir tamaño del enlace "Regístrate" */
 .text-primary.small {
-  font-size: 0.85rem; /* Tamaño ligeramente más pequeño */
+  font-size: 0.85rem;
 }
 
 .vh-100 {

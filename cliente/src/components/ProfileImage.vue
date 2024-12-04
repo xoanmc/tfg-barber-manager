@@ -1,13 +1,11 @@
 <template>
   <div class="text-center position-relative">
-    <!-- Imagen de perfil -->
     <div class="profile-picture position-relative d-inline-block">
       <img
         :src="imageUrl || defaultImageUrl"
         alt="Imagen de Perfil"
         class="rounded-circle shadow img-fluid"
       />
-      <!-- Botón para cambiar imagen -->
       <button
         type="button"
         class="btn btn-sm btn-primary position-absolute btn-edit-profile"
@@ -18,7 +16,6 @@
       </button>
     </div>
 
-    <!-- Input oculto para seleccionar archivo -->
     <input
       type="file"
       ref="fileInput"
@@ -39,14 +36,14 @@ export default {
     },
     currentImageUrl: {
       type: String,
-      default: "", // Asegura que tenga un valor por defecto
+      default: "",
     },
   },
   data() {
     return {
-      selectedImage: null, // Archivo seleccionado para subir
-      imageUrl: this.currentImageUrl, // URL de la imagen actual
-      defaultImageUrl: "https://via.placeholder.com/150", // Imagen predeterminada
+      selectedImage: null,
+      imageUrl: this.currentImageUrl,
+      defaultImageUrl: "https://via.placeholder.com/150",
     };
   },
   methods: {
@@ -55,7 +52,7 @@ export default {
     },
     onFileSelected(event) {
       this.selectedImage = event.target.files[0];
-      this.uploadImage(); // Llama automáticamente a la función para subir la imagen
+      this.uploadImage();
     },
     async uploadImage() {
       if (!this.selectedImage) {
@@ -65,7 +62,7 @@ export default {
 
       try {
         const imageUrl = await ImageRepository.uploadProfileImage(this.userId, this.selectedImage);
-        this.imageUrl = imageUrl; // Actualiza la imagen mostrada
+        this.imageUrl = imageUrl;
         this.$emit("imageUploaded", imageUrl);
         alert("Imagen subida con éxito.");
       } catch (error) {
@@ -76,7 +73,7 @@ export default {
   },
   watch: {
     currentImageUrl(newVal) {
-      this.imageUrl = newVal; // Sincroniza la URL de la imagen con la prop
+      this.imageUrl = newVal;
     },
   },
 };

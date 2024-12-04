@@ -4,7 +4,6 @@
       <h1 class="text-primary">Lista de Clientes</h1>
     </div>
 
-    <!-- Muestra la tabla solo si hay clientes disponibles -->
     <div class="table-responsive" v-if="clientes.length > 0">
       <table class="table table-striped table-hover align-middle">
         <thead class="table-dark">
@@ -50,7 +49,6 @@
       </table>
     </div>
 
-    <!-- Mensaje mostrado mientras se cargan los clientes -->
     <div v-else class="text-center py-5">
       <p class="text-muted">Cargando lista de clientes...</p>
     </div>
@@ -63,11 +61,11 @@ import UsuarioRepository from "@/repositories/UsuarioRepository";
 export default {
   data() {
     return {
-      clientes: [], // Inicializamos el array de clientes
+      clientes: [],
     };
   },
   mounted() {
-    this.obtenerClientes(); // Carga la lista de clientes al montar el componente
+    this.obtenerClientes();
   },
   methods: {
     async obtenerClientes() {
@@ -76,7 +74,7 @@ export default {
         this.clientes = response;
       } catch (e) {
         console.error("Error obteniendo la lista de clientes", e);
-        this.clientes = []; // Asegura que el array esté vacío en caso de error
+        this.clientes = [];
       }
     },
     async toggleClienteEstado(id, estadoActual) {
@@ -90,7 +88,6 @@ export default {
             await UsuarioRepository.activarCliente(id);
             alert("Cliente activado con éxito.");
           }
-          // Actualiza directamente el estado del cliente
           const cliente = this.clientes.find((c) => c.id === id);
           if (cliente) {
             cliente.activo = !estadoActual;

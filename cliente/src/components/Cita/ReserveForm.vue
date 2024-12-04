@@ -2,7 +2,6 @@
   <div class="reserva-container">
     <h2 class="reserva-titulo">Reserva tu Cita</h2>
 
-    <!-- Lista de barberos disponibles -->
     <div class="form-group">
       <label for="barbero" class="form-label">Selecciona Barbero:</label>
       <select v-model="cita.barberoId" id="barbero" class="form-select">
@@ -16,7 +15,6 @@
       </select>
     </div>
 
-    <!-- Lista de servicios disponibles -->
     <div class="form-group">
       <label for="servicio" class="form-label">Selecciona Servicio:</label>
       <select v-model="cita.servicioId" id="servicio" class="form-select">
@@ -30,7 +28,6 @@
       </select>
     </div>
 
-    <!-- Calendario con Flatpickr -->
     <div class="datepicker-container">
       <label for="fecha" class="form-label">Selecciona Fecha y Hora:</label>
       <flat-pickr
@@ -40,7 +37,6 @@
       />
     </div>
 
-    <!-- Botón para reservar -->
     <div>
       <button @click="reservarCita" :disabled="!cita.fechaHora || !cita.servicioId">
         Reservar
@@ -73,7 +69,7 @@ export default {
       },
       flatpickrConfig: {
   enableTime: true,
-  dateFormat: "Y-m-d\\TH:i:S", // Cambiar formato a 'yyyy-MM-ddTHH:mm:ss'
+  dateFormat: "Y-m-d\\TH:i:S", //cambiar formato a 'yyyy-MM-ddTHH:mm:ss'
   minDate: "today",
   time_24hr: true,
   minuteIncrement: 30,
@@ -125,7 +121,6 @@ export default {
 
 
 <style scoped>
-/* Contenedor principal */
 .reserva-container {
   display: flex;
   flex-direction: column;
@@ -137,7 +132,6 @@ export default {
   padding: 20px;
 }
 
-/* Estilo del título principal */
 .reserva-titulo {
   font-size: 2rem;
   font-weight: bold;
@@ -146,15 +140,15 @@ export default {
   color: #333;
 }
 
-/* Ajustes para pantallas más pequeñas (menos de 768px) */
+/* ajustes para pantallas pequeñas (menos de 768px) */
 @media (max-width: 768px) {
   .reserva-titulo {
-    margin-top: 20px; /* Aumentar margen superior en pantallas pequeñas */
-    font-size: 1.8rem; /* Reducir el tamaño del texto para móviles */
+    margin-top: 20px;
+    font-size: 1.8rem;
   }
 }
 
-/* Ajustes para pantallas muy pequeñas (menos de 480px) */
+/* ajustes para pantallas muy pequeñas (menos de 480px) */
 @media (max-width: 480px) {
   .reserva-titulo {
     margin-top: 30px; /* Espacio adicional para teléfonos más compactos */
@@ -162,7 +156,6 @@ export default {
   }
 }
 
-/* Estilo para etiquetas de formularios */
 .form-label {
   font-size: 1.2rem;
   font-weight: bold;
@@ -172,7 +165,6 @@ export default {
   color: #444;
 }
 
-/* Grupo de formulario */
 .form-group {
   margin-bottom: 20px;
   width: 100%;
@@ -180,7 +172,6 @@ export default {
   text-align: left;
 }
 
-/* Campos de selección */
 .form-select {
   width: 100%;
   padding: 10px;
@@ -190,12 +181,10 @@ export default {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Contenedor del calendario */
 .datepicker-container {
   margin: 20px 0;
 }
 
-/* Estilo del botón */
 button {
   background-color: #007bff;
   color: white;

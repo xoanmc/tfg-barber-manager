@@ -13,9 +13,9 @@
         <p>{{ servicio.descripcion }}</p>
         <p><strong>Precio:</strong> {{ servicio.precio.toFixed(2) }} €</p>
 
-        <!-- Botones de edición y eliminación visibles solo para jefes -->
+        <!-- solo para usuario jefe -->
         <div v-if="isJefe" class="service-actions">
-          <button class="btn btn-warning btn-sm me-2" @click="editarServicio(index)">
+          <button class="btn btn-primary btn-sm me-2" @click="editarServicio(index)">
             Editar
           </button>
           <button class="btn btn-danger btn-sm" @click="eliminarServicio(index)">
@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <!-- Formulario para añadir o modificar servicios (solo visible para jefes) -->
+    <!--añadir/modificar servicios (solo para jefes) -->
     <div v-if="isJefe" class="form-container mt-5">
       <h3 class="text-primary text-center">
         {{ editIndex !== null ? "Modificar Servicio" : "Añadir Nuevo Servicio" }}
@@ -99,26 +99,25 @@ import ServicesRepository from "@/repositories/ServicesRepository";
 export default {
   data() {
     return {
-      servicios: [], // Lista de servicios obtenidos desde el backend
+      servicios: [],
       nuevoServicio: {
         nombre: "",
         descripcion: "",
         precio: null,
       },
-      editIndex: null, // Índice del servicio en edición (null si no se edita)
-      precioInvalido: false, // Validación de precio
+      editIndex: null,
+      precioInvalido: false,
     };
   },
   computed: {
     isJefe() {
-      return auth.isJefe(); // Solo los jefes pueden añadir/editar servicios
+      return auth.isJefe();
     },
   },
   mounted() {
-    this.cargarServicios(); // Cargar los servicios desde el backend cuando se monta el componente
+    this.cargarServicios();
   },
   methods: {
-    // Cargar servicios desde el backend
     async cargarServicios() {
       try {
         const response = await ServicesRepository.getServicios();
@@ -127,53 +126,44 @@ export default {
         console.error("Error cargando los servicios", error);
       }
     },
-    // Validar el campo precio
     validatePrecio() {
       const precio = this.nuevoServicio.precio;
       this.precioInvalido =
         isNaN(precio) || precio < 0 || !/^\d+(\.\d{1,2})?$/.test(precio);
     },
-    // Guardar cambios (añadir o editar servicio)
     async handleSubmit() {
       if (this.editIndex !== null) {
-        // Si estamos en modo edición, actualiza el servicio
         this.servicios[this.editIndex] = { ...this.nuevoServicio };
       } else {
-        // Si estamos añadiendo un nuevo servicio
-        this.servicios.unshift({ ...this.nuevoServicio }); // Añadir al inicio
+        this.servicios.unshift({ ...this.nuevoServicio });
       }
 
-      // Guardar los cambios en el backend
       await this.guardarServicios();
-      this.resetForm(); // Reiniciar el formulario
+      this.resetForm();
     },
-    // Editar un servicio existente
     editarServicio(index) {
-      this.nuevoServicio = { ...this.servicios[index] }; // Cargar los datos del servicio en el formulario
+      this.nuevoServicio = { ...this.servicios[index] };
       this.editIndex = index;
     },
-    // Eliminar un servicio
     async eliminarServicio(index) {
-      const servicioId = this.servicios[index].id; // Obtener el ID del servicio a eliminar
+      const servicioId = this.servicios[index].id;
       try {
-        await ServicesRepository.deleteServicio(servicioId); // Llamar a la API para eliminar el servicio en el backend
-        this.servicios.splice(index, 1); // Eliminar el servicio de la lista en el frontend
+        await ServicesRepository.deleteServicio(servicioId);
+        this.servicios.splice(index, 1);
         alert("Servicio eliminado correctamente");
       } catch (error) {
         console.error("Error eliminando el servicio", error);
         alert("Hubo un error al eliminar el servicio");
       }
     },
-    // Resetear formulario
     resetForm() {
-      this.nuevoServicio = { nombre: "", descripcion: "", precio: null }; // Limpiar campos del formulario
-      this.editIndex = null; // Salir del modo edición
-      this.precioInvalido = false; // Reiniciar la validación de precio
+      this.nuevoServicio = { nombre: "", descripcion: "", precio: null };
+      this.editIndex = null;
+      this.precioInvalido = false;
     },
-    // Guardar la lista completa de servicios en el backend
     async guardarServicios() {
       try {
-        await ServicesRepository.updateServicios(this.servicios); // Persiste la lista de servicios en el backend
+        await ServicesRepository.updateServicios(this.servicios);
         alert("Servicios actualizados con éxito");
       } catch (error) {
         console.error("Error guardando los servicios", error);
