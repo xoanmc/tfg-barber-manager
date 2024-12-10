@@ -1,5 +1,5 @@
 <template>
-  <div class="container py-5 d-flex justify-content-center align-items-center vh-100">
+  <div class="container py-5 d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 56px);">
     <div class="card shadow-lg w-100" style="max-width: 400px; border-radius: 15px;">
       <div class="card-body p-4">
         <h2 class="text-center text-primary fw-bold mb-4">¡Hazte Miembro!</h2>
