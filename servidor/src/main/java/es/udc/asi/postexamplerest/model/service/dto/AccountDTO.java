@@ -33,6 +33,7 @@ public class AccountDTO {
   private String primeraCita;  // Campo para la fecha de la primera cita
   private String horario;  // Campo para empleados
   private String descripcion;  // Campo para empleados
+  private String fotoPerfil;
 
   public AccountDTO() {
   }
@@ -193,4 +194,5 @@ public class AccountDTO {
   public void setDescripcion(String descripcion) {
     this.descripcion = descripcion;
   }
+
 }

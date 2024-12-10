@@ -1,13 +1,16 @@
-import HTTP from "@/common/http"; // Asegúrate de tener el helper HTTP para manejar peticiones
+import HTTP from "@/common/http";
 
 export default {
-  async getContent() {
-    // GET para obtener el contenido actual
-    return (await HTTP.get("/about/1")).data; // Suponemos que solo hay un "Acerca de"
-  },
+    async getContent() {
+        return (await HTTP.get("/about/1")).data;
+    },
 
-  async updateContent(payload) {
-    // PUT para actualizar contenido
-    return await HTTP.post("/about/update", payload); // POST o PUT con solo la descripción
-  },
+    async updateContent(payload) {
+        const token = localStorage.getItem("token");
+        return await HTTP.post("/about/update", payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      },
 };

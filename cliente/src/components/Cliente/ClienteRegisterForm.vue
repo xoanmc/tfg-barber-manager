@@ -1,17 +1,11 @@
 <template>
   <div class="container py-5 d-flex justify-content-center align-items-center vh-100">
-    <div v-if="showBanner" class="alert alert-success text-center fade-in" role="alert">
-      <p class="mb-2 fw-bold">¡Registro exitoso!</p>
-      <p>Hemos enviado un correo para confirmar tu cuenta. Por favor, revisa tu bandeja de entrada.</p>
-      <button class="btn btn-primary mt-3" @click="redirectToHome">Aceptar</button>
-    </div>
-
-    <div v-else class="card shadow-lg w-100" style="max-width: 400px; border-radius: 15px;">
+    <div class="card shadow-lg w-100" style="max-width: 400px; border-radius: 15px;">
       <div class="card-body p-4">
         <h2 class="text-center text-primary fw-bold mb-4">¡Hazte Miembro!</h2>
         <form @submit.prevent="handleRegister">
           <div class="mb-3">
-            <label for="name" class="form-label">Nombre</label>
+            <label for="name" class="form-label">Nombre*</label>
             <input
               type="text"
               id="name"
@@ -22,7 +16,7 @@
           </div>
 
           <div class="mb-3">
-            <label for="apellido" class="form-label">Apellido</label>
+            <label for="apellido" class="form-label">Apellido*</label>
             <input
               type="text"
               id="apellido"
@@ -33,7 +27,7 @@
           </div>
 
           <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
+            <label for="email" class="form-label">Email*</label>
             <input
               type="email"
               id="email"
@@ -44,7 +38,7 @@
           </div>
 
           <div class="mb-3">
-            <label for="login" class="form-label">Login</label>
+            <label for="login" class="form-label">Login*</label>
             <input
               type="text"
               id="login"
@@ -56,7 +50,7 @@
           </div>
 
           <div class="mb-3">
-            <label for="password" class="form-label">Contraseña</label>
+            <label for="password" class="form-label">Contraseña*</label>
             <input
               type="password"
               id="password"
@@ -79,7 +73,17 @@
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Fecha de Nacimiento</label>
+            <label for="profile-picture" class="form-label">Foto de Perfil</label>
+            <input
+              type="file"
+              id="profile-picture"
+              class="form-control"
+              @change="onFileChange"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Fecha de Nacimiento*</label>
             <div class="d-flex gap-2">
               <select v-model="fechaNacimiento.dia" class="form-control" required>
                 <option disabled value="">Día</option>
@@ -124,8 +128,8 @@ export default {
       fechaNacimiento: { dia: "", mes: "", anio: "" },
       login: "",
       password: "",
+      fotoPerfil: null,
       error: "",
-      showBanner: false,
       meses: [
         "Enero",
         "Febrero",
@@ -144,34 +148,53 @@ export default {
     };
   },
   methods: {
-    async handleRegister() {
-      try {
-        const dia = String(this.fechaNacimiento.dia).padStart(2, "0").trim();
-        const mes = String(this.fechaNacimiento.mes).padStart(2, "0").trim();
-        const anio = String(this.fechaNacimiento.anio).trim();
-        const fechaNacimiento = `${anio}-${mes}-${dia}`;
+  onFileChange(event) {
+    this.fotoPerfil = event.target.files[0];
+  },
+  async handleRegister() {
+    try {
+      // Validación y preparación de datos
+      const dia = String(this.fechaNacimiento.dia).padStart(2, "0").trim();
+      const mes = String(this.fechaNacimiento.mes).padStart(2, "0").trim();
+      const anio = String(this.fechaNacimiento.anio).trim();
+      const fechaNacimiento = `${anio}-${mes}-${dia}`;
 
-        await auth.registerCliente({
-          nombre: this.nombre,
-          apellido: this.apellido,
-          email: this.email,
-          telefono: this.telefono,
-          fechaNacimiento,
-          login: this.login,
-          password: this.password,
-        });
-
-        this.showBanner = true;
-
-        this.clearForm();
-
-        this.error = "";
-      } catch (e) {
-        console.error(e);
-
-        this.error = e.response?.data?.message || "Ocurrió un error inesperado.";
+      const formData = new FormData();
+      formData.append("nombre", this.nombre);
+      formData.append("apellido", this.apellido);
+      formData.append("email", this.email);
+      formData.append("telefono", this.telefono);
+      formData.append("fechaNacimiento", fechaNacimiento);
+      formData.append("login", this.login);
+      formData.append("password", this.password);
+      if (this.fotoPerfil) {
+        formData.append("fotoPerfil", this.fotoPerfil);
       }
-    },
+
+      // Redirige inmediatamente al usuario a la pantalla de confirmación
+      this.$router.push("/emailConfirmation");
+
+      // Mientras tanto, envía la solicitud al backend
+      await auth.registerCliente(formData);
+
+      this.clearForm();
+    } catch (e) {
+      console.error(e);
+      this.error = e.response?.data?.message || "Ocurrió un error inesperado.";
+    }
+  },
+  clearForm() {
+    this.nombre = "";
+    this.apellido = "";
+    this.email = "";
+    this.telefono = "";
+    this.fechaNacimiento = { dia: "", mes: "", anio: "" };
+    this.login = "";
+    this.password = "";
+    this.fotoPerfil = null;
+  },
+},
+
     clearForm() {
       this.nombre = "";
       this.apellido = "";
@@ -180,12 +203,9 @@ export default {
       this.fechaNacimiento = { dia: "", mes: "", anio: "" };
       this.login = "";
       this.password = "";
+      this.fotoPerfil = null;
     },
-    redirectToHome() {
-      this.$router.push("/");
-    },
-  },
-};
+  }
 </script>
 
 <style scoped>
@@ -193,13 +213,6 @@ export default {
   border: none;
   border-radius: 15px;
   background-color: #f8f9fa;
-}
-
-.alert {
-  max-width: 400px;
-  margin: 0 auto;
-  border-radius: 15px;
-  animation: fadeIn 0.5s ease-in-out;
 }
 
 .card-body {
@@ -239,32 +252,5 @@ h2 {
 
 .text-danger {
   font-size: 0.9rem;
-}
-
-/* Animación del banner */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (max-width: 768px) {
-  .card-body {
-    padding: 1.5rem;
-  }
-
-  h2 {
-    font-size: 1.5rem;
-  }
-
-  .btn-primary {
-    font-size: 0.9rem;
-  }
 }
 </style>

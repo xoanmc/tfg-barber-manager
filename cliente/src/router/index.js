@@ -11,6 +11,7 @@ import ReserveForm from "@/components/Cita/ReserveForm.vue";
 import LoginForm from "../components/LoginForm.vue";
 import ClienteRegisterForm from "@/components/Cliente/ClienteRegisterForm.vue";
 import ClienteList from "@/components/Cliente/ClienteList.vue";
+import EmailConfirmation from "@/components/EmailConfirmation.vue";
 
 import PerfilCliente from "@/components/Cliente/ClientePerfil.vue";
 
@@ -48,6 +49,13 @@ const routes = [{
         component: EmpleadoRegisterForm,
         meta: { authority: "JEFE" },
     },
+    {
+        path: "/emailConfirmation",
+        name: "EmailConfirmation",
+        component:EmailConfirmation,
+        meta: { public: true },
+    },
+    
     //PERFILES
     {
         path: "/perfilCliente",

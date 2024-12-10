@@ -26,8 +26,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.time.LocalDate;
 
 /**
@@ -83,27 +85,44 @@ public class AccountResource {
         return userService.getCurrentUserWithAuthority();
     }
 
-    @PostMapping("/register")
-    public void registerClient(@Valid @RequestBody AccountDTO account, Errors errors)
-            throws UserLoginExistsException, RequestBodyNotValidException {
-        if (errors.hasErrors()) {
-            throw new RequestBodyNotValidException(errors);
-        }
+    @PostMapping(value = "/register", consumes = "multipart/form-data")
+    public void registerClient(
+            @RequestParam("nombre") String nombre,
+            @RequestParam("apellido") String apellido,
+            @RequestParam("email") String email,
+            @RequestParam("telefono") String telefono,
+            @RequestParam("fechaNacimiento") String fechaNacimiento,
+            @RequestParam("login") String login,
+            @RequestParam("password") String password,
+            @RequestParam(value = "fotoPerfil", required = false) MultipartFile fotoPerfil)
+            throws UserLoginExistsException, NotFoundException {
 
-        // Registrar el cliente, el correo se enviará desde UsuarioService si es necesario
-        userService.registerCliente(
-                account.getNombre(),
-                account.getApellido(),
-                account.getTelefono(),
-                account.getFechaNacimiento(),
-                account.getEmail(),
-                account.getLogin(),
-                account.getPassword(),
-                account.getCitas(),
-                account.getPrimeraCita(),
-                true // Activar el envío de correo desde UsuarioService
+        // parsear fecha de nacimiento
+        LocalDate parsedFechaNacimiento = LocalDate.parse(fechaNacimiento);
+
+        Cliente cliente = userService.registerCliente(
+                nombre,
+                apellido,
+                telefono,
+                parsedFechaNacimiento,
+                email,
+                login,
+                password,
+                0, // Número inicial de citas
+                null, // Primera cita
+                true // Enviar correo de confirmación
         );
+
+        // si se proporciona una foto de perfil, subirla y asociarla al cliente
+        if (fotoPerfil != null && !fotoPerfil.isEmpty()) {
+            try {
+                userService.uploadProfileImage(cliente.getId(), fotoPerfil);
+            } catch (IOException e) {
+                throw new RuntimeException("Error al subir la foto de perfil", e);
+            }
+        }
     }
+
 
     @GetMapping("/confirm-registration")
     public ResponseEntity<String> confirmRegistration(@RequestParam("token") String token) {

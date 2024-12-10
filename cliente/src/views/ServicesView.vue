@@ -195,6 +195,9 @@ export default {
   width: 250px;
   text-align: left;
   transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .service-card:hover {
@@ -217,6 +220,7 @@ export default {
 .service-actions {
   display: flex;
   justify-content: space-between;
+  margin-top: auto;
 }
 
 .form-container {
