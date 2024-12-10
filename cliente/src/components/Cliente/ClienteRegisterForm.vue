@@ -171,10 +171,10 @@ export default {
         formData.append("fotoPerfil", this.fotoPerfil);
       }
 
-      // Redirige inmediatamente al usuario a la pantalla de confirmación
+     
       this.$router.push("/emailConfirmation");
 
-      // Mientras tanto, envía la solicitud al backend
+      // envía la solicitud al backend
       await auth.registerCliente(formData);
 
       this.clearForm();

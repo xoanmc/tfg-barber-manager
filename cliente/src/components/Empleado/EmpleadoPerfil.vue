@@ -78,6 +78,7 @@ export default {
 .card {
   border-radius: 15px;
   background-color: #f8f9fa;
+  margin-top: 80px;
 }
 
 .card-body {

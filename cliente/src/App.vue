@@ -1,19 +1,12 @@
 <template>
-<nav
-    class="navbar navbar-expand-lg navbar-transparent"
-    :style="{ color: textColor }"
-  >
+  <nav class="navbar navbar-expand-lg navbar-transparent" :style="{ color: textColor }">
     <div class="container-fluid">
-      <router-link class="navbar-brand" to="/home">TFG Barber</router-link>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <router-link class="navbar-brand" to="/home">
+        <img src="@/assets/logoBarber.png" alt="Logo" class="logo-circle" />
+      </router-link>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -45,24 +38,12 @@
           </li>
         </ul>
         <ul class="navbar-nav">
-          <li
-            class="nav-item dropdown"
-            v-if="store.state.user.logged"
-          >
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              id="userDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+          <li class="nav-item dropdown" v-if="store.state.user.logged">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
               Hola, {{ store.state.user.login }}
             </a>
-            <ul
-              class="dropdown-menu dropdown-menu-end"
-              aria-labelledby="userDropdown"
-            >
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
               <template v-if="isCliente">
                 <li>
                   <a class="dropdown-item" @click="irAPerfil">Perfil</a>
@@ -101,10 +82,7 @@
               </li>
             </ul>
           </li>
-          <li
-            class="nav-item"
-            v-if="!store.state.user.logged"
-          >
+          <li class="nav-item" v-if="!store.state.user.logged">
             <router-link class="nav-link" to="/login" active-class="active">
               Iniciar Sesión
             </router-link>
@@ -205,7 +183,8 @@ export default {
   top: 0;
   width: 100%;
   z-index: 1000;
-  transition: background-color 0.3s ease, color 0.3s ease; /* Transiciones suaves */
+  transition: background-color 0.3s ease, color 0.3s ease;
+  /* Transiciones suaves */
 }
 
 
@@ -226,6 +205,16 @@ export default {
 }
 
 .navbar-transparent .nav-link:hover {
-  color: rgba(15, 105, 230, 0.8) !important; /* Color al pasar el mouse */
+  color: rgba(15, 105, 230, 0.8) !important;
+  /* color al pasar el mouse */
 }
+
+.logo-circle {
+  height: 40px; 
+  width: 40px;  
+  border-radius: 50%; /* hace que la imagen sea circular */
+  object-fit: cover; /* para que la imagen se ajuste dentro del círculo */
+}
+
+
 </style>

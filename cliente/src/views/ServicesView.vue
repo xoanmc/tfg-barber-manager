@@ -178,6 +178,7 @@ export default {
 .services-container {
   text-align: center;
   padding: 30px 20px;
+  margin-top: 80px;
 }
 
 .services-grid {
