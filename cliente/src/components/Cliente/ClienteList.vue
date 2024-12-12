@@ -105,6 +105,7 @@ export default {
 <style scoped>
 .container {
   padding: 20px;
+  margin-top: 80px;
 }
 
 .table {

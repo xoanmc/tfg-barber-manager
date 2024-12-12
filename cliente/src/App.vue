@@ -36,6 +36,31 @@
               Tendencias
             </router-link>
           </li>
+          <li class="nav-item" v-if="isCliente">
+            <router-link to="/misCitas" class="nav-link" active-class="active">
+              Mis Citas
+            </router-link>
+          </li>
+          <li class="nav-item" v-if="isEmpleado">
+            <router-link to="/empleadoCitas" class="nav-link" active-class="active">
+              Mis Citas
+            </router-link>
+          </li>
+          <li class="nav-item" v-if="isJefe">
+            <router-link to="/users/empleados" class="nav-link" active-class="active">
+              Empleados
+            </router-link>
+          </li>
+          <li class="nav-item" v-if="isJefe">
+            <router-link to="/users/clientes" class="nav-link" active-class="active">
+              Clientes
+            </router-link>
+          </li>
+          <li class="nav-item" v-if="isJefe">
+            <router-link to="/promociones" class="nav-link" active-class="active">
+              Promociones
+            </router-link>
+          </li>
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item dropdown" v-if="store.state.user.logged">
@@ -210,11 +235,11 @@ export default {
 }
 
 .logo-circle {
-  height: 40px; 
-  width: 40px;  
-  border-radius: 50%; /* hace que la imagen sea circular */
-  object-fit: cover; /* para que la imagen se ajuste dentro del círculo */
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  /* hace que la imagen sea circular */
+  object-fit: cover;
+  /* para que la imagen se ajuste dentro del círculo */
 }
-
-
 </style>
