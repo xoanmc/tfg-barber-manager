@@ -353,4 +353,48 @@ public class UsuarioService {
         return imageUrl;
     }
 
+    @Transactional
+    public void enviarInstruccionesRecuperacion(String email) throws NotFoundException {
+        Usuario usuario = usuarioDAO.findByEmail(email);
+        if (usuario == null) {
+            throw new NotFoundException("Usuario con el correo: " + email + " no encontrado.", Usuario.class);
+        }
+
+        // Generar token de recuperación
+        String token = UUID.randomUUID().toString();
+        usuario.setPasswordRecoveryToken(token);
+        System.out.println("Actualizando usuario con token: " + token);
+        usuarioDAO.update(usuario);
+        System.out.println("Usuario actualizado.");
+
+
+        // Enviar correo con instrucciones
+        String recoveryUrl = appBaseUrl + "/api/reset-password?token=" + token;
+        String subject = "Recuperación de contraseña";
+        String message = String.format(
+                "Hola %s,\n\nHaz clic en el siguiente enlace para recuperar tu contraseña:\n\n%s\n\nGracias.",
+                usuario.getNombre(), recoveryUrl
+        );
+
+        mailService.sendPasswordRecoveryEmail(email, subject, message);
+    }
+
+    @Transactional
+    public void resetearContraseña(String token, String newPassword) throws NotFoundException, IllegalArgumentException {
+        System.out.println("Token recibido: " + token);
+        Usuario usuario = usuarioDAO.findByPasswordRecoveryToken(token);
+        if (usuario == null) {
+            System.out.println("Usuario no encontrado para el token: " + token);
+            throw new NotFoundException("Token inválido o expirado.", Usuario.class);
+        }
+        System.out.println("Usuario encontrado: " + usuario.getLogin());
+
+        // Validar el token y actualizar la contraseña
+        usuario.setPassword(passwordEncoder.encode(newPassword));
+        usuario.setPasswordRecoveryToken(null); // Limpiar el token después de usarlo
+        usuarioDAO.update(usuario);
+    }
+
+
+
 }

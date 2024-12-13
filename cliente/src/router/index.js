@@ -9,6 +9,8 @@ import TrendingView from "@/views/TrendingView.vue";
 import ReserveForm from "@/components/Cita/ReserveForm.vue";
 
 import LoginForm from "../components/LoginForm.vue";
+import ForgotPassword from "@/components/ForgotPassword.vue";
+import ResetPassword from "@/components/ResetPassword.vue";
 import ClienteRegisterForm from "@/components/Cliente/ClienteRegisterForm.vue";
 import ClienteList from "@/components/Cliente/ClienteList.vue";
 import EmailConfirmation from "@/components/EmailConfirmation.vue";
@@ -35,6 +37,18 @@ const routes = [{
         name: "Login",
         component: LoginForm,
         meta: { public: true, isLoginPage: true },
+    },
+    {
+        path: "/forgotPassword",
+        name: "ForgotPassword",
+        component: ForgotPassword,
+        meta: { public: true },
+    },
+    {
+        path: "/resetPassword",
+        name: "ResetPassword",
+        component: ResetPassword,
+        meta: { public: true },
     },
     //REGISTER
     {

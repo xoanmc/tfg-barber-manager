@@ -54,6 +54,9 @@ public abstract class Usuario {
   @Column(name = "fecha_nacimiento") // Nueva columna para la fecha de nacimiento
   private LocalDate fechaNacimiento;
 
+  @Column(name = "password_recovery_token")
+  private String passwordRecoveryToken;
+
   public Usuario() {
   }
 
@@ -137,5 +140,13 @@ public abstract class Usuario {
 
   public void setFechaNacimiento(LocalDate fechaNacimiento) {
     this.fechaNacimiento = fechaNacimiento;
+  }
+
+  public String getPasswordRecoveryToken() {
+    return passwordRecoveryToken;
+  }
+
+  public void setPasswordRecoveryToken(String passwordRecoveryToken) {
+    this.passwordRecoveryToken = passwordRecoveryToken;
   }
 }

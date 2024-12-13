@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Map;
 
 /**
  * Este controlador maneja la autenticación, registro y gestión de cuentas de usuarios.
@@ -185,5 +186,41 @@ public class AccountResource {
         userService.cambiarEstadoCliente(id, true);
         return ResponseEntity.noContent().build();
     }
+
+    //manejo de recuperación de contraseña
+
+    @PostMapping("/password-recovery")
+    public ResponseEntity<Void> solicitarRecuperacion(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        logger.info("Solicitud recibida para recuperación de contraseña del email: {}", email);
+        try {
+            userService.enviarInstruccionesRecuperacion(email);
+            logger.info("Correo de recuperación enviado con éxito.");
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundException e) {
+            logger.warn("No se encontró usuario para el email: {}", email);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/reset-password")
+    public ResponseEntity<Void> redirigirFormulario(@RequestParam("token") String token) {
+        return ResponseEntity.status(302)
+                .header("Location", "http://localhost:1234/resetPassword?token=" + token)
+                .build();
+    }
+
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Void> resetearContraseña(@RequestBody Map<String, String> request) throws NotFoundException {
+        String token = request.get("token");
+        String newPassword = request.get("password");
+        System.out.println("Token recibido: " + token);
+
+        userService.resetearContraseña(token, newPassword);
+        return ResponseEntity.noContent().build();
+    }
+
+
 
 }

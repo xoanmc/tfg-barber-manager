@@ -5,29 +5,20 @@
         <form @submit.prevent="autenticarme">
           <div class="mb-4">
             <label for="username" class="form-label fs-5 fw-semibold text-secondary">Login</label>
-            <input
-              type="text"
-              id="username"
-              class="form-control"
-              v-model="auxLogin"
-              required
-            />
+            <input type="text" id="username" class="form-control" v-model="auxLogin" required />
           </div>
 
           <div class="mb-4">
             <label for="password" class="form-label fs-5 fw-semibold text-secondary">Contraseña</label>
-            <input
-              type="password"
-              id="password"
-              class="form-control"
-              v-model="auxPass"
-              required
-            />
+            <input type="password" id="password" class="form-control" v-model="auxPass" required />
           </div>
 
           <div class="text-center mb-4">
-            <a href="#" class="text-muted small">¿Olvidaste tu contraseña?</a>
+            <router-link to="/forgotPassword" class="text-muted small">
+              ¿Olvidaste tu contraseña?
+            </router-link>
           </div>
+
 
           <div class="d-grid">
             <button type="submit" class="btn btn-primary btn-lg rounded-pill">
@@ -39,7 +30,8 @@
         <div class="text-center mt-4">
           <p class="small">
             ¿Todavía no eres miembro?
-            <router-link to="/register" class="text-primary fw-normal" style="font-size: 0.95rem;">Regístrate</router-link>
+            <router-link to="/register" class="text-primary fw-normal"
+              style="font-size: 0.95rem;">Regístrate</router-link>
           </p>
         </div>
       </div>

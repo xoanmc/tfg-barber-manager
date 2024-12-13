@@ -29,4 +29,6 @@ public interface UsuarioDao {
 
     Cliente findByConfirmationToken(String confirmationToken);
 
+    Usuario findByPasswordRecoveryToken(String token);
+
 }

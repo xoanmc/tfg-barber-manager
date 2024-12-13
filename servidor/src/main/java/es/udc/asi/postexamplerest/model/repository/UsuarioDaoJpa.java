@@ -13,71 +13,82 @@ import java.util.List;
 @Repository
 public class UsuarioDaoJpa extends GenericDaoJpa implements UsuarioDao {
 
-  @Override
-  public void create(Usuario usuario) {
-    entityManager.persist(usuario);
-  }
+    @Override
+    public void create(Usuario usuario) {
+        entityManager.persist(usuario);
+    }
 
-  @Override
-  public void update(Usuario usuario) {
-    entityManager.merge(usuario);
-  }
+    @Override
+    public void update(Usuario usuario) {
+        entityManager.merge(usuario);
+    }
 
-  @Override
-  public void delete(Usuario usuario) {
-    entityManager.remove(usuario);
-  }
+    @Override
+    public void delete(Usuario usuario) {
+        entityManager.remove(usuario);
+    }
 
-  @Override
-  public List<Empleado> findAllEmpleados() {
-    return entityManager.createQuery("from Empleado", Empleado.class).getResultList();
-  }
+    @Override
+    public List<Empleado> findAllEmpleados() {
+        return entityManager.createQuery("from Empleado", Empleado.class).getResultList();
+    }
 
-  @Override
-  public List<Empleado> findAllBarberos() {
-    return entityManager.createQuery("from Empleado e where e.puesto = :puesto", Empleado.class)
-      .setParameter("puesto", "barbero")
-      .getResultList();
-  }
+    @Override
+    public List<Empleado> findAllBarberos() {
+        return entityManager.createQuery("from Empleado e where e.puesto = :puesto", Empleado.class)
+                .setParameter("puesto", "barbero")
+                .getResultList();
+    }
 
-  @Override
-  public List<Cliente> findAllClientes() {
-    return entityManager.createQuery("from Cliente", Cliente.class).getResultList();
-  }
+    @Override
+    public List<Cliente> findAllClientes() {
+        return entityManager.createQuery("from Cliente", Cliente.class).getResultList();
+    }
 
-  @Override
-  public Usuario findById(Long id) {
-    return entityManager.find(Usuario.class, id);
-  }
+    @Override
+    public Usuario findById(Long id) {
+        return entityManager.find(Usuario.class, id);
+    }
 
-  @Override
-  public Cliente findClienteById(Long id) {
-    return entityManager.find(Cliente.class, id);
-  }
+    @Override
+    public Cliente findClienteById(Long id) {
+        return entityManager.find(Cliente.class, id);
+    }
 
-  @Override
-  public Usuario findByLogin(String login) {
-    TypedQuery<Usuario> query = entityManager.createQuery("from Usuario u where u.login = :login", Usuario.class)
-      .setParameter("login", login);
-    return DataAccessUtils.singleResult(query.getResultList());
-  }
+    @Override
+    public Usuario findByLogin(String login) {
+        TypedQuery<Usuario> query = entityManager.createQuery("from Usuario u where u.login = :login", Usuario.class)
+                .setParameter("login", login);
+        return DataAccessUtils.singleResult(query.getResultList());
+    }
 
-  public Usuario findByEmail(String email) {
-    return entityManager.createQuery("SELECT u FROM Usuario u WHERE u.email = :email", Usuario.class)
-            .setParameter("email", email)
-            .getResultStream()
-            .findFirst()
-            .orElse(null);
-  }
+    public Usuario findByEmail(String email) {
+        return entityManager.createQuery("SELECT u FROM Usuario u WHERE u.email = :email", Usuario.class)
+                .setParameter("email", email)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+    }
 
-  @Override
-  public Cliente findByConfirmationToken(String confirmationToken) {
-    return entityManager.createQuery("SELECT c FROM Cliente c WHERE c.confirmationToken = :token", Cliente.class)
-            .setParameter("token", confirmationToken)
-            .getResultStream()
-            .findFirst()
-            .orElse(null);
-  }
+    @Override
+    public Cliente findByConfirmationToken(String confirmationToken) {
+        return entityManager.createQuery("SELECT c FROM Cliente c WHERE c.confirmationToken = :token", Cliente.class)
+                .setParameter("token", confirmationToken)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public Usuario findByPasswordRecoveryToken(String token) {
+        String query = "SELECT u FROM Usuario u WHERE u.passwordRecoveryToken = :token";
+        return entityManager.createQuery(query, Usuario.class)
+                .setParameter("token", token)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+    }
+
 
 
 }

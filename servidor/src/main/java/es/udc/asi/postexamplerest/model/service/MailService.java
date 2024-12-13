@@ -37,4 +37,27 @@ public class MailService {
             logger.error("Error al enviar el correo de confirmación a: {}", to, e);
         }
     }
+
+    /**
+     * Envía un correo de recuperación de contraseña al destinatario proporcionado.
+     *
+     * @param to      Dirección de correo electrónico del destinatario.
+     * @param subject Asunto del correo.
+     * @param text    Contenido del correo.
+     */
+    public void sendPasswordRecoveryEmail(String to, String subject, String text) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(to);
+            message.setSubject(subject);
+            message.setText(text);
+            mailSender.send(message);
+
+            // Log para confirmar envío exitoso
+            logger.info("Correo de recuperación de contraseña enviado a: {}", to);
+        } catch (Exception e) {
+            // Log para capturar cualquier error al enviar el correo
+            logger.error("Error al enviar el correo de recuperación de contraseña a: {}", to, e);
+        }
+    }
 }

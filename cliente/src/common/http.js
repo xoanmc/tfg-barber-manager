@@ -30,15 +30,20 @@ const onResponseFailure = (err) => {
 
 // Antes de cada request, añade el token solo si es necesario
 const onRequest = (config) => {
-  // No añadir token para rutas públicas como /home
-  if (!config.url.includes("/home") && !config.url.includes("/about")) {
-    const token = localStorage.getItem("token"); // Recupera el token desde localStorage
+  // Excluir rutas públicas del envío del token
+  if (
+    !config.url.includes("/password-recovery") &&
+    !config.url.includes("/reset-password")
+  ) {
+    const token = localStorage.getItem("token");
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`; // Añade el token al header
+      config.headers.Authorization = `Bearer ${token}`;
     }
   }
   return config;
 };
+
+
 
 // Configura los interceptores para añadir el token solo si es necesario
 HTTP.interceptors.request.use(onRequest);

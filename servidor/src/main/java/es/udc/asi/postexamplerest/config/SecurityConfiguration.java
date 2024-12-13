@@ -62,17 +62,18 @@ public class SecurityConfiguration {
                 .headers().frameOptions().disable().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/api/authenticate").permitAll() // Autenticación
-                .antMatchers(HttpMethod.POST, "/api/register").permitAll() // Registro
-                .antMatchers("/api/confirm-registration").permitAll() // Permitir confirmación de registro
-                .antMatchers("/api/home").permitAll() // Permitir acceso público a la página de inicio
-                .antMatchers("/api/update").hasAuthority("JEFE") // Solo jefes pueden actualizar la info
-                .antMatchers("/api/about/**").permitAll() // Acceso público a la sección "about"
+                .antMatchers("/api/authenticate").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/register").permitAll()
+                .antMatchers("/api/confirm-registration").permitAll()
+                .antMatchers("/api/home").permitAll()
+                .antMatchers("/api/update").hasAuthority("JEFE")
+                .antMatchers("/api/about/**").permitAll()
                 .antMatchers("/api/reserve").permitAll()
-                .antMatchers("/api/servicios/**").permitAll() // Acceso público a servicios
-                .antMatchers(HttpMethod.GET, "/api/users/**").permitAll() // Ver usuarios
-                .antMatchers(HttpMethod.POST, "/api/users/upload/**").permitAll() // Subida de archivos permitida
-                .antMatchers("/api/images/profile/**").permitAll() // Permitir acceso sin autenticación
+                .antMatchers("/api/servicios/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/users/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/users/upload/**").permitAll()
+                .antMatchers("/api/images/profile/**").permitAll()
+                .antMatchers("/api/reset-password", "/api/password-recovery").permitAll()
                 .antMatchers("/**").authenticated() // Todas las demás rutas requieren autenticación
                 .and()
                 .apply(securityConfigurerAdapter());
