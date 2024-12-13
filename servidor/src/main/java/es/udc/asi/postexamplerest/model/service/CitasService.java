@@ -36,15 +36,15 @@ public class CitasService {
 
 
   @Transactional(readOnly = false)
-  public Cita reservarCita(Cita cita) {
+  public Cita reservarCita(Cita cita, Usuario clienteAutenticado) {
     Usuario barbero = usuarioDao.findById(cita.getBarbero().getId());
-    Usuario cliente = usuarioDao.findById(cita.getCliente().getId());
     Servicio servicio = servicioDao.findById(cita.getServicio().getId());
 
     cita.setBarbero(barbero);
-    cita.setCliente(cliente);
+    cita.setCliente(clienteAutenticado); // Asignar cliente autenticado
     cita.setServicio(servicio);
 
+    // Validar conflicto de horarios del barbero
     List<Cita> citasConflicto = citasDao.findCitasByBarberoIdAndFechaHoraBetween(
             barbero.getId(),
             cita.getFechaHora().minusMinutes(30),
@@ -57,6 +57,7 @@ public class CitasService {
 
     return citasDao.create(cita);
   }
+
 
   @Transactional(readOnly = false)
   public void confirmarCita(Long citaId) {

@@ -65,7 +65,6 @@ export default {
         barberoId: null,
         servicioId: null,
         fechaHora: null,
-        clienteId: 1,
       },
       flatpickrConfig: {
   enableTime: true,
@@ -105,7 +104,6 @@ export default {
           barbero: { id: this.cita.barberoId, autoridad: "EMPLEADO" },
           servicio: { id: this.cita.servicioId },
           fechaHora: this.cita.fechaHora,
-          cliente: { id: this.cita.clienteId, autoridad: "CLIENTE" },
         };
         console.log("Datos de la cita que se enviarán:", citaData);
         await CitaRepository.reservarCita(citaData);
