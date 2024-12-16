@@ -11,15 +11,17 @@ public class Cita {
   private Long id;
 
   @ManyToOne
-  private Usuario cliente;  // Relación con el cliente
+  private Usuario cliente;  // relación con el cliente
 
   @ManyToOne
-  private Usuario barbero;  // Relación con el barbero
-  private LocalDateTime fechaHora; // Fecha y hora de la cita
-  private String estado;  // Ej: "Confirmada", "Pendiente", "Cancelada"
+  private Usuario barbero;  // relación con el barbero
+  private LocalDateTime fechaHora; // fecha y hora de la cita
+
+  @Column(nullable = false)
+  private String estado = "Pendiente";  // Confirmada, Pendiente, Cancelada
 
   @ManyToOne
-  private Servicio servicio;  // Servicio que se reservó
+  private Servicio servicio;  // servicio que se reservó
 
   public Cita() {}
 

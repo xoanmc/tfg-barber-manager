@@ -3,17 +3,45 @@
     <h2 class="text-center mb-4">Citas Programadas</h2>
 
     <div v-if="citas.length" class="row g-3">
-      <div class="col-12" v-for="cita in citas" :key="cita.id">
-        <div class="card shadow-sm">
+      <div
+        class="col-12"
+        v-for="cita in citas"
+        :key="cita.id"
+      >
+        <!-- Aplicar clase 'rechazada' si la cita está rechazada -->
+        <div
+          class="card shadow-sm"
+          :class="{ 'rechazada': cita.estado === 'Rechazada' }"
+        >
           <div class="card-body text-center d-flex flex-column align-items-center">
             <h5 class="card-title">{{ cita.servicio.nombre }}</h5>
-            <p class="card-text"><strong>Fecha y Hora:</strong> {{ new Date(cita.fechaHora).toLocaleString() }}</p>
-            <p class="card-text"><strong>Cliente:</strong> {{ cita.cliente.nombre }}</p>
-            <p class="card-text"><strong>Estado:</strong> {{ cita.estado }}</p>
+            <p class="card-text">
+              <strong>Fecha y Hora:</strong>
+              {{ new Date(cita.fechaHora).toLocaleString() }}
+            </p>
+            <p class="card-text">
+              <strong>Cliente:</strong>
+              {{ cita.cliente.nombre }}
+            </p>
+            <p class="card-text">
+              <strong>Estado:</strong>
+              {{ cita.estado }}
+            </p>
 
-            <div class="mt-3">
-              <button class="btn btn-success me-2" @click="confirmarCita(cita.id)">Confirmar</button>
-              <button class="btn btn-danger" @click="rechazarCita(cita.id)">Rechazar</button>
+            <!-- Mostrar botones solo si el estado es 'Pendiente' -->
+            <div v-if="cita.estado === 'Pendiente'" class="mt-3">
+              <button
+                class="btn btn-success me-2"
+                @click="confirmarCita(cita.id)"
+              >
+                Confirmar
+              </button>
+              <button
+                class="btn btn-danger"
+                @click="rechazarCita(cita.id)"
+              >
+                Rechazar
+              </button>
             </div>
           </div>
         </div>
@@ -49,7 +77,7 @@ export default {
     async confirmarCita(citaId) {
       try {
         await CitaRepository.confirmarCita(citaId);
-        await this.fetchCitas();
+        await this.fetchCitas(); // Actualizar las citas después de confirmar
         alert("Cita confirmada exitosamente");
       } catch (error) {
         console.error("Error confirmando cita", error);
@@ -59,7 +87,7 @@ export default {
     async rechazarCita(citaId) {
       try {
         await CitaRepository.rechazarCita(citaId);
-        await this.fetchCitas();
+        await this.fetchCitas(); // Actualizar las citas después de rechazar
         alert("Cita rechazada exitosamente");
       } catch (error) {
         console.error("Error rechazando cita", error);
@@ -74,11 +102,18 @@ export default {
 .card {
   border-radius: 10px;
   background-color: #f8f9fa;
+  transition: opacity 0.3s ease-in-out; /* Transición suave para opacidad */
 }
+
+.card.rechazada {
+  opacity: 0.5; /* Difumina la tarjeta al reducir su opacidad */
+}
+
 .card-title {
   font-size: 1.5rem;
   font-weight: bold;
 }
+
 .card-text {
   font-size: 1rem;
   margin: 0.5rem 0;

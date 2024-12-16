@@ -41,7 +41,7 @@ public class CitasService {
     Servicio servicio = servicioDao.findById(cita.getServicio().getId());
 
     cita.setBarbero(barbero);
-    cita.setCliente(clienteAutenticado); // Asignar cliente autenticado
+    cita.setCliente(clienteAutenticado);
     cita.setServicio(servicio);
 
     // Validar conflicto de horarios del barbero
