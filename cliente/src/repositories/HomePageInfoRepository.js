@@ -6,7 +6,11 @@ export default {
         return response.data;
     },
 
-    async updateHomePageInfo(info) {
-        return await HTTP.post("/update", info);
-    },
+    async updateHomePageInfo(formData) {
+        return await HTTP.post("/update", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      },
 };

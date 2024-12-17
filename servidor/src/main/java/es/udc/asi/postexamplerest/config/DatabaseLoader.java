@@ -1,11 +1,9 @@
 package es.udc.asi.postexamplerest.config;
 
-import es.udc.asi.postexamplerest.model.domain.Cliente;
-import es.udc.asi.postexamplerest.model.domain.Empleado;
-import es.udc.asi.postexamplerest.model.domain.HomePageInfo;
-import es.udc.asi.postexamplerest.model.domain.Servicio;
+import es.udc.asi.postexamplerest.model.domain.*;
 import es.udc.asi.postexamplerest.model.exception.UserLoginExistsException;
 import es.udc.asi.postexamplerest.model.repository.HomePageInfoDao;
+import es.udc.asi.postexamplerest.model.repository.HorarioDao;
 import es.udc.asi.postexamplerest.model.repository.UsuarioDao;
 import es.udc.asi.postexamplerest.model.repository.ServiciosDao;
 import es.udc.asi.postexamplerest.model.service.HomePageInfoService;
@@ -16,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Configuration
 public class DatabaseLoader {
@@ -34,6 +33,9 @@ public class DatabaseLoader {
 
     @Autowired
     private ServiciosDao serviciosDao;
+
+    @Autowired
+    private HorarioDao horarioDao;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -72,6 +74,7 @@ public class DatabaseLoader {
         maria.setActivo(true); // Marcar como activo
         userDAO.update(maria);
 
+        // Registro de empleados
         Empleado empleado1 = new Empleado();
         empleado1.setNombre("ronaldo");
         empleado1.setApellido("nazario");
@@ -83,7 +86,6 @@ public class DatabaseLoader {
         empleado1.setPassword(passwordEncoder.encode("ronaldo"));
         empleado1.setSalario(2500.00);
         empleado1.setContrato("01/01/2023");
-        empleado1.setHorario("LUN-SAB 9:00-18:00");
         empleado1.setDescripcion("Especialista en cortes y afeitado tradicional");
         empleado1.setDespedido(false); // Inicializar explícitamente
         userDAO.create(empleado1);
@@ -99,10 +101,25 @@ public class DatabaseLoader {
         empleado2.setPassword(passwordEncoder.encode("messi"));
         empleado2.setSalario(3000.00);
         empleado2.setContrato("01/06/2022");
-        empleado2.setHorario("LUN-VIE 10:00-19:00");
         empleado2.setDescripcion("Experto en cortes modernos y degradados");
         empleado2.setDespedido(false); // Inicializar explícitamente
         userDAO.create(empleado2);
+
+        // Asignar horarios a Ronaldo
+        horarioDao.create(new Horario(empleado1, "Lunes", LocalTime.of(9, 0), LocalTime.of(18, 0)));
+        horarioDao.create(new Horario(empleado1, "Martes", LocalTime.of(9, 0), LocalTime.of(18, 0)));
+        horarioDao.create(new Horario(empleado1, "Miércoles", LocalTime.of(9, 0), LocalTime.of(18, 0)));
+        horarioDao.create(new Horario(empleado1, "Jueves", LocalTime.of(9, 0), LocalTime.of(18, 0)));
+        horarioDao.create(new Horario(empleado1, "Viernes", LocalTime.of(9, 0), LocalTime.of(18, 0)));
+        horarioDao.create(new Horario(empleado1, "Sábado", LocalTime.of(9, 0), LocalTime.of(18, 0)));
+
+        // Asignar horarios a Lionel
+        horarioDao.create(new Horario(empleado2, "Lunes", LocalTime.of(10, 0), LocalTime.of(19, 0)));
+        horarioDao.create(new Horario(empleado2, "Martes", LocalTime.of(10, 0), LocalTime.of(19, 0)));
+        horarioDao.create(new Horario(empleado2, "Miércoles", LocalTime.of(10, 0), LocalTime.of(19, 0)));
+        horarioDao.create(new Horario(empleado2, "Jueves", LocalTime.of(10, 0), LocalTime.of(19, 0)));
+        horarioDao.create(new Horario(empleado2, "Viernes", LocalTime.of(10, 0), LocalTime.of(19, 0)));
+
 
         // Registro de jefes
         userService.registerJefe(

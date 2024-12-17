@@ -74,6 +74,7 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.POST, "/api/users/upload/**").permitAll()
                 .antMatchers("/api/images/profile/**").permitAll()
                 .antMatchers("/api/reset-password", "/api/password-recovery").permitAll()
+                .antMatchers("/api/images/homepage/**").permitAll()
                 .antMatchers("/**").authenticated() // Todas las demás rutas requieren autenticación
                 .and()
                 .apply(securityConfigurerAdapter());

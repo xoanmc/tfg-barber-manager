@@ -1,8 +1,10 @@
 package es.udc.asi.postexamplerest.web;
 
 import es.udc.asi.postexamplerest.model.domain.Cita;
+import es.udc.asi.postexamplerest.model.domain.Servicio;
 import es.udc.asi.postexamplerest.model.domain.Usuario;
 import es.udc.asi.postexamplerest.model.service.CitasService;
+import es.udc.asi.postexamplerest.model.service.dto.CitaDTO;
 import es.udc.asi.postexamplerest.security.CustomUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,12 +37,34 @@ public class CitasResource {
 
   @PostMapping("/reservar")
   @PreAuthorize("hasAuthority('CLIENTE')")
-  public Cita reservarCita(@RequestBody Cita cita, Authentication authentication) {
+  public Cita reservarCita(@RequestBody CitaDTO citaDTO, Authentication authentication) {
+    // Obtener el cliente autenticado
     CustomUserPrincipal customUserPrincipal = (CustomUserPrincipal) authentication.getPrincipal();
-    Usuario cliente = customUserPrincipal.getUsuario(); // obtener usuario asociado
-    cita.setCliente(cliente); // asignar cliente autenticado a la cita
+    Usuario cliente = customUserPrincipal.getUsuario();
+
+    // Buscar el barbero y el servicio por ID usando los servicios correspondientes
+    Usuario barbero = citasService.findBarberoById(citaDTO.getBarberoId());
+    Servicio servicio = citasService.findServicioById(citaDTO.getServicioId());
+
+    // Validar barbero y servicio
+    if (barbero == null) {
+      throw new IllegalArgumentException("El barbero seleccionado no existe.");
+    }
+    if (servicio == null) {
+      throw new IllegalArgumentException("El servicio seleccionado no existe.");
+    }
+
+    // Crear la entidad Cita
+    Cita cita = new Cita();
+    cita.setCliente(cliente);
+    cita.setBarbero(barbero);
+    cita.setServicio(servicio);
+    cita.setFechaHora(citaDTO.getFechaHora());
+
+    // Reservar la cita
     return citasService.reservarCita(cita, cliente);
   }
+
 
 
   @DeleteMapping("/cancelar/{citaId}")

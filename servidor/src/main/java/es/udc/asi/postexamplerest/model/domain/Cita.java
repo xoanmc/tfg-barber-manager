@@ -1,5 +1,8 @@
 package es.udc.asi.postexamplerest.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -14,7 +17,10 @@ public class Cita {
   private Usuario cliente;  // relación con el cliente
 
   @ManyToOne
+  @JsonTypeInfo(use = JsonTypeInfo.Id.NONE) // Deshabilita el uso de type info
   private Usuario barbero;  // relación con el barbero
+
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
   private LocalDateTime fechaHora; // fecha y hora de la cita
 
   @Column(nullable = false)

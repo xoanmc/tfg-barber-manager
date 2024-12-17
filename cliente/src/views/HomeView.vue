@@ -1,17 +1,10 @@
 <template>
   <div class="home-container">
     <!-- Imagen de fondo -->
-    <div
-      class="background-banner"
-      :style="{ backgroundImage: `url(${homePageInfo.imagen || defaultBanner})` }"
-    >
+    <div class="background-banner" :style="{ backgroundImage: `url(${homePageInfo.imagen || defaultBanner})` }">
       <div class="overlay">
         <div class="content text-center">
-          <img
-            alt="Logo de la Barbería"
-            src="../assets/logoBarber.png"
-            class="logo-img mb-3"
-          />
+          <img alt="Logo de la Barbería" src="../assets/logoBarber.png" class="logo-img mb-3" />
           <h1 class="text-white display-4">
             {{ homePageInfo.nombre || "Nombre Barbería" }}
           </h1>
@@ -23,42 +16,22 @@
           </button>
         </div>
 
-        <div
-          v-if="isJefe"
-          class="form-container bg-white p-4 shadow rounded mx-auto"
-        >
+        <div v-if="isJefe" class="form-container bg-white p-4 shadow rounded mx-auto">
           <h2 class="text-center text-primary mb-4">¿Quieres editar los datos?</h2>
           <form @submit.prevent="guardarInformacion">
             <div class="mb-3">
               <label for="nombre" class="form-label">Nombre de la Barbería</label>
-              <input
-                v-model="homePageInfo.nombre"
-                type="text"
-                id="nombre"
-                class="form-control"
-                placeholder="Nombre de la barbería"
-                required
-              />
+              <input v-model="homePageInfo.nombre" type="text" id="nombre" class="form-control"
+                placeholder="Nombre de la barbería" required />
             </div>
             <div class="mb-3">
               <label for="descripcion" class="form-label">Descripción de la Barbería</label>
-              <textarea
-                v-model="homePageInfo.descripcion"
-                id="descripcion"
-                class="form-control"
-                placeholder="Descripción de la barbería"
-                rows="3"
-                required
-              ></textarea>
+              <textarea v-model="homePageInfo.descripcion" id="descripcion" class="form-control"
+                placeholder="Descripción de la barbería" rows="3" required></textarea>
             </div>
             <div class="mb-3">
               <label for="imagen" class="form-label">Subir Imagen de Portada</label>
-              <input
-                type="file"
-                id="imagen"
-                class="form-control"
-                @change="onFileChange"
-              />
+              <input type="file" id="imagen" class="form-control" accept="image/*" @change="onFileChange" />
             </div>
             <button type="submit" class="btn btn-primary w-100">Guardar</button>
           </form>
@@ -79,8 +52,9 @@ export default {
       homePageInfo: {
         nombre: "",
         descripcion: "",
-        imagen: "",
+        imagen: "", // URL temporal de la imagen seleccionada
       },
+      selectedFile: null, // Archivo seleccionado
       defaultBanner: require('@/assets/defaultBanner.jpg'),
       isJefe: auth.isJefe(),
     };
@@ -92,6 +66,7 @@ export default {
     async cargarInformacion() {
       try {
         const response = await HomePageInfoRepository.getHomePageInfo();
+        console.log("Respuesta del servidor:", response);
         this.homePageInfo = response;
       } catch (error) {
         console.error("Error cargando la información de la página de inicio", error);
@@ -99,8 +74,19 @@ export default {
     },
     async guardarInformacion() {
       try {
-        await HomePageInfoRepository.updateHomePageInfo(this.homePageInfo);
+        const formData = new FormData();
+        formData.append("nombre", this.homePageInfo.nombre);
+        formData.append("descripcion", this.homePageInfo.descripcion);
+
+        if (this.selectedFile) {
+          formData.append("imagen", this.selectedFile); // Añadir archivo si fue seleccionado
+        } else {
+          console.warn("No se seleccionó ninguna imagen para subir.");
+        }
+
+        await HomePageInfoRepository.updateHomePageInfo(formData);
         alert("Información actualizada con éxito");
+        this.cargarInformacion(); // Recargar datos actualizados
       } catch (error) {
         console.error("Error guardando la información de la página de inicio", error);
         alert("Hubo un error al guardar la información");
@@ -115,12 +101,16 @@ export default {
     },
     onFileChange(event) {
       const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.homePageInfo.imagen = e.target.result;
-      };
-      reader.readAsDataURL(file);
+      if (file) {
+        this.selectedFile = file; // signa archivo seleccionado
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.homePageInfo.imagen = e.target.result; // URL temporal para previsualización
+        };
+        reader.readAsDataURL(file);
+      }
     },
+
   },
 };
 </script>
@@ -143,7 +133,8 @@ export default {
 }
 
 .overlay {
-  background-color: rgba(0, 0, 0, 0.6); /* Oscurece la imagen de fondo */
+  background-color: rgba(0, 0, 0, 0.6);
+  /* Oscurece la imagen de fondo */
   position: absolute;
   top: 0;
   left: 0;
@@ -153,14 +144,16 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 5%; /* Más espacio para mover el contenido hacia arriba */
+  padding-top: 5%;
+  /* Más espacio para mover el contenido hacia arriba */
 }
 
 .content {
   color: white;
   text-align: center;
   max-width: 800px;
-  margin-bottom: 50px; /* Espacio adicional entre el contenido y el formulario */
+  margin-bottom: 50px;
+  /* Espacio adicional entre el contenido y el formulario */
 }
 
 .logo-img {
@@ -183,6 +176,7 @@ p {
   background-color: #007BFF;
   border: none;
 }
+
 .btn-primary:hover {
   background-color: #0056b3;
 }
@@ -211,6 +205,7 @@ p {
   background-color: #007BFF;
   border: none;
 }
+
 .form-container .btn-primary:hover {
   background-color: #0056b3;
 }
