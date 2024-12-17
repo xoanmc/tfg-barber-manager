@@ -8,6 +8,7 @@ public class CitaDTO {
     private Long barberoId;
     private Long servicioId;
 
+    //para que acepte el formato que le llega desde el formualrio de reserva
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime fechaHora;
 
