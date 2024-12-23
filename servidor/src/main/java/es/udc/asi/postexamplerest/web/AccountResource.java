@@ -110,8 +110,8 @@ public class AccountResource {
                 login,
                 password,
                 0, // Número inicial de citas
-                null, // Primera cita
-                true // Enviar correo de confirmación
+                null,
+                true
         );
 
         // si se proporciona una foto de perfil, subirla y asociarla al cliente
@@ -124,25 +124,24 @@ public class AccountResource {
         }
     }
 
-
     @GetMapping("/confirm-registration")
-    public ResponseEntity<String> confirmRegistration(@RequestParam("token") String token) {
+    public ResponseEntity<Void> confirmRegistration(@RequestParam("token") String token) {
         try {
-            // Validar el token JWT y obtener el login del usuario
             String login = tokenProvider.validateEmailVerificationToken(token);
-            logger.info("Token válido. Usuario login: {}", login);
-
-            // Confirmar el registro del usuario
             userService.confirmarRegistro(login);
 
-            // Responder con un mensaje de éxito
-            return ResponseEntity.ok("Registro confirmado exitosamente.<br>Puedes cerrar esta ventana.");
+            // Redirige al frontend
+            return ResponseEntity.status(302)
+                    .header("Location", "http://localhost:1234/confirmRegistration?success=true")
+                    .build();
         } catch (IllegalArgumentException e) {
-            logger.error("Error de token inválido: {}", e.getMessage());
-            return ResponseEntity.badRequest().body("El enlace de confirmación es inválido o ha expirado.");
+            return ResponseEntity.status(302)
+                    .header("Location", "http://localhost:1234/confirmRegistration?success=false&error=invalid_token")
+                    .build();
         } catch (NotFoundException e) {
-            logger.error("Usuario no encontrado: {}", e.getMessage());
-            return ResponseEntity.status(404).body("Usuario no encontrado.");
+            return ResponseEntity.status(302)
+                    .header("Location", "http://localhost:1234/confirmRegistration?success=false&error=user_not_found")
+                    .build();
         }
     }
 
@@ -188,7 +187,6 @@ public class AccountResource {
     }
 
     //manejo de recuperación de contraseña
-
     @PostMapping("/password-recovery")
     public ResponseEntity<Void> solicitarRecuperacion(@RequestBody Map<String, String> request) {
         String email = request.get("email");
@@ -210,7 +208,6 @@ public class AccountResource {
                 .build();
     }
 
-
     @PostMapping("/reset-password")
     public ResponseEntity<Void> resetearContraseña(@RequestBody Map<String, String> request) throws NotFoundException {
         String token = request.get("token");
@@ -220,7 +217,4 @@ public class AccountResource {
         userService.resetearContraseña(token, newPassword);
         return ResponseEntity.noContent().build();
     }
-
-
-
 }

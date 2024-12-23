@@ -19,5 +19,5 @@ export default {
 
     async updateAccount(profile) {
         return (await HTTP.put("/users/me", profile)).data;
-    }
+    },
 };

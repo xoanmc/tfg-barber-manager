@@ -52,6 +52,7 @@ D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\security
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\domain\Horario.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\service\MailService.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\security\MyUnauthorizedEntryPoint.java
+D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\service\dto\CitaDTO.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\web\AccountResource.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\web\exceptions\CredentialsAreNotValidException.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\service\ServiciosService.java

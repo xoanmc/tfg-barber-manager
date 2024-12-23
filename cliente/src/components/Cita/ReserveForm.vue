@@ -2,6 +2,7 @@
   <div class="reserva-container">
     <h2 class="reserva-titulo">Reserva tu Cita</h2>
 
+    <!-- seleccionar barbero -->
     <div class="form-group">
       <label for="barbero" class="form-label">Selecciona Barbero:</label>
       <select v-model="cita.barberoId" id="barbero" class="form-select" @change="actualizarHorariosDisponibles">
@@ -12,6 +13,7 @@
       </select>
     </div>
 
+    <!-- seleccionar servicio -->
     <div class="form-group">
       <label for="servicio" class="form-label">Selecciona Servicio:</label>
       <select v-model="cita.servicioId" id="servicio" class="form-select">
@@ -21,16 +23,21 @@
       </select>
     </div>
 
+    <!-- seleccionar horario -->
     <div class="datepicker-container">
       <label for="fecha" class="form-label">Selecciona Fecha y Hora:</label>
       <flat-pickr ref="flatpickrInstance" v-model="cita.fechaHora" :config="flatpickrConfig" class="datepicker" />
     </div>
 
+    <!-- botón de reservar -->
     <div>
       <button @click="reservarCita" :disabled="!cita.fechaHora || !cita.servicioId">
         Reservar
       </button>
     </div>
+
+    <!-- botón de PayPal -->
+    <div id="paypal-button-container" style="margin-top: 20px;"></div>
   </div>
 </template>
 
@@ -73,7 +80,9 @@ export default {
   },
   mounted() {
     this.cargarBarberos();
-    this.cargarServicios();
+    this.cargarServicios().then(() => {
+      this.initPayPalButton();
+    });
     this.actualizarHorariosDisponibles(); // Cargar todos los horarios al inicio
   },
   methods: {
@@ -214,6 +223,42 @@ export default {
         alert("Hubo un error al reservar la cita");
       }
     },
+    initPayPalButton() {
+      if (!window.paypal) {
+        console.error("PayPal SDK no está cargado.");
+        return;
+      }
+      window.paypal.Buttons({
+        createOrder: (data, actions) => {
+          // Crear el pedido de PayPal con los detalles del servicio
+          const selectedService = this.servicios.find(s => s.id === this.cita.servicioId);
+          const amount = selectedService ? selectedService.precio : 0;
+
+          return actions.order.create({
+            purchase_units: [
+              {
+                description: "Pago de Reserva",
+                amount: {
+                  value: amount.toFixed(2),
+                  currency_code: "EUR",
+                },
+              },
+            ],
+          });
+        },
+        onApprove: async (data, actions) => {
+          const order = await actions.order.capture();
+          console.log("Pago realizado con éxito:", order);
+
+          alert("¡Pago completado! Tu cita ha sido reservada.");
+          await this.reservarCita();
+        },
+        onError: (err) => {
+          console.error("Error en PayPal:", err);
+          alert("Hubo un problema con el pago.");
+        },
+      }).render("#paypal-button-container");
+    }
   },
 };
 </script>

@@ -170,20 +170,19 @@ public class UsuarioService {
         empleado.setNombre(nombre);
         empleado.setApellido(apellido);
         empleado.setTelefono(telefono);
-        empleado.setFechaNacimiento(fechaNacimiento); // Establecer fecha de nacimiento
-        empleado.setEmail(email); // Establecer email
+        empleado.setFechaNacimiento(fechaNacimiento);
+        empleado.setEmail(email);
         empleado.setLogin(login);
         empleado.setPassword(encryptedPassword);
         empleado.setPuesto(puesto);
         empleado.setSalario(salario);
         empleado.setContrato(contrato);
-        empleado.setHorario(horario); // Nuevo campo horario
-        empleado.setDescripcion(descripcion); // Nuevo campo descripción
+        empleado.setHorario(horario);
+        empleado.setDescripcion(descripcion);
 
         usuarioDAO.create(empleado);
     }
 
-    // Registrar Jefe
     @Transactional(readOnly = false)
     public void registerJefe(String nombre, String apellido, String telefono, String email, String login,
                              String password) throws UserLoginExistsException {
@@ -204,7 +203,6 @@ public class UsuarioService {
         usuarioDAO.create(jefe);
     }
 
-    // Obtener información del usuario actual con su autoridad
     public AccountDTO getCurrentUserWithAuthority() {
         String currentUserLogin = SecurityUtils.getCurrentUserLogin();
         if (currentUserLogin != null) {
@@ -213,7 +211,6 @@ public class UsuarioService {
         return null;
     }
 
-    // Eliminar usuario por ID
     @PreAuthorize("hasAuthority('JEFE')")
     @Transactional(readOnly = false)
     public void deleteById(Long id) throws NotFoundException, OperationNotAllowed {
@@ -272,23 +269,21 @@ public class UsuarioService {
             if (accountDTO.getDescripcion() != null) empleado.setDescripcion(accountDTO.getDescripcion());
         }
 
-        // Guardar los cambios
         usuarioDAO.update(user);
 
-        // Retornar los datos actualizados
         return new AccountDTO(user);
     }
 
   public void despedirEmpleado(Long id) throws NotFoundException {
-    // Buscar el usuario por ID
+
     Usuario usuario = usuarioDAO.findById(id);
     if (usuario == null || !(usuario instanceof Empleado)) {
       throw new NotFoundException("Empleado no encontrado", Empleado.class);
     }
-    // Convertir a Empleado y marcar como despedido
+
     Empleado empleado = (Empleado) usuario;
     empleado.setDespedido(true);
-    // Actualizar el estado del empleado
+
     usuarioDAO.update(empleado);
   }
 
@@ -299,7 +294,7 @@ public class UsuarioService {
       throw new NotFoundException("Cliente no encontrado", Cliente.class);
     }
     Cliente cliente = (Cliente) usuario;
-    cliente.setActivo(false); // Marcar cliente como inactivo
+    cliente.setActivo(false);
     usuarioDAO.update(cliente);
   }
 
@@ -394,7 +389,4 @@ public class UsuarioService {
         usuario.setPasswordRecoveryToken(null); // Limpiar el token después de usarlo
         usuarioDAO.update(usuario);
     }
-
-
-
 }

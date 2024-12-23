@@ -14,6 +14,7 @@ import ResetPassword from "@/components/ResetPassword.vue";
 import ClienteRegisterForm from "@/components/Cliente/ClienteRegisterForm.vue";
 import ClienteList from "@/components/Cliente/ClienteList.vue";
 import EmailConfirmation from "@/components/EmailConfirmation.vue";
+import ConfirmRegistration from "@/components/ConfirmRegistration.vue";
 
 import PerfilCliente from "@/components/Cliente/ClientePerfil.vue";
 
@@ -67,6 +68,12 @@ const routes = [{
         path: "/emailConfirmation",
         name: "EmailConfirmation",
         component:EmailConfirmation,
+        meta: { public: true },
+    },
+    {
+        path: "/confirmRegistration",
+        name: "ConfirmRegistration",
+        component: ConfirmRegistration,
         meta: { public: true },
     },
     
