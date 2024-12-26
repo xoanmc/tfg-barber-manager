@@ -99,6 +99,15 @@ export default {
 </script>
 
 <style scoped>
+
+h2 {
+  padding: 30px 20px;
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95); /* Sombreado para mejorar la legibilidad */
+  color: #f8f9fa; /* Color claro para contraste */
+}
+
 .card {
   border-radius: 10px;
   background-color: #f8f9fa;
@@ -117,5 +126,12 @@ export default {
 .card-text {
   font-size: 1rem;
   margin: 0.5rem 0;
+}
+
+.text-muted {
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7);
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #f8f9fa;
 }
 </style>

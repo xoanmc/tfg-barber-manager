@@ -1,122 +1,124 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-transparent" :style="{ color: textColor }">
-    <div class="container-fluid">
-      <router-link class="navbar-brand" to="/home">
-        <img src="@/assets/logoBarber.png" alt="Logo" class="logo-circle" />
-      </router-link>
+  <div class="global-background">
+    <nav class="navbar navbar-expand-lg navbar-transparent" :style="{ color: textColor }">
+      <div class="container-fluid">
+        <router-link class="navbar-brand" to="/home">
+          <img src="@/assets/logoBarber.png" alt="Logo" class="logo-circle" />
+        </router-link>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <router-link to="/home" class="nav-link" active-class="active">
-              Inicio
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/about" class="nav-link" active-class="active">
-              Acerca de
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/services" class="nav-link" active-class="active">
-              Servicios
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/gallery" class="nav-link" active-class="active">
-              Galería
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/trending" class="nav-link" active-class="active">
-              Tendencias
-            </router-link>
-          </li>
-          <li class="nav-item" v-if="isCliente">
-            <router-link to="/misCitas" class="nav-link" active-class="active">
-              Mis Citas
-            </router-link>
-          </li>
-          <li class="nav-item" v-if="isEmpleado">
-            <router-link to="/empleadoCitas" class="nav-link" active-class="active">
-              Mis Citas
-            </router-link>
-          </li>
-          <li class="nav-item" v-if="isJefe">
-            <router-link to="/users/empleados" class="nav-link" active-class="active">
-              Empleados
-            </router-link>
-          </li>
-          <li class="nav-item" v-if="isJefe">
-            <router-link to="/users/clientes" class="nav-link" active-class="active">
-              Clientes
-            </router-link>
-          </li>
-          <li class="nav-item" v-if="isJefe">
-            <router-link to="/promociones" class="nav-link" active-class="active">
-              Promociones
-            </router-link>
-          </li>
-        </ul>
-        <ul class="navbar-nav">
-          <li class="nav-item dropdown" v-if="store.state.user.logged">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              Hola, {{ store.state.user.login }}
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-              <template v-if="isCliente">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <router-link to="/home" class="nav-link" active-class="active">
+                Inicio
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/about" class="nav-link" active-class="active">
+                Acerca de
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/services" class="nav-link" active-class="active">
+                Servicios
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/gallery" class="nav-link" active-class="active">
+                Galería
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/trending" class="nav-link" active-class="active">
+                Tendencias
+              </router-link>
+            </li>
+            <li class="nav-item" v-if="isCliente">
+              <router-link to="/misCitas" class="nav-link" active-class="active">
+                Mis Citas
+              </router-link>
+            </li>
+            <li class="nav-item" v-if="isEmpleado">
+              <router-link to="/empleadoCitas" class="nav-link" active-class="active">
+                Mis Citas
+              </router-link>
+            </li>
+            <li class="nav-item" v-if="isJefe">
+              <router-link to="/users/empleados" class="nav-link" active-class="active">
+                Empleados
+              </router-link>
+            </li>
+            <li class="nav-item" v-if="isJefe">
+              <router-link to="/users/clientes" class="nav-link" active-class="active">
+                Clientes
+              </router-link>
+            </li>
+            <li class="nav-item" v-if="isJefe">
+              <router-link to="/promociones" class="nav-link" active-class="active">
+                Promociones
+              </router-link>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown" v-if="store.state.user.logged">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Hola, {{ store.state.user.login }}
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <template v-if="isCliente">
+                  <li>
+                    <a class="dropdown-item" @click="irAPerfil">Perfil</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" @click="verMisCitas">Mis citas</a>
+                  </li>
+                </template>
+                <template v-if="isEmpleado">
+                  <li>
+                    <a class="dropdown-item" @click="irAPerfil">Perfil</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" @click="verMisCitas">Mis citas</a>
+                  </li>
+                </template>
+                <template v-if="isJefe">
+                  <li>
+                    <a class="dropdown-item" @click="irAPerfil">Perfil</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" @click="irAGestionEmpleados">Gestión Empleados</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" @click="irAGestionClientes">Gestión Clientes</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" @click="irAGestionPromociones">Gestión Promociones</a>
+                  </li>
+                </template>
                 <li>
-                  <a class="dropdown-item" @click="irAPerfil">Perfil</a>
+                  <hr class="dropdown-divider" />
                 </li>
                 <li>
-                  <a class="dropdown-item" @click="verMisCitas">Mis citas</a>
+                  <a class="dropdown-item text-danger" @click="desautenticarme">Cerrar Sesión</a>
                 </li>
-              </template>
-              <template v-if="isEmpleado">
-                <li>
-                  <a class="dropdown-item" @click="irAPerfil">Perfil</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" @click="verMisCitas">Mis citas</a>
-                </li>
-              </template>
-              <template v-if="isJefe">
-                <li>
-                  <a class="dropdown-item" @click="irAPerfil">Perfil</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" @click="irAGestionEmpleados">Gestión Empleados</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" @click="irAGestionClientes">Gestión Clientes</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" @click="irAGestionPromociones">Gestión Promociones</a>
-                </li>
-              </template>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li>
-                <a class="dropdown-item text-danger" @click="desautenticarme">Cerrar Sesión</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item" v-if="!store.state.user.logged">
-            <router-link class="nav-link" to="/login" active-class="active">
-              Iniciar Sesión
-            </router-link>
-          </li>
-        </ul>
+              </ul>
+            </li>
+            <li class="nav-item" v-if="!store.state.user.logged">
+              <router-link class="nav-link" to="/login" active-class="active">
+                Iniciar Sesión
+              </router-link>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </nav>
-  <router-view />
+    </nav>
+    <router-view />
+  </div>
 </template>
 
 <script>
@@ -147,21 +149,7 @@ export default {
       return auth.isJefe();
     },
   },
-  watch: {
-    $route: "updateNavbarStyle",
-  },
-  mounted() {
-    this.updateNavbarStyle();
-  },
   methods: {
-    updateNavbarStyle() {
-      // Define los colores en función de la ruta
-      if (this.isHome) {
-        this.textColor = "#ffffff"; // Blanco para fondo oscuro
-      } else {
-        this.textColor = "#2c3e50"; // Oscuro para fondo claro
-      }
-    },
     desautenticarme() {
       auth.logout();
       this.$router.push("/login");
@@ -198,40 +186,64 @@ export default {
 };
 </script>
 
+
+
+<style>
+/* Fondo global */
+.global-background {
+  position: relative;
+  /* Necesario para que el overlay funcione correctamente */
+  background-image: url('~@/assets/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.global-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+}
+
+.global-background>* {
+  position: relative;
+  z-index: 2;
+}
+</style>
+
 <style scoped>
 .router-view {
   margin-top: 80px;
 }
 
 .navbar {
+  background: transparent !important;
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  /* Transiciones suaves */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Transiciones suaves */
+  
 }
 
-
-.navbar-transparent {
-  background: transparent !important;
+.navbar .nav-link {
+  color: white !important;
 }
 
-
-.navbar-brand,
-.nav-link,
-.navbar-toggler-icon {
-  transition: color 0.3s ease;
-}
-
-
-.navbar-transparent .nav-link {
-  color: inherit !important;
-}
-
-.navbar-transparent .nav-link:hover {
+.navbar .nav-link:hover {
   color: rgba(15, 105, 230, 0.8) !important;
-  /* color al pasar el mouse */
+}
+
+.navbar-brand {
+  color: white !important;
+  /* Logo en blanco */
 }
 
 .logo-circle {

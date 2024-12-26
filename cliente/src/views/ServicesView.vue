@@ -175,11 +175,10 @@ export default {
 </script>
 
 <style scoped>
-.services-container {
+ .services-container {
   text-align: center;
-  padding: 30px 20px;
-  margin-top: 80px;
-}
+  padding: 100px 20px;
+} 
 
 .services-grid {
   display: flex;
@@ -240,6 +239,20 @@ export default {
 .error-text {
   color: red;
   font-size: 0.85rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95); /* Sombreado para mejorar la legibilidad */
+  color: #f8f9fa; /* Color claro para contraste */
+}
+
+h3 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95); /* Sombreado para mejorar la legibilidad */
+  color: #f8f9fa; /* Color claro para contraste */
 }
 
 .d-flex.justify-content-center {

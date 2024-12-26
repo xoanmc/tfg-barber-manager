@@ -207,11 +207,10 @@ export default {
           return;
         }
 
-        // Aquí enviamos solo el ID de barbero y servicio
         const citaData = {
-          barberoId: barberoIdSeleccionado,       // Solo el ID del barbero
-          servicioId: this.cita.servicioId,       // Solo el ID del servicio
-          fechaHora: this.cita.fechaHora,         // Fecha y hora seleccionada
+          barberoId: barberoIdSeleccionado,       
+          servicioId: this.cita.servicioId,       
+          fechaHora: this.cita.fechaHora,         
         };
 
         console.log("Datos de la cita enviados al backend:", citaData);

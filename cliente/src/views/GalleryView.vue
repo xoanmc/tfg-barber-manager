@@ -3,10 +3,3 @@
     <h1>Aquí irá la GALERÍA</h1>
   </div>
 </template>
-
-<style scoped>
-.content {
-  margin-top: 80px; /* ajustar según la altura de la barra de navegación */
-  padding: 20px; /* para agregar espacio interno */
-}
-</style>

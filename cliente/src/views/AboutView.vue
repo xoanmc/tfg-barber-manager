@@ -72,16 +72,17 @@ export default {
 
 <style scoped>
 .about-container {
-  padding: 20px;
+  padding: 100px 20px;
   max-width: 800px;
   margin: 0 auto;
-  margin-top: 80px;
 }
 
 h1 {
   font-size: 2.5rem;
   font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95); /* Sombreado para mejorar la legibilidad */
 }
+
 
 .card {
   border-radius: 12px;

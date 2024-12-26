@@ -4,86 +4,102 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 public class Cita {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @ManyToOne
-  private Usuario cliente;  // relación con el cliente
+    @ManyToOne
+    private Usuario cliente;  // relación con el cliente
 
-  @ManyToOne
-  @JsonTypeInfo(use = JsonTypeInfo.Id.NONE) // Deshabilita el uso de type info
-  private Usuario barbero;  // relación con el barbero
+    @ManyToOne
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NONE) // Deshabilita el uso de type info
+    private Usuario barbero;  // relación con el barbero
 
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-  private LocalDateTime fechaHora; // fecha y hora de la cita
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fecha;
 
-  @Column(nullable = false)
-  private String estado = "Pendiente";  // Confirmada, Pendiente, Cancelada
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime hora;
 
-  @ManyToOne
-  private Servicio servicio;  // servicio que se reservó
+    @Column(nullable = false)
+    private String estado = "Pendiente";  // Confirmada, Pendiente, Cancelada
 
-  public Cita() {}
+    @ManyToOne
+    private Servicio servicio;  // servicio que se reservó
 
-  public Cita(Usuario cliente, Usuario barbero, LocalDateTime fechaHora, Servicio servicio, String estado) {
-    this.cliente = cliente;
-    this.barbero = barbero;
-    this.fechaHora = fechaHora;
-    this.servicio = servicio;
-    this.estado = estado;
-  }
+    public Cita() {
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public Cita(Long id, Usuario cliente, Usuario barbero, LocalDate fecha, LocalTime hora, String estado, Servicio servicio) {
+        this.id = id;
+        this.cliente = cliente;
+        this.barbero = barbero;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.estado = estado;
+        this.servicio = servicio;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public Usuario getCliente() {
-    return cliente;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public void setCliente(Usuario cliente) {
-    this.cliente = cliente;
-  }
+    public Usuario getCliente() {
+        return cliente;
+    }
 
-  public Usuario getBarbero() {
-    return barbero;
-  }
+    public void setCliente(Usuario cliente) {
+        this.cliente = cliente;
+    }
 
-  public void setBarbero(Usuario barbero) {
-    this.barbero = barbero;
-  }
+    public Usuario getBarbero() {
+        return barbero;
+    }
 
-  public LocalDateTime getFechaHora() {
-    return fechaHora;
-  }
+    public void setBarbero(Usuario barbero) {
+        this.barbero = barbero;
+    }
 
-  public void setFechaHora(LocalDateTime fechaHora) {
-    this.fechaHora = fechaHora;
-  }
+    public LocalDate getFecha() {
+        return fecha;
+    }
 
-  public String getEstado() {
-    return estado;
-  }
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
 
-  public void setEstado(String estado) {
-    this.estado = estado;
-  }
+    public LocalTime getHora() {
+        return hora;
+    }
 
-  public Servicio getServicio() {
-    return servicio;
-  }
+    public void setHora(LocalTime hora) {
+        this.hora = hora;
+    }
 
-  public void setServicio(Servicio servicio) {
-    this.servicio = servicio;
-  }
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public Servicio getServicio() {
+        return servicio;
+    }
+
+    public void setServicio(Servicio servicio) {
+        this.servicio = servicio;
+    }
 }

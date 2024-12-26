@@ -1,7 +1,7 @@
 <template>
   <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1 class="text-primary">Lista de Clientes</h1>
+      <h1>Lista de Clientes</h1>
     </div>
 
     <div class="table-responsive" v-if="clientes.length > 0">
@@ -105,7 +105,6 @@ export default {
 <style scoped>
 .container {
   padding: 20px;
-  margin-top: 80px;
 }
 
 .table {
@@ -131,6 +130,14 @@ export default {
 .btn-success {
   background-color: #28a745 !important;
   border-color: #28a745 !important;
+}
+
+h1 {
+  color: #f8f9fa;
+  margin-bottom: 0;
+  padding-top: 100px;
+  font-size: 2rem;
+  font-weight: bold;
 }
 
 .btn-warning:hover {

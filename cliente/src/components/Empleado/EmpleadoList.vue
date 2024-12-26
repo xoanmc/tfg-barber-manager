@@ -1,7 +1,7 @@
 <template>
   <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1 class="text-primary">Plantilla de Empleados</h1>
+      <h1>Plantilla de Empleados</h1>
       <router-link class="btn btn-success btn-lg" :to="{ name: 'EmpleadoCreate' }">
         Contratar
       </router-link>
@@ -96,7 +96,6 @@ export default {
 <style scoped>
 .container {
   padding: 20px;
-  margin-top: 80px;
 }
 
 .table {
@@ -126,6 +125,9 @@ export default {
 }
 
 h1 {
+  color: #f8f9fa;
+  margin-bottom: 0;
+  padding-top: 100px;
   font-size: 2rem;
   font-weight: bold;
 }

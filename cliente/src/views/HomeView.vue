@@ -5,7 +5,7 @@
       <div class="overlay">
         <div class="content text-center">
           <img alt="Logo de la Barbería" src="../assets/logoBarber.png" class="logo-img mb-3" />
-          <h1 class="text-white display-4">
+          <h1 class="text-primary display-4">
             {{ homePageInfo.nombre || "Nombre Barbería" }}
           </h1>
           <p class="text-white fs-5 mb-4">
@@ -133,8 +133,7 @@ export default {
 }
 
 .overlay {
-  background-color: rgba(0, 0, 0, 0.6);
-  /* Oscurece la imagen de fondo */
+  background-color: rgba(0, 0, 0, 0.6); /* Oscurece la imagen de fondo */
   position: absolute;
   top: 0;
   left: 0;
@@ -145,7 +144,6 @@ export default {
   align-items: center;
   justify-content: flex-start;
   padding-top: 5%;
-  /* Más espacio para mover el contenido hacia arriba */
 }
 
 .content {
@@ -166,6 +164,7 @@ export default {
 h1 {
   font-weight: bold;
   font-size: 2.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95);
 }
 
 p {
