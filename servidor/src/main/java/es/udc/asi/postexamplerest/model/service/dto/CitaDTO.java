@@ -16,6 +16,8 @@ public class CitaDTO {
     @JsonFormat(pattern = "HH:mm")
     private LocalTime hora;
 
+    private String preferencias;
+
     public CitaDTO() {}
 
     public CitaDTO(Long barberoId, Long servicioId, LocalDateTime fechaHora) {
@@ -23,6 +25,7 @@ public class CitaDTO {
         this.servicioId = servicioId;
         this.fecha = fecha;
         this.hora = hora;
+        this.preferencias = preferencias;
     }
 
     public Long getBarberoId() {
@@ -55,6 +58,14 @@ public class CitaDTO {
 
     public void setHora(LocalTime hora) {
         this.hora = hora;
+    }
+
+    public String getPreferencias() {
+        return preferencias;
+    }
+
+    public void setPreferencias(String preferencias) {
+        this.preferencias = preferencias;
     }
 }
 

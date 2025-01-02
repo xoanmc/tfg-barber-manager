@@ -17,6 +17,10 @@
               {{ cita.cliente.nombre }}
             </p>
             <p class="card-text">
+              <strong>Preferencias del Cliente:</strong>
+              {{ cita.preferencias || "No especificadas" }}
+            </p>
+            <p class="card-text">
               <strong>Estado:</strong>
               {{ cita.estado }}
             </p>
@@ -58,10 +62,10 @@ export default {
       try {
         const citas = await CitaRepository.getCitasBarbero();
 
-        // Combinar fecha y hora en una propiedad `fechaHora`
-        this.citas = citas.map(cita => ({
+        // Combinar fecha y hora en `fechaHora`
+        this.citas = citas.filter(cita => cita.estado !== "Cancelada").map(cita => ({
           ...cita,
-          fechaHora: `${cita.fecha}T${cita.hora}`, // Crear formato ISO 8601
+          fechaHora: `${cita.fecha}T${cita.hora}`,
         }));
       } catch (error) {
         console.error("Error obteniendo las citas del barbero", error);

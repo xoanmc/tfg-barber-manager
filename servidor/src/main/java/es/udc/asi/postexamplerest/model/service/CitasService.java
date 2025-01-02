@@ -85,6 +85,10 @@ public class CitasService {
             throw new RuntimeException("El barbero ya tiene una cita en ese horario.");
         }
 
+        if (cita.getPreferencias() == null) {
+            cita.setPreferencias("");
+        }
+
         return citasDao.create(cita);
     }
 
@@ -110,16 +114,6 @@ public class CitasService {
         Cita cita = citasDao.findById(citaId);
         if (cita == null) throw new RuntimeException("Cita no encontrada.");
         citasDao.delete(cita);
-    }
-
-    @Transactional(readOnly = false)
-    public Cita modificarCita(Long citaId, Cita citaModificada) {
-        Cita cita = citasDao.findById(citaId);
-        if (cita == null) throw new RuntimeException("Cita no encontrada.");
-        cita.setFecha(citaModificada.getFecha());
-        cita.setHora(citaModificada.getHora());
-        citasDao.update(cita);
-        return cita;
     }
 
 }

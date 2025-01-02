@@ -4,7 +4,6 @@
 
     <div v-if="citas.length" class="row g-3">
       <div class="col-12" v-for="cita in citas" :key="cita.id">
-        <!-- Aplicar clase 'rechazada' si la cita está rechazada -->
         <div class="card shadow-sm" :class="{ 'rechazada': cita.estado === 'Rechazada' }">
           <div class="card-body text-center d-flex flex-column align-items-center">
             <h5 class="card-title">{{ cita.servicio.nombre }}</h5>
@@ -26,6 +25,13 @@
               <strong>Barbero:</strong>
               {{ cita.barbero.nombre }} {{ cita.barbero.apellido }}
             </p>
+            <p class="card-text">
+              <strong>Preferencias:</strong>
+              {{ cita.preferencias || "No especificadas" }}
+            </p>
+            <button v-if="cita.estado === 'Pendiente'" class="btn btn-danger mt-3" @click="cancelarCita(cita.id)">
+              Cancelar
+            </button>
           </div>
         </div>
       </div>
@@ -65,13 +71,23 @@ export default {
 
         const citas = await CitaRepository.getCitasCliente(this.myuser.id);
 
-        // Combinar fecha y hora en una propiedad `fechaHora`
-        this.citas = citas.map(cita => ({
+        this.citas = citas.filter(cita => cita.estado !== "Cancelada").map(cita => ({
           ...cita,
-          fechaHora: `${cita.fecha}T${cita.hora}`, // Crear formato ISO 8601
+          fechaHora: `${cita.fecha}T${cita.hora}`,
         }));
       } catch (err) {
         console.error("Error al obtener las citas del cliente:", err);
+      }
+    },
+
+    async cancelarCita(citaId) {
+      try {
+        await CitaRepository.cancelarCita(citaId);
+        await this.fetchCitas();
+        alert("Cita cancelada exitosamente");
+      } catch (err) {
+        console.error("Error al cancelar la cita:", err);
+        alert("No se pudo cancelar la cita");
       }
     },
 
@@ -82,8 +98,8 @@ export default {
       try {
         const fecha = new Date(fechaHora);
         return new Intl.DateTimeFormat("es-ES", {
-          dateStyle: "long", // fecha en formato largo
-          timeStyle: "short", // hora sin segundos
+          dateStyle: "long",
+          timeStyle: "short",
         }).format(fecha);
       } catch (error) {
         console.error("Error al formatear la fecha y hora:", error);
@@ -91,7 +107,6 @@ export default {
       }
     },
   },
-
 };
 </script>
 
@@ -101,16 +116,13 @@ h2 {
   font-size: 2rem;
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95);
-  /* Sombreado para mejorar la legibilidad */
   color: #f8f9fa;
-  /* Color claro para contraste */
 }
 
 .card {
   border-radius: 10px;
   background-color: #f8f9fa;
   transition: opacity 0.3s ease-in-out;
-  /* transición suave para opacidad */
 }
 
 .card.rechazada {
@@ -129,24 +141,13 @@ h2 {
 
 .text-success {
   color: #28a745;
-  /* verde Confirmada */
 }
 
 .text-warning {
   color: #ffc107;
-  /* amarillo  Pendiente */
 }
-
-.text-muted {
-  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7);
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #f8f9fa;
-}
-
 
 .text-danger {
   color: #dc3545;
-  /* rojo Rechazada */
 }
 </style>

@@ -3,7 +3,7 @@
     <div class="card shadow-lg" style="max-width: 500px; width: 100%; border-radius: 15px;">
       <div class="card-body p-4">
         <h2 class="card-title text-center text-primary mb-4">Reserva tu Cita</h2>
-        
+
         <!-- Selección de barbero -->
         <div class="mb-4">
           <label for="barbero" class="form-label fs-6 fw-semibold text-secondary">Selecciona Barbero:</label>
@@ -28,13 +28,8 @@
         <!-- Selección de fecha -->
         <div class="mb-4">
           <label for="fecha" class="form-label fs-6 fw-semibold text-secondary">Selecciona Fecha:</label>
-          <flat-pickr
-            ref="flatpickrInstance"
-            v-model="cita.fecha"
-            :config="flatpickrConfig"
-            @change="actualizarHorariosDisponibles"
-            class="form-control datepicker"
-          />
+          <flat-pickr ref="flatpickrInstance" v-model="cita.fecha" :config="flatpickrConfig"
+            @change="actualizarHorariosDisponibles" class="form-control datepicker" />
         </div>
 
         <!-- Selección de hora -->
@@ -50,13 +45,18 @@
           <p>No hay horarios disponibles para la fecha seleccionada.</p>
         </div>
 
+        <!-- Selección de preferencias -->
+        <div class="mb-4">
+          <label for="preferencias" class="form-label fs-6 fw-semibold text-secondary">Preferencias (Opcional):</label>
+          <textarea v-model="cita.preferencias" id="preferencias" class="form-control" rows="3"
+            placeholder="Escribe aquí tus preferencias de servicio..."></textarea>
+        </div>
+
+
         <!-- Botón de continuar -->
         <div class="d-grid">
-          <button
-            @click="continuarPago"
-            :disabled="!cita.fecha || !cita.hora || !cita.servicioId"
-            class="btn btn-primary btn-lg rounded-pill"
-          >
+          <button @click="continuarPago" :disabled="!cita.fecha || !cita.hora || !cita.servicioId"
+            class="btn btn-primary btn-lg rounded-pill">
             Continuar
           </button>
         </div>
@@ -87,6 +87,7 @@ export default {
         servicioId: null,
         fecha: null,
         hora: null,
+        preferencias: "",
       },
       flatpickrConfig: {
         enableTime: false,
@@ -162,14 +163,16 @@ export default {
   font-weight: bold;
 }
 
-.form-control, .form-select {
+.form-control,
+.form-select {
   border-radius: 10px;
   background-color: #f8f9fa;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
   transition: all 0.2s;
 }
 
-.form-control:focus, .form-select:focus {
+.form-control:focus,
+.form-select:focus {
   box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
   border-color: #007bff;
 }

@@ -49,7 +49,6 @@ public class CitasResource {
         Usuario barbero = citasService.findBarberoById(citaDTO.getBarberoId());
         Servicio servicio = citasService.findServicioById(citaDTO.getServicioId());
 
-        // Validar barbero y servicio
         if (barbero == null) {
             throw new IllegalArgumentException("El barbero seleccionado no existe.");
         }
@@ -57,13 +56,13 @@ public class CitasResource {
             throw new IllegalArgumentException("El servicio seleccionado no existe.");
         }
 
-        // Crear la entidad Cita
         Cita cita = new Cita();
         cita.setCliente(cliente);
         cita.setBarbero(barbero);
         cita.setServicio(servicio);
         cita.setFecha(citaDTO.getFecha());
         cita.setHora(citaDTO.getHora());
+        cita.setPreferencias(citaDTO.getPreferencias());
 
         // Reservar la cita
         return citasService.reservarCita(cita, cliente);
@@ -103,9 +102,4 @@ public class CitasResource {
         citasService.rechazarCita(citaId);
     }
 
-    @PutMapping("/modificar/{citaId}")
-    @PreAuthorize("hasAuthority('EMPLEADO')")
-    public Cita modificarCita(@PathVariable Long citaId, @RequestBody Cita citaModificada) {
-        return citasService.modificarCita(citaId, citaModificada);
-    }
 }

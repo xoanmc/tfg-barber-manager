@@ -11,7 +11,6 @@ export default {
         }
     },
 
-
     async getCitasCliente(clienteId) {
         try {
             const response = await HTTP.get(`/citas/cliente/${clienteId}`);
@@ -31,7 +30,6 @@ export default {
             throw error;
         }
     },
-
 
     async reservarCita(cita) {
         try {
@@ -69,5 +67,4 @@ export default {
             throw error;
         }
     },
-
 };

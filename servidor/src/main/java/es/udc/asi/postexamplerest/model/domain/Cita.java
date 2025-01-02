@@ -32,7 +32,10 @@ public class Cita {
     private String estado = "Pendiente";  // Confirmada, Pendiente, Cancelada
 
     @ManyToOne
-    private Servicio servicio;  // servicio que se reservó
+    private Servicio servicio;
+
+    @Column(length = 500)
+    private String preferencias;
 
     public Cita() {
     }
@@ -45,6 +48,7 @@ public class Cita {
         this.hora = hora;
         this.estado = estado;
         this.servicio = servicio;
+        this.preferencias = preferencias;
     }
 
     public Long getId() {
@@ -102,4 +106,8 @@ public class Cita {
     public void setServicio(Servicio servicio) {
         this.servicio = servicio;
     }
+
+    public String getPreferencias() { return preferencias; }
+
+    public void setPreferencias(String preferencias) { this.preferencias = preferencias; }
 }
