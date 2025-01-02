@@ -2,22 +2,27 @@ package es.udc.asi.postexamplerest.model.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class CitaDTO {
     private Long barberoId;
     private Long servicioId;
 
-    //para que acepte el formato que le llega desde el formualrio de reserva
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime fechaHora;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fecha;
+
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime hora;
 
     public CitaDTO() {}
 
     public CitaDTO(Long barberoId, Long servicioId, LocalDateTime fechaHora) {
         this.barberoId = barberoId;
         this.servicioId = servicioId;
-        this.fechaHora = fechaHora;
+        this.fecha = fecha;
+        this.hora = hora;
     }
 
     public Long getBarberoId() {
@@ -36,12 +41,20 @@ public class CitaDTO {
         this.servicioId = servicioId;
     }
 
-    public LocalDateTime getFechaHora() {
-        return fechaHora;
+    public LocalDate getFecha() {
+        return fecha;
     }
 
-    public void setFechaHora(LocalDateTime fechaHora) {
-        this.fechaHora = fechaHora;
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public LocalTime getHora() {
+        return hora;
+    }
+
+    public void setHora(LocalTime hora) {
+        this.hora = hora;
     }
 }
 

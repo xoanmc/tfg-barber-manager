@@ -70,13 +70,4 @@ export default {
         }
     },
 
-    async modificarCita(citaId, citaModificada) {
-        try {
-            const response = await HTTP.put(`/citas/modificar/${citaId}`, citaModificada);
-            return response.data;
-        } catch (error) {
-            console.error("Error modificando la cita", error);
-            throw error;
-        }
-    },
 };

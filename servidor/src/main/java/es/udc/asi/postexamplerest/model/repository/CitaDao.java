@@ -1,14 +1,16 @@
 package es.udc.asi.postexamplerest.model.repository;
 
 import es.udc.asi.postexamplerest.model.domain.Cita;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 public interface CitaDao {
-  // Crear una nueva cita, debe devolver la cita creada
+
   Cita create(Cita cita);
 
-  // Actualizar una cita existente
   void update(Cita cita);
 
   // Eliminar una cita por su ID
@@ -20,9 +22,9 @@ public interface CitaDao {
 
   List<Cita> findCitasByBarbero(Long barberoId);
 
-  // Buscar citas de un barbero en un rango de fechas
-  List<Cita> findCitasByBarberoIdAndFechaHoraBetween(Long barberoId, LocalDateTime inicio, LocalDateTime fin);
+  List<Cita> findCitasByBarberoIdAndFechaAndHoraBetween(Long barberoId, LocalDate fecha, LocalTime inicio, LocalTime fin);
 
-  // Buscar citas de un cliente en un rango de fechas
   List<Cita> findCitasByClienteIdAndFechaHoraBetween(Long clienteId, LocalDateTime inicio, LocalDateTime fin);
+
+  List<Cita> findCitasByBarberoIdAndFecha(Long barberoId, LocalDate fecha);
 }

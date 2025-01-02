@@ -1,43 +1,67 @@
 <template>
-  <div class="reserva-container">
-    <h2 class="reserva-titulo">Reserva tu Cita</h2>
+  <div class="container py-5 d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg" style="max-width: 500px; width: 100%; border-radius: 15px;">
+      <div class="card-body p-4">
+        <h2 class="card-title text-center text-primary mb-4">Reserva tu Cita</h2>
+        
+        <!-- Selección de barbero -->
+        <div class="mb-4">
+          <label for="barbero" class="form-label fs-6 fw-semibold text-secondary">Selecciona Barbero:</label>
+          <select v-model="cita.barberoId" id="barbero" class="form-select" @change="actualizarHorariosDisponibles">
+            <option value="" selected>Cualquiera</option>
+            <option v-for="barbero in barberos" :key="barbero.id" :value="barbero.id">
+              {{ barbero.nombre }}
+            </option>
+          </select>
+        </div>
 
-    <!-- seleccionar barbero -->
-    <div class="form-group">
-      <label for="barbero" class="form-label">Selecciona Barbero:</label>
-      <select v-model="cita.barberoId" id="barbero" class="form-select" @change="actualizarHorariosDisponibles">
-        <option value="" selected>Cualquiera</option>
-        <option v-for="barbero in barberos" :key="barbero.id" :value="barbero.id">
-          {{ barbero.nombre }}
-        </option>
-      </select>
+        <!-- Selección de servicio -->
+        <div class="mb-4">
+          <label for="servicio" class="form-label fs-6 fw-semibold text-secondary">Selecciona Servicio:</label>
+          <select v-model="cita.servicioId" id="servicio" class="form-select">
+            <option v-for="servicio in servicios" :key="servicio.id" :value="servicio.id">
+              {{ servicio.nombre }} - {{ servicio.precio }}€
+            </option>
+          </select>
+        </div>
+
+        <!-- Selección de fecha -->
+        <div class="mb-4">
+          <label for="fecha" class="form-label fs-6 fw-semibold text-secondary">Selecciona Fecha:</label>
+          <flat-pickr
+            ref="flatpickrInstance"
+            v-model="cita.fecha"
+            :config="flatpickrConfig"
+            @change="actualizarHorariosDisponibles"
+            class="form-control datepicker"
+          />
+        </div>
+
+        <!-- Selección de hora -->
+        <div v-if="horariosDisponibles.length > 0" class="mb-4">
+          <label for="hora" class="form-label fs-6 fw-semibold text-secondary">Selecciona Hora:</label>
+          <select v-model="cita.hora" id="hora" class="form-select">
+            <option v-for="hora in horariosDisponibles" :key="hora" :value="hora">
+              {{ hora }}
+            </option>
+          </select>
+        </div>
+        <div v-else class="text-muted mb-4">
+          <p>No hay horarios disponibles para la fecha seleccionada.</p>
+        </div>
+
+        <!-- Botón de continuar -->
+        <div class="d-grid">
+          <button
+            @click="continuarPago"
+            :disabled="!cita.fecha || !cita.hora || !cita.servicioId"
+            class="btn btn-primary btn-lg rounded-pill"
+          >
+            Continuar
+          </button>
+        </div>
+      </div>
     </div>
-
-    <!-- seleccionar servicio -->
-    <div class="form-group">
-      <label for="servicio" class="form-label">Selecciona Servicio:</label>
-      <select v-model="cita.servicioId" id="servicio" class="form-select">
-        <option v-for="servicio in servicios" :key="servicio.id" :value="servicio.id">
-          {{ servicio.nombre }} - {{ servicio.precio }}€
-        </option>
-      </select>
-    </div>
-
-    <!-- seleccionar horario -->
-    <div class="datepicker-container">
-      <label for="fecha" class="form-label">Selecciona Fecha y Hora:</label>
-      <flat-pickr ref="flatpickrInstance" v-model="cita.fechaHora" :config="flatpickrConfig" class="datepicker" />
-    </div>
-
-    <!-- botón de reservar -->
-    <div>
-      <button @click="reservarCita" :disabled="!cita.fechaHora || !cita.servicioId">
-        Reservar
-      </button>
-    </div>
-
-    <!-- botón de PayPal -->
-    <div id="paypal-button-container" style="margin-top: 20px;"></div>
   </div>
 </template>
 
@@ -45,7 +69,6 @@
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 import { Spanish } from "flatpickr/dist/l10n/es.js";
-import CitaRepository from "@/repositories/CitaRepository";
 import UsuarioRepository from "@/repositories/UsuarioRepository";
 import ServicesRepository from "@/repositories/ServicesRepository";
 import HorariosBarberosRepository from "@/repositories/HorariosBarberosRepository";
@@ -58,32 +81,24 @@ export default {
     return {
       barberos: [],
       servicios: [],
-      horariosDisponibles: [], // Horarios traídos del backend
+      horariosDisponibles: [],
       cita: {
         barberoId: null,
         servicioId: null,
-        fechaHora: null,
+        fecha: null,
+        hora: null,
       },
       flatpickrConfig: {
-        enableTime: true,
-        dateFormat: "Y-m-d H:i",
+        enableTime: false,
+        dateFormat: "Y-m-d",
         minDate: "today",
-        time_24hr: true,
         locale: Spanish,
-        enable: [], // Fechas habilitadas
-        disable: [(date) => date.getDay() === 0], // Deshabilitar domingos
-        minuteIncrement: 30,
-        minTime: "09:00",
-        maxTime: "21:00",
       },
     };
   },
   mounted() {
     this.cargarBarberos();
-    this.cargarServicios().then(() => {
-      this.initPayPalButton();
-    });
-    this.actualizarHorariosDisponibles(); // Cargar todos los horarios al inicio
+    this.cargarServicios();
   },
   methods: {
     async cargarBarberos() {
@@ -91,7 +106,7 @@ export default {
         const barberos = await UsuarioRepository.findAllBarberos();
         this.barberos = barberos.sort((a, b) => a.nombre.localeCompare(b.nombre));
       } catch (error) {
-        console.error("Error cargando barberos", error);
+        console.error("Error cargando barberos:", error);
       }
     },
     async cargarServicios() {
@@ -99,233 +114,79 @@ export default {
         const servicios = await ServicesRepository.findAllServicios();
         this.servicios = servicios.sort((a, b) => a.nombre.localeCompare(b.nombre));
       } catch (error) {
-        console.error("Error cargando servicios", error);
+        console.error("Error cargando servicios:", error);
       }
     },
     async actualizarHorariosDisponibles() {
-      try {
-        if (this.cita.barberoId) {
-          this.horariosDisponibles = await HorariosBarberosRepository.obtenerHorariosPorBarbero(this.cita.barberoId);
-        } else {
-          this.horariosDisponibles = await HorariosBarberosRepository.obtenerTodosLosHorarios();
-        }
-
-        console.log("Horarios disponibles recibidos:", this.horariosDisponibles);
-
-        if (this.horariosDisponibles && this.horariosDisponibles.length > 0) {
-          this.flatpickrConfig.enable = this.generarRangosPermitidos();
-        } else {
-          this.flatpickrConfig.enable = [];
-        }
-
-        this.$nextTick(() => {
-          this.$refs.flatpickrInstance.fp.set("enable", this.flatpickrConfig.enable);
-        });
-      } catch (error) {
-        console.error("Error actualizando horarios disponibles", error);
-        this.flatpickrConfig.enable = [];
-      }
-    },
-    generarRangosPermitidos() {
-      if (!this.horariosDisponibles || this.horariosDisponibles.length === 0) {
-        console.warn("No hay horarios disponibles para generar rangos");
-        return [];
-      }
-
-      const enabledDates = [];
-      const diasMap = {
-        Lunes: 1,
-        Martes: 2,
-        Miércoles: 3,
-        Jueves: 4,
-        Viernes: 5,
-        Sábado: 6,
-        Domingo: 0,
-      };
-
-      const hoy = new Date(); // Fecha actual
-
-      // Iterar por horarios disponibles
-      this.horariosDisponibles.forEach((horario) => {
-        const { diaSemana, horaInicio, horaFin, barbero } = horario;
-
-        // Si hay un barbero seleccionado, omitir horarios de otros barberos
-        if (this.cita.barberoId && barbero.id !== this.cita.barberoId) {
-          return;
-        }
-
-        // Configurar fecha base
-        let fechaBase = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
-
-        for (let i = 0; i < 30; i++) { // Próximos 30 días
-          if (fechaBase.getDay() === diasMap[diaSemana]) {
-            const fechaInicio = new Date(fechaBase);
-            fechaInicio.setHours(...horaInicio.split(":").map(Number), 0, 0);
-
-            const fechaFin = new Date(fechaBase);
-            fechaFin.setHours(...horaFin.split(":").map(Number), 0, 0);
-
-            // Agregar intervalos de 30 minutos
-            let current = new Date(fechaInicio);
-            while (current <= fechaFin) {
-              enabledDates.push(new Date(current));
-              current.setMinutes(current.getMinutes() + 30);
-            }
-          }
-          fechaBase.setDate(fechaBase.getDate() + 1);
-        }
-      });
-
-      //console.log("Fechas permitidas generadas:", enabledDates);
-      return enabledDates;
-    },
-
-
-    async reservarCita() {
-      try {
-        const fechaSeleccionada = new Date(this.cita.fechaHora);
-        let barberoIdSeleccionado = this.cita.barberoId;
-
-        // Verificar si la hora seleccionada está dentro de los horarios permitidos
-        const horarioValido = this.horariosDisponibles.some((h) => {
-          const horaInicio = new Date(fechaSeleccionada);
-          horaInicio.setHours(...h.horaInicio.split(":").map(Number), 0, 0);
-
-          const horaFin = new Date(fechaSeleccionada);
-          horaFin.setHours(...h.horaFin.split(":").map(Number), 0, 0);
-
-          const esValido = fechaSeleccionada >= horaInicio && fechaSeleccionada <= horaFin;
-
-          if (esValido && !barberoIdSeleccionado) {
-            barberoIdSeleccionado = h.barbero.id;
-          }
-          return esValido;
-        });
-
-        if (!horarioValido) {
-          alert("La hora seleccionada no está disponible para este barbero.");
-          return;
-        }
-
-        const citaData = {
-          barberoId: barberoIdSeleccionado,       
-          servicioId: this.cita.servicioId,       
-          fechaHora: this.cita.fechaHora,         
-        };
-
-        console.log("Datos de la cita enviados al backend:", citaData);
-
-        await CitaRepository.reservarCita(citaData);
-        alert("Cita reservada con éxito");
-      } catch (error) {
-        console.error("Error reservando cita:", error);
-        alert("Hubo un error al reservar la cita");
-      }
-    },
-    initPayPalButton() {
-      if (!window.paypal) {
-        console.error("PayPal SDK no está cargado.");
+      if (!this.cita.barberoId || !this.cita.fecha) {
+        console.log("Barbero o fecha no seleccionados");
         return;
       }
-      window.paypal.Buttons({
-        createOrder: (data, actions) => {
-          // Crear el pedido de PayPal con los detalles del servicio
-          const selectedService = this.servicios.find(s => s.id === this.cita.servicioId);
-          const amount = selectedService ? selectedService.precio : 0;
 
-          return actions.order.create({
-            purchase_units: [
-              {
-                description: "Pago de Reserva",
-                amount: {
-                  value: amount.toFixed(2),
-                  currency_code: "EUR",
-                },
-              },
-            ],
-          });
-        },
-        onApprove: async (data, actions) => {
-          const order = await actions.order.capture();
-          console.log("Pago realizado con éxito:", order);
+      try {
+        const horarios = await HorariosBarberosRepository.obtenerSlotsDisponibles(
+          this.cita.barberoId,
+          this.cita.fecha
+        );
+        this.horariosDisponibles = horarios;
+      } catch (error) {
+        console.error("Error obteniendo horarios disponibles:", error);
+      }
+    },
+    continuarPago() {
+      if (!this.cita.barberoId || !this.cita.servicioId || !this.cita.fecha || !this.cita.hora) {
+        alert("Por favor, completa todos los campos antes de continuar.");
+        return;
+      }
 
-          alert("¡Pago completado! Tu cita ha sido reservada.");
-          await this.reservarCita();
-        },
-        onError: (err) => {
-          console.error("Error en PayPal:", err);
-          alert("Hubo un problema con el pago.");
-        },
-      }).render("#paypal-button-container");
-    }
+      const formattedHora = this.cita.hora.length === 5 ? this.cita.hora : this.cita.hora.slice(0, 5);
+      this.cita.hora = formattedHora;
+
+      this.$router.push({
+        name: "PaymentScreen",
+        query: { cita: JSON.stringify(this.cita) },
+      });
+    },
   },
 };
 </script>
 
 <style scoped>
-.reserva-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  text-align: center;
-  font-family: Arial, sans-serif;
-  padding: 20px;
+.card {
+  border: none;
+  border-radius: 15px;
+  background-color: #f8f9fa;
 }
 
-.reserva-titulo {
-  font-size: 2rem;
+.card-title {
   font-weight: bold;
-  margin-bottom: 30px;
-  color: #333;
+}
+
+.form-control, .form-select {
+  border-radius: 10px;
+  background-color: #f8f9fa;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.form-control:focus, .form-select:focus {
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+  border-color: #007bff;
 }
 
 .form-label {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 10px;
-  display: block;
-  text-align: left;
-  color: #444;
-}
-
-.form-group {
-  margin-bottom: 20px;
-  width: 100%;
-  max-width: 400px;
-  text-align: left;
-}
-
-.form-select {
-  width: 100%;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
   font-size: 1rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+  color: #6c757d;
 }
 
-.datepicker-container {
-  margin: 20px 0;
-}
-
-button {
+.btn-primary {
   background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
+  border-color: #007bff;
 }
 
-button:hover {
+.btn-primary:hover {
   background-color: #0056b3;
-}
-
-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
+  border-color: #004085;
 }
 </style>

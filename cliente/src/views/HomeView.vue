@@ -165,6 +165,7 @@ h1 {
   font-weight: bold;
   font-size: 2.5rem;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95);
+
 }
 
 p {

@@ -3,21 +3,14 @@
     <h2 class="text-center mb-4">Citas Programadas</h2>
 
     <div v-if="citas.length" class="row g-3">
-      <div
-        class="col-12"
-        v-for="cita in citas"
-        :key="cita.id"
-      >
+      <div class="col-12" v-for="cita in citas" :key="cita.id">
         <!-- Aplicar clase 'rechazada' si la cita está rechazada -->
-        <div
-          class="card shadow-sm"
-          :class="{ 'rechazada': cita.estado === 'Rechazada' }"
-        >
+        <div class="card shadow-sm" :class="{ 'rechazada': cita.estado === 'Rechazada' }">
           <div class="card-body text-center d-flex flex-column align-items-center">
             <h5 class="card-title">{{ cita.servicio.nombre }}</h5>
             <p class="card-text">
               <strong>Fecha y Hora:</strong>
-              {{ new Date(cita.fechaHora).toLocaleString() }}
+              {{ formatFechaHora(cita.fechaHora) }}
             </p>
             <p class="card-text">
               <strong>Cliente:</strong>
@@ -30,16 +23,10 @@
 
             <!-- Mostrar botones solo si el estado es 'Pendiente' -->
             <div v-if="cita.estado === 'Pendiente'" class="mt-3">
-              <button
-                class="btn btn-success me-2"
-                @click="confirmarCita(cita.id)"
-              >
+              <button class="btn btn-success me-2" @click="confirmarCita(cita.id)">
                 Confirmar
               </button>
-              <button
-                class="btn btn-danger"
-                @click="rechazarCita(cita.id)"
-              >
+              <button class="btn btn-danger" @click="rechazarCita(cita.id)">
                 Rechazar
               </button>
             </div>
@@ -69,11 +56,34 @@ export default {
   methods: {
     async fetchCitas() {
       try {
-        this.citas = await CitaRepository.getCitasBarbero();
+        const citas = await CitaRepository.getCitasBarbero();
+
+        // Combinar fecha y hora en una propiedad `fechaHora`
+        this.citas = citas.map(cita => ({
+          ...cita,
+          fechaHora: `${cita.fecha}T${cita.hora}`, // Crear formato ISO 8601
+        }));
       } catch (error) {
         console.error("Error obteniendo las citas del barbero", error);
       }
     },
+
+    formatFechaHora(fechaHora) {
+      if (!fechaHora) {
+        return "Fecha/Hora no disponibles";
+      }
+      try {
+        const fecha = new Date(fechaHora);
+        return new Intl.DateTimeFormat("es-ES", {
+          dateStyle: "long", // fecha en formato largo
+          timeStyle: "short", // hora sin segundos
+        }).format(fecha);
+      } catch (error) {
+        console.error("Error al formatear la fecha y hora:", error);
+        return "Fecha/Hora inválidas";
+      }
+    },
+
     async confirmarCita(citaId) {
       try {
         await CitaRepository.confirmarCita(citaId);
@@ -84,6 +94,7 @@ export default {
         alert("Error al confirmar la cita");
       }
     },
+
     async rechazarCita(citaId) {
       try {
         await CitaRepository.rechazarCita(citaId);
@@ -99,23 +110,26 @@ export default {
 </script>
 
 <style scoped>
-
 h2 {
   padding: 30px 20px;
   font-size: 2rem;
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95); /* Sombreado para mejorar la legibilidad */
-  color: #f8f9fa; /* Color claro para contraste */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95);
+  /* Sombreado para mejorar la legibilidad */
+  color: #f8f9fa;
+  /* Color claro para contraste */
 }
 
 .card {
   border-radius: 10px;
   background-color: #f8f9fa;
-  transition: opacity 0.3s ease-in-out; /* Transición suave para opacidad */
+  transition: opacity 0.3s ease-in-out;
+  /* Transición suave para opacidad */
 }
 
 .card.rechazada {
-  opacity: 0.5; /* Difumina la tarjeta al reducir su opacidad */
+  opacity: 0.5;
+  /* Difumina la tarjeta al reducir su opacidad */
 }
 
 .card-title {

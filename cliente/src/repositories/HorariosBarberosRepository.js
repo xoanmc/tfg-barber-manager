@@ -14,4 +14,13 @@ export default {
     const response = await HTTP.get("/horarios/todos");
     return response.data;
   },
+
+  async obtenerSlotsDisponibles(barberoId, fecha) {
+    console.log("Parámetros enviados al backend: ", { barberoId, fecha });
+    const response = await HTTP.get(`/horarios/barbero/${barberoId}/slots`, {
+      params: { fecha },
+    });
+    console.log("Respuesta del backend: ", response.data);
+    return response.data;
+  },
 };

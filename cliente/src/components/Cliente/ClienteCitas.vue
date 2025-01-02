@@ -3,31 +3,22 @@
     <h2 class="text-center mb-4">Mis Citas</h2>
 
     <div v-if="citas.length" class="row g-3">
-      <div
-        class="col-12"
-        v-for="cita in citas"
-        :key="cita.id"
-      >
+      <div class="col-12" v-for="cita in citas" :key="cita.id">
         <!-- Aplicar clase 'rechazada' si la cita está rechazada -->
-        <div
-          class="card shadow-sm"
-          :class="{ 'rechazada': cita.estado === 'Rechazada' }"
-        >
+        <div class="card shadow-sm" :class="{ 'rechazada': cita.estado === 'Rechazada' }">
           <div class="card-body text-center d-flex flex-column align-items-center">
             <h5 class="card-title">{{ cita.servicio.nombre }}</h5>
             <p class="card-text">
               <strong>Fecha y Hora:</strong>
-              {{ new Date(cita.fechaHora).toLocaleString() }}
+              {{ formatFechaHora(cita.fechaHora) }}
             </p>
             <p class="card-text">
               <strong>Estado:</strong>
-              <span
-                :class="{
-                  'text-success': cita.estado === 'Confirmada',
-                  'text-warning': cita.estado === 'Pendiente',
-                  'text-danger': cita.estado === 'Rechazada'
-                }"
-              >
+              <span :class="{
+                'text-success': cita.estado === 'Confirmada',
+                'text-warning': cita.estado === 'Pendiente',
+                'text-danger': cita.estado === 'Rechazada'
+              }">
                 {{ cita.estado }}
               </span>
             </p>
@@ -72,29 +63,54 @@ export default {
           throw new Error("No se pudo obtener la información del cliente autenticado.");
         }
 
-        this.citas = await CitaRepository.getCitasCliente(this.myuser.id);
+        const citas = await CitaRepository.getCitasCliente(this.myuser.id);
+
+        // Combinar fecha y hora en una propiedad `fechaHora`
+        this.citas = citas.map(cita => ({
+          ...cita,
+          fechaHora: `${cita.fecha}T${cita.hora}`, // Crear formato ISO 8601
+        }));
       } catch (err) {
         console.error("Error al obtener las citas del cliente:", err);
       }
     },
+
+    formatFechaHora(fechaHora) {
+      if (!fechaHora) {
+        return "Fecha/Hora no disponibles";
+      }
+      try {
+        const fecha = new Date(fechaHora);
+        return new Intl.DateTimeFormat("es-ES", {
+          dateStyle: "long", // fecha en formato largo
+          timeStyle: "short", // hora sin segundos
+        }).format(fecha);
+      } catch (error) {
+        console.error("Error al formatear la fecha y hora:", error);
+        return "Fecha/Hora inválidas";
+      }
+    },
   },
+
 };
 </script>
 
 <style scoped>
-
 h2 {
   padding: 30px 20px;
   font-size: 2rem;
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95); /* Sombreado para mejorar la legibilidad */
-  color: #f8f9fa; /* Color claro para contraste */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95);
+  /* Sombreado para mejorar la legibilidad */
+  color: #f8f9fa;
+  /* Color claro para contraste */
 }
 
 .card {
   border-radius: 10px;
   background-color: #f8f9fa;
-  transition: opacity 0.3s ease-in-out; /* transición suave para opacidad */
+  transition: opacity 0.3s ease-in-out;
+  /* transición suave para opacidad */
 }
 
 .card.rechazada {
@@ -112,11 +128,13 @@ h2 {
 }
 
 .text-success {
-  color: #28a745; /* verde Confirmada */
+  color: #28a745;
+  /* verde Confirmada */
 }
 
 .text-warning {
-  color: #ffc107; /* amarillo  Pendiente */
+  color: #ffc107;
+  /* amarillo  Pendiente */
 }
 
 .text-muted {
@@ -128,6 +146,7 @@ h2 {
 
 
 .text-danger {
-  color: #dc3545; /* rojo Rechazada */
+  color: #dc3545;
+  /* rojo Rechazada */
 }
 </style>

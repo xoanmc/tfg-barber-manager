@@ -5,7 +5,9 @@ import es.udc.asi.postexamplerest.model.repository.util.GenericDaoJpa;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Repository
@@ -47,13 +49,18 @@ public class CitaDaoJpa extends GenericDaoJpa implements CitaDao {
   }
 
   @Override
-  public List<Cita> findCitasByBarberoIdAndFechaHoraBetween(Long barberoId, LocalDateTime inicio, LocalDateTime fin) {
-    TypedQuery<Cita> query = entityManager.createQuery("SELECT c FROM Cita c WHERE c.barbero.id = :barberoId AND c.fechaHora BETWEEN :inicio AND :fin", Cita.class);
+  public List<Cita> findCitasByBarberoIdAndFechaAndHoraBetween(Long barberoId, LocalDate fecha, LocalTime inicio, LocalTime fin) {
+    TypedQuery<Cita> query = entityManager.createQuery(
+            "SELECT c FROM Cita c WHERE c.barbero.id = :barberoId AND c.fecha = :fecha AND c.hora BETWEEN :inicio AND :fin",
+            Cita.class
+    );
     query.setParameter("barberoId", barberoId);
+    query.setParameter("fecha", fecha);
     query.setParameter("inicio", inicio);
     query.setParameter("fin", fin);
     return query.getResultList();
   }
+
 
   @Override
   public List<Cita> findCitasByClienteIdAndFechaHoraBetween(Long clienteId, LocalDateTime inicio, LocalDateTime fin) {
@@ -63,4 +70,14 @@ public class CitaDaoJpa extends GenericDaoJpa implements CitaDao {
     query.setParameter("fin", fin);
     return query.getResultList();
   }
+
+  @Override
+  public List<Cita> findCitasByBarberoIdAndFecha(Long barberoId, LocalDate fecha) {
+    TypedQuery<Cita> query = entityManager.createQuery(
+            "SELECT c FROM Cita c WHERE c.barbero.id = :barberoId AND c.fecha = :fecha", Cita.class);
+    query.setParameter("barberoId", barberoId);
+    query.setParameter("fecha", fecha);
+    return query.getResultList();
+  }
+
 }

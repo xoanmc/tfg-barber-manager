@@ -3,9 +3,15 @@ package es.udc.asi.postexamplerest.web;
 import es.udc.asi.postexamplerest.model.domain.Horario;
 import es.udc.asi.postexamplerest.model.service.HorariosService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,5 +58,19 @@ public class HorariosResource {
             return horarioMap;
         }).collect(Collectors.toList());
     }
+
+    @GetMapping("/barbero/{barberoId}/slots")
+    @PreAuthorize("hasAuthority('CLIENTE') or hasAuthority('EMPLEADO')")
+    public List<LocalTime> obtenerSlotsDisponibles(
+            @PathVariable Long barberoId,
+            @RequestParam("fecha") String fechaString) {
+        try {
+            LocalDate fecha = LocalDate.parse(fechaString); // Parsear la fecha desde el parámetro
+            return horariosService.calcularSlotsDisponibles(barberoId, fecha);
+        } catch (DateTimeParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Formato de fecha inválido");
+        }
+    }
+
 
 }

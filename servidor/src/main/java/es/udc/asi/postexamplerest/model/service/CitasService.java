@@ -1,16 +1,22 @@
 package es.udc.asi.postexamplerest.model.service;
 
 import es.udc.asi.postexamplerest.model.domain.Cita;
+import es.udc.asi.postexamplerest.model.domain.Horario;
 import es.udc.asi.postexamplerest.model.domain.Servicio;
 import es.udc.asi.postexamplerest.model.domain.Usuario;
 import es.udc.asi.postexamplerest.model.repository.CitaDao;
+import es.udc.asi.postexamplerest.model.repository.HorarioDao;
 import es.udc.asi.postexamplerest.model.repository.ServiciosDao;
 import es.udc.asi.postexamplerest.model.repository.UsuarioDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true, rollbackFor = Exception.class)
@@ -24,6 +30,9 @@ public class CitasService {
 
     @Autowired
     private ServiciosDao servicioDao;
+
+    @Autowired
+    private HorarioDao horarioDao;
 
     public List<Cita> findCitasByCliente(Long clienteId) {
         return citasDao.findCitasByCliente(clienteId);
@@ -58,13 +67,21 @@ public class CitasService {
         cita.setServicio(servicio);
 
         // Validar conflicto de horarios del barbero
-        List<Cita> citasConflicto = citasDao.findCitasByBarberoIdAndFechaHoraBetween(
-                barbero.getId(),
-                cita.getFechaHora().minusMinutes(30),
-                cita.getFechaHora().plusMinutes(30)
-        );
+        List<Cita> citasConflicto = citasDao.findCitasByBarberoIdAndFecha(barbero.getId(), cita.getFecha());
 
-        if (!citasConflicto.isEmpty()) {
+        // Calcular el rango de tiempo de la nueva cita
+        LocalTime inicioNuevaCita = cita.getHora();
+        LocalTime finNuevaCita = inicioNuevaCita.plusMinutes(30); // Duración estándar de la cita
+
+        boolean conflicto = citasConflicto.stream().anyMatch(citaExistente -> {
+            LocalTime inicioExistente = citaExistente.getHora();
+            LocalTime finExistente = inicioExistente.plusMinutes(30); // Duración estándar de las citas existentes
+
+            // Verificar si hay solapamiento entre las citas
+            return inicioNuevaCita.isBefore(finExistente) && finNuevaCita.isAfter(inicioExistente);
+        });
+
+        if (conflicto) {
             throw new RuntimeException("El barbero ya tiene una cita en ese horario.");
         }
 
@@ -99,8 +116,10 @@ public class CitasService {
     public Cita modificarCita(Long citaId, Cita citaModificada) {
         Cita cita = citasDao.findById(citaId);
         if (cita == null) throw new RuntimeException("Cita no encontrada.");
-        cita.setFechaHora(citaModificada.getFechaHora());
+        cita.setFecha(citaModificada.getFecha());
+        cita.setHora(citaModificada.getHora());
         citasDao.update(cita);
         return cita;
     }
+
 }
