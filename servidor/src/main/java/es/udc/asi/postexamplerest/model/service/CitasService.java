@@ -34,6 +34,9 @@ public class CitasService {
     @Autowired
     private HorarioDao horarioDao;
 
+    @Autowired
+    private MailService mailService;
+
     public List<Cita> findCitasByCliente(Long clienteId) {
         return citasDao.findCitasByCliente(clienteId);
     }
@@ -89,17 +92,55 @@ public class CitasService {
             cita.setPreferencias("");
         }
 
-        return citasDao.create(cita);
-    }
+        // Crear cita en la base de datos
+        Cita nuevaCita = citasDao.create(cita);
 
+        // Envío del correo al cliente informando que la cita está pendiente de confirmación
+        String detallesCita = String.format(
+                "- Servicio: %s\n- Barbero: %s %s\n- Fecha: %s\n- Hora: %s\n- Preferencias: %s",
+                servicio.getNombre(),
+                barbero.getNombre(),
+                barbero.getApellido(),
+                cita.getFecha().toString(),
+                cita.getHora().toString(),
+                cita.getPreferencias().isEmpty() ? "No especificadas" : cita.getPreferencias()
+        );
+
+        mailService.sendReservationPendingEmail(
+                clienteAutenticado.getEmail(),
+                clienteAutenticado.getNombre(),
+                detallesCita
+        );
+
+        return nuevaCita;
+    }
 
     @Transactional(readOnly = false)
     public void confirmarCita(Long citaId) {
         Cita cita = citasDao.findById(citaId);
         if (cita == null) throw new RuntimeException("Cita no encontrada.");
+
         cita.setEstado("Confirmada");
         citasDao.update(cita);
+
+        // Envío del correo al cliente informando que su cita ha sido confirmada
+        String detallesCita = String.format(
+                "- Servicio: %s\n- Barbero: %s %s\n- Fecha: %s\n- Hora: %s\n- Preferencias: %s",
+                cita.getServicio().getNombre(),
+                cita.getBarbero().getNombre(),
+                cita.getBarbero().getApellido(),
+                cita.getFecha().toString(),
+                cita.getHora().toString(),
+                cita.getPreferencias().isEmpty() ? "No especificadas" : cita.getPreferencias()
+        );
+
+        mailService.sendReservationConfirmedEmail(
+                cita.getCliente().getEmail(),
+                cita.getCliente().getNombre(),
+                detallesCita
+        );
     }
+
 
     @Transactional(readOnly = false)
     public void rechazarCita(Long citaId) {

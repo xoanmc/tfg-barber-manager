@@ -46,7 +46,7 @@ public class DatabaseLoader {
         // Registro de clientes
         Cliente pepe = userService.registerCliente(
                 "pepe",
-                "perez",
+                "pereira",
                 "+34 22222222",
                 LocalDate.of(1998, 5, 15), // Fecha de nacimiento
                 "pepe.perez@gmail.com", // Email
@@ -64,7 +64,7 @@ public class DatabaseLoader {
                 "martinez",
                 "+34 4444444",
                 LocalDate.of(1993, 11, 25), // Fecha de nacimiento
-                "maria.martinez@gmail.com", // Email
+                "maria.martinez.colombo.2025@gmail.com", // Email
                 "maria",
                 "maria",
                 3,

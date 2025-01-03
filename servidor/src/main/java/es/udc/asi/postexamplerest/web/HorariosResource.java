@@ -65,7 +65,7 @@ public class HorariosResource {
             @PathVariable Long barberoId,
             @RequestParam("fecha") String fechaString) {
         try {
-            LocalDate fecha = LocalDate.parse(fechaString); // Parsear la fecha desde el parámetro
+            LocalDate fecha = LocalDate.parse(fechaString);
             return horariosService.calcularSlotsDisponibles(barberoId, fecha);
         } catch (DateTimeParseException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Formato de fecha inválido");

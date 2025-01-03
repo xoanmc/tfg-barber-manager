@@ -8,7 +8,7 @@
         <div class="mb-4">
           <label for="barbero" class="form-label fs-6 fw-semibold text-secondary">Selecciona Barbero:</label>
           <select v-model="cita.barberoId" id="barbero" class="form-select" @change="actualizarHorariosDisponibles">
-            <option value="" selected>Cualquiera</option>
+            <!--<option value="" selected>Cualquiera</option>-->
             <option v-for="barbero in barberos" :key="barbero.id" :value="barbero.id">
               {{ barbero.nombre }}
             </option>

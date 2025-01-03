@@ -60,4 +60,42 @@ public class MailService {
             logger.error("Error al enviar el correo de recuperación de contraseña a: {}", to, e);
         }
     }
+
+    /**
+     * Envío de correo al cliente al realizar una reserva.
+     */
+    public void sendReservationPendingEmail(String to, String nombreCliente, String detallesCita) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(to);
+            message.setSubject("Reserva realizada: Pendiente de confirmación");
+            message.setText(String.format(
+                    "Estimad@ %s,\n\nHa realizado su reserva. Está pendiente de confirmación.\n\n%s\n\nGracias por confiar en nosotros.",
+                    nombreCliente, detallesCita
+            ));
+            mailSender.send(message);
+            logger.info("Correo de reserva pendiente enviado a: {}", to);
+        } catch (Exception e) {
+            logger.error("Error al enviar el correo de reserva pendiente a: {}", to, e);
+        }
+    }
+
+    /**
+     * Envío de correo al cliente al confirmar la reserva.
+     */
+    public void sendReservationConfirmedEmail(String to, String nombreCliente, String detallesCita) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(to);
+            message.setSubject("Reserva confirmada");
+            message.setText(String.format(
+                    "Estimad@ %s,\n\nSu reserva ha sido confirmada por el barbero.\n\n%s\n\n¡Nos vemos pronto!",
+                    nombreCliente, detallesCita
+            ));
+            mailSender.send(message);
+            logger.info("Correo de confirmación de cita enviado a: {}", to);
+        } catch (Exception e) {
+            logger.error("Error al enviar el correo de confirmación de cita a: {}", to, e);
+        }
+    }
 }
