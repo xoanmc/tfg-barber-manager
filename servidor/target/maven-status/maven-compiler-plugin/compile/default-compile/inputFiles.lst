@@ -1,9 +1,11 @@
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\config\PasswordEncoderBean.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\domain\Estado.java
+D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\repository\AboutPageInfoDaoJpa.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\repository\UsuarioDao.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\web\ProfileImageResource.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\security\MyUserDetailsService.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\domain\Usuario.java
+D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\service\AboutPageInfoService.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\security\JWTFilter.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\security\SecurityUtils.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\security\CustomUserPrincipal.java
@@ -23,6 +25,7 @@ D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\se
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\RestExampleApplication.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\repository\AboutDao.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\domain\Cita.java
+D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\web\AboutPageInfoResource.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\service\HorariosService.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\web\CitasResource.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\web\HorariosResource.java
@@ -40,6 +43,7 @@ D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\re
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\repository\HomePageInfoDao.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\service\dto\AccountDTO.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\domain\Empleado.java
+D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\repository\AboutPageInfoDao.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\service\AboutService.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\repository\HorarioDaoJpa.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\exception\OperationNotAllowed.java
@@ -50,6 +54,8 @@ D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\se
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\web\ServiciosResource.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\security\TokenProvider.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\domain\Horario.java
+D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\web\AboutImageResource.java
+D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\domain\AboutPageInfo.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\service\MailService.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\security\MyUnauthorizedEntryPoint.java
 D:\TFG\tfg-barber\tfg\servidor\src\main\java\es\udc\asi\postexamplerest\model\service\dto\CitaDTO.java

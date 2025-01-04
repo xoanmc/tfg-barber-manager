@@ -24,12 +24,7 @@
             </li>
             <li class="nav-item">
               <router-link to="/services" class="nav-link" active-class="active">
-                Servicios
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <router-link to="/gallery" class="nav-link" active-class="active">
-                Galería
+                Nuestros Servicios
               </router-link>
             </li>
             <li class="nav-item">

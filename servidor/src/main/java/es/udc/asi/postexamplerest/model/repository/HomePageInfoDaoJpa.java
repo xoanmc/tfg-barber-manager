@@ -14,14 +14,12 @@ public class HomePageInfoDaoJpa extends GenericDaoJpa implements HomePageInfoDao
   public HomePageInfo find() {
     TypedQuery<HomePageInfo> query = entityManager.createQuery("SELECT h FROM HomePageInfo h", HomePageInfo.class);
 
-    // Ejecutar la consulta para obtener la información de la página de inicio
     List<HomePageInfo> result = query.getResultList();
 
     if (result.isEmpty()) {
-      return null;  // Devuelve null si no hay registros en la base de datos
+      return null;
     }
 
-    // Devolver el primer resultado si existe
     return result.get(0);
   }
 

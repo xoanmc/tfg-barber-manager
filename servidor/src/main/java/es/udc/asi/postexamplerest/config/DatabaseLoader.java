@@ -48,15 +48,15 @@ public class DatabaseLoader {
                 "pepe",
                 "pereira",
                 "+34 22222222",
-                LocalDate.of(1998, 5, 15), // Fecha de nacimiento
-                "pepe.perez@gmail.com", // Email
+                LocalDate.of(1998, 5, 15),
+                "pepe.perez@gmail.com",
                 "pepe",
                 "pepe",
                 5,
                 "01/01/2020",
                 false // No enviar correo
         );
-        pepe.setActivo(true); // Marcar como activo
+        pepe.setActivo(true);
         userDAO.update(pepe);
 
         Cliente maria = userService.registerCliente(

@@ -4,7 +4,6 @@ import ErrorNotFoundView from "../views/ErrorNotFoundView.vue";
 import AboutView from "../views/AboutView.vue";
 import HomeView from "../views/HomeView.vue";
 import ServicesView from "@/views/ServicesView.vue";
-import GalleryView from "@/views/GalleryView.vue";
 import TrendingView from "@/views/TrendingView.vue";
 import ReserveForm from "@/components/Cita/ReserveForm.vue";
 import PaymentScreen from "@/components/Cita/PaymentScreen.vue";
@@ -137,12 +136,6 @@ const routes = [{
     path: "/services",
     name: "services",
     component: ServicesView,
-    meta: { public: true },
-},
-{
-    path: "/gallery",
-    name: "gallery",
-    component: GalleryView,
     meta: { public: true },
 },
 {

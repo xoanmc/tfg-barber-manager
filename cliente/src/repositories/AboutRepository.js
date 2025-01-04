@@ -1,9 +1,9 @@
 import HTTP from "@/common/http";
 
 export default {
-    async getContent() {
-        return (await HTTP.get("/about/1")).data;
-    },
+  async getContent() {
+    return await HTTP.get("/about");
+  },
 
     async updateContent(payload) {
         const token = localStorage.getItem("token");
