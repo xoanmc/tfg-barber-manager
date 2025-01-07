@@ -1,13 +1,12 @@
 import HTTP from "@/common/http";
 
 export default {
-  async getBarberProfileByLogin(login) {
+  async getBarberProfile(login) {
     try {
       const response = await HTTP.get(`/barber-profile/${login}`);
       return response.data;
     } catch (error) {
-      console.error("Error al obtener el perfil del barbero:", error);
-      throw error;
+      throw new Error("Error al obtener el perfil del barbero.");
     }
   },
 };

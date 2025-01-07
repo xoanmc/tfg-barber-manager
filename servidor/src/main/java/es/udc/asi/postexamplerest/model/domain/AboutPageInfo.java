@@ -1,9 +1,6 @@
 package es.udc.asi.postexamplerest.model.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class AboutPageInfo {
@@ -12,6 +9,7 @@ public class AboutPageInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(columnDefinition = "TEXT")
     private String descripcion;
     private String imagen;  // Nombre del archivo de imagen
 

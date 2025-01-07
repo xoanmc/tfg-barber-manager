@@ -28,7 +28,8 @@
     <div class="professionals-section mt-5">
       <h2 class="text-center text-primary mb-4">Nuestros Profesionales</h2>
       <div class="cards-container d-flex flex-wrap justify-content-center gap-4">
-        <div v-for="profesional in profesionales" :key="profesional.id" class="profile-card text-center shadow-sm">
+        <div v-for="profesional in profesionales" :key="profesional.id" class="profile-card text-center shadow-sm"
+              @click="verPerfil(profesional)">
           <div class="profile-img-container">
             <img v-if="profesional.imagen" :src="profesional.imagen" alt="Imagen de perfil" class="profile-img" />
             <div v-else class="profile-placeholder"></div>

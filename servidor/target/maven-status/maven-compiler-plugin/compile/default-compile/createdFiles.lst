@@ -31,6 +31,7 @@ es\udc\asi\postexamplerest\web\exceptions\ResourceException.class
 es\udc\asi\postexamplerest\web\ProfileImageResource.class
 es\udc\asi\postexamplerest\model\repository\CitaDaoJpa.class
 es\udc\asi\postexamplerest\security\CustomUserPrincipal.class
+es\udc\asi\postexamplerest\model\service\dto\BarberProfileDTO.class
 es\udc\asi\postexamplerest\model\repository\UsuarioDao.class
 es\udc\asi\postexamplerest\model\service\MailService.class
 es\udc\asi\postexamplerest\config\SecurityConfiguration$1.class
