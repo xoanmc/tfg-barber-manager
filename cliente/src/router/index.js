@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import ErrorNotFoundView from "../views/ErrorNotFoundView.vue";
 import AboutView from "../views/AboutView.vue";
+import BarberProfileView from "@/views/BarberProfileView.vue";
 import HomeView from "../views/HomeView.vue";
 import ServicesView from "@/views/ServicesView.vue";
 import TrendingView from "@/views/TrendingView.vue";
@@ -130,6 +131,12 @@ const routes = [{
     path: "/about",
     name: "about",
     component: AboutView,
+    meta: { public: true },
+},
+{
+    path: "/barber-profile/:login",
+    name: "BarberProfileView",
+    component: BarberProfileView,
     meta: { public: true },
 },
 {

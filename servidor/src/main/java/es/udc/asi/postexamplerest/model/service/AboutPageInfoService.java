@@ -22,7 +22,12 @@ public class AboutPageInfoService {
     public AboutPageInfo getAboutPageInfo() {
         AboutPageInfo info = aboutPageInfoDao.find();
 
-        if (info != null && info.getImagen() != null && !info.getImagen().isEmpty()) {
+        if (info == null) {
+            info = new AboutPageInfo();
+            info.setDescripcion("Aquí va la descripción inicial por defecto de la barbería.");
+        }
+
+        if (info.getImagen() != null && !info.getImagen().isEmpty()) {
             String imageUrl = "http://localhost:8080/api/images/about/" + info.getImagen();
             info.setImagen(imageUrl);
         }
@@ -34,7 +39,6 @@ public class AboutPageInfoService {
     public void updateAboutPageInfo(AboutPageInfo updatedInfo, MultipartFile imagen) {
         try {
             AboutPageInfo existingInfo = aboutPageInfoDao.find();
-
             if (existingInfo == null) {
                 existingInfo = new AboutPageInfo();
             }
@@ -53,6 +57,7 @@ public class AboutPageInfoService {
         }
     }
 
+
     private String saveAboutPageImage(MultipartFile imagen) throws IOException {
         String uploadDir = UPLOAD_DIR + "/about-images/";
 
@@ -68,3 +73,4 @@ public class AboutPageInfoService {
         return fileName;
     }
 }
+

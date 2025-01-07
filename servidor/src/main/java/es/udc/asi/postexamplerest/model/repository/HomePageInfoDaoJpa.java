@@ -26,10 +26,8 @@ public class HomePageInfoDaoJpa extends GenericDaoJpa implements HomePageInfoDao
   @Override
   public void update(HomePageInfo homePageInfo) {
     if (homePageInfo.getId() == null) {
-      // Si no existe, persistimos un nuevo objeto
       entityManager.persist(homePageInfo);
     } else {
-      // Si ya existe, realizamos un merge para actualizarlo
       entityManager.merge(homePageInfo);
     }
   }

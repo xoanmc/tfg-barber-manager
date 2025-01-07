@@ -18,6 +18,7 @@ public class EmpleadoListaDTO {
     private String horario;
     private String descripcion;
     private boolean despedido;
+    private String imagen;
 
     // Constructor
     public EmpleadoListaDTO(Empleado empleado) {
@@ -26,13 +27,14 @@ public class EmpleadoListaDTO {
         this.apellido = empleado.getApellido();
         this.telefono = empleado.getTelefono();
         this.puesto = empleado.getPuesto();
-        this.email = empleado.getEmail(); // Fecha de nacimiento
+        this.email = empleado.getEmail();
         this.salario = empleado.getSalario();
         this.contrato = empleado.getContrato();
         this.login = empleado.getLogin();
-        this.horario = empleado.getHorario();       // Asignar horario
-        this.descripcion = empleado.getDescripcion(); // Asignar descripción
+        this.horario = empleado.getHorario();
+        this.descripcion = empleado.getDescripcion();
         this.despedido = empleado.isDespedido();
+        this.imagen = empleado.getProfileImageUrl();
     }
 
     // Getters y setters
@@ -114,5 +116,13 @@ public class EmpleadoListaDTO {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 }

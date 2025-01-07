@@ -150,4 +150,11 @@ h2 {
 .text-danger {
   color: #dc3545;
 }
+
+.text-muted {
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7);
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #f8f9fa;
+}
 </style>

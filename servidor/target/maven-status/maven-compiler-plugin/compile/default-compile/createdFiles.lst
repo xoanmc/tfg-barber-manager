@@ -1,6 +1,5 @@
 es\udc\asi\postexamplerest\model\domain\Estado.class
 es\udc\asi\postexamplerest\web\util\GlobalControllerExceptionHandler.class
-es\udc\asi\postexamplerest\web\AboutResource.class
 es\udc\asi\postexamplerest\web\exceptions\IdAndBodyNotMatchingOnUpdateException.class
 es\udc\asi\postexamplerest\security\JWTToken.class
 es\udc\asi\postexamplerest\security\TokenProvider.class
@@ -12,6 +11,7 @@ es\udc\asi\postexamplerest\web\util\ErrorDTO.class
 es\udc\asi\postexamplerest\model\exception\NotFoundException.class
 es\udc\asi\postexamplerest\security\JWTFilter.class
 es\udc\asi\postexamplerest\web\AccountResource.class
+es\udc\asi\postexamplerest\web\BarberProfileResource.class
 es\udc\asi\postexamplerest\web\exceptions\CredentialsAreNotValidException.class
 es\udc\asi\postexamplerest\web\ServiciosResource.class
 es\udc\asi\postexamplerest\security\MyAccessDeniedHandler.class
@@ -31,7 +31,6 @@ es\udc\asi\postexamplerest\web\exceptions\ResourceException.class
 es\udc\asi\postexamplerest\web\ProfileImageResource.class
 es\udc\asi\postexamplerest\model\repository\CitaDaoJpa.class
 es\udc\asi\postexamplerest\security\CustomUserPrincipal.class
-es\udc\asi\postexamplerest\model\domain\About.class
 es\udc\asi\postexamplerest\model\repository\UsuarioDao.class
 es\udc\asi\postexamplerest\model\service\MailService.class
 es\udc\asi\postexamplerest\config\SecurityConfiguration$1.class
@@ -41,7 +40,6 @@ es\udc\asi\postexamplerest\web\HomePageInfoResource.class
 es\udc\asi\postexamplerest\security\JWTConfigurer.class
 es\udc\asi\postexamplerest\model\repository\ServiciosDao.class
 es\udc\asi\postexamplerest\model\service\UsuarioService.class
-es\udc\asi\postexamplerest\model\service\AboutService.class
 es\udc\asi\postexamplerest\config\Properties.class
 es\udc\asi\postexamplerest\model\repository\ServiciosDaoJpa.class
 es\udc\asi\postexamplerest\model\service\HomePageInfoService.class
@@ -57,7 +55,6 @@ es\udc\asi\postexamplerest\config\PasswordEncoderBean.class
 es\udc\asi\postexamplerest\model\repository\HorarioDao.class
 es\udc\asi\postexamplerest\model\service\ServiciosService.class
 es\udc\asi\postexamplerest\model\service\dto\CitaDTO.class
-es\udc\asi\postexamplerest\model\repository\AboutDaoJpa.class
 es\udc\asi\postexamplerest\model\domain\AutoridadUsuario.class
 es\udc\asi\postexamplerest\web\HorariosResource.class
 es\udc\asi\postexamplerest\model\repository\CitaDao.class
@@ -67,10 +64,10 @@ es\udc\asi\postexamplerest\model\service\dto\AccountDTO.class
 es\udc\asi\postexamplerest\security\SecurityUtils.class
 es\udc\asi\postexamplerest\model\repository\HomePageInfoDao.class
 es\udc\asi\postexamplerest\model\repository\HomePageInfoDaoJpa.class
+es\udc\asi\postexamplerest\model\domain\BarberProfile.class
 es\udc\asi\postexamplerest\model\service\HorariosService.class
 es\udc\asi\postexamplerest\model\domain\Horario.class
 es\udc\asi\postexamplerest\model\repository\AboutPageInfoDaoJpa.class
 es\udc\asi\postexamplerest\model\repository\UsuarioDaoJpa.class
 es\udc\asi\postexamplerest\RestExampleApplication.class
-es\udc\asi\postexamplerest\model\repository\AboutDao.class
 es\udc\asi\postexamplerest\model\service\AboutPageInfoService.class

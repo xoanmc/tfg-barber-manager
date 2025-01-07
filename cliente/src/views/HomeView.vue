@@ -86,7 +86,7 @@ export default {
 
         await HomePageInfoRepository.updateHomePageInfo(formData);
         alert("Información actualizada con éxito");
-        this.cargarInformacion(); // Recargar datos actualizados
+        this.cargarInformacion();
       } catch (error) {
         console.error("Error guardando la información de la página de inicio", error);
         alert("Hubo un error al guardar la información");

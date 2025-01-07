@@ -15,7 +15,7 @@ public interface UsuarioDao {
 
     List<Empleado> findAllEmpleados();
 
-    List<Empleado> findAllBarberos(); // Nuevo método
+    List<Empleado> findAllBarberos();
 
     List<Cliente> findAllClientes();
 

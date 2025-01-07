@@ -2,10 +2,8 @@ package es.udc.asi.postexamplerest.config;
 
 import es.udc.asi.postexamplerest.model.domain.*;
 import es.udc.asi.postexamplerest.model.exception.UserLoginExistsException;
-import es.udc.asi.postexamplerest.model.repository.HomePageInfoDao;
-import es.udc.asi.postexamplerest.model.repository.HorarioDao;
-import es.udc.asi.postexamplerest.model.repository.UsuarioDao;
-import es.udc.asi.postexamplerest.model.repository.ServiciosDao;
+import es.udc.asi.postexamplerest.model.repository.*;
+import es.udc.asi.postexamplerest.model.service.AboutPageInfoService;
 import es.udc.asi.postexamplerest.model.service.HomePageInfoService;
 import es.udc.asi.postexamplerest.model.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +34,12 @@ public class DatabaseLoader {
 
     @Autowired
     private HorarioDao horarioDao;
+
+    @Autowired
+    private AboutPageInfoDao aboutPageInfoDao;
+
+    @Autowired
+    private AboutPageInfoService aboutPageInfoService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -153,6 +157,17 @@ public class DatabaseLoader {
             System.out.println("Servicios por defecto cargados.");
         } else {
             System.out.println("Los servicios ya están cargados.");
+        }
+
+        // Cargar datos por defecto de AboutPageInfo si no existe
+        if (aboutPageInfoDao.find() == null) {
+            AboutPageInfo aboutPageInfo = new AboutPageInfo();
+            aboutPageInfo.setDescripcion("Aquí va la historia inicial por defecto de la barbería.");
+            aboutPageInfo.setImagen(null);  // No hay imagen por defecto
+            aboutPageInfoService.updateAboutPageInfo(aboutPageInfo, null);
+            System.out.println("Datos por defecto de AboutPageInfo cargados.");
+        } else {
+            System.out.println("AboutPageInfo ya está cargado.");
         }
     }
 }

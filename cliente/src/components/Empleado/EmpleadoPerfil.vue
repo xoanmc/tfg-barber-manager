@@ -50,6 +50,7 @@ import UsuarioRepository from "@/repositories/UsuarioRepository";
 import HorariosBarberosRepository from "@/repositories/HorariosBarberosRepository";
 import ProfileImage from "@/components/ProfileImage";
 import ImageRepository from "@/repositories/ImageRepository";
+import eventBus from "@/eventBus";
 
 export default {
   components: {
@@ -60,7 +61,7 @@ export default {
       myuser: null,
       imageUrl: "",
       loading: true,
-      horarios: [], // Horarios crudos obtenidos del backend
+      horarios: [], // Horarios obtenidos del backend
       horariosFormateados: [], // Horarios agrupados y formateados
     };
   },
@@ -70,13 +71,13 @@ export default {
   methods: {
     async fetchData() {
       try {
-        // Obtener datos del usuario
+        
         this.myuser = await AccountRepository.getAccount();
         this.imageUrl = await ImageRepository.getProfileImage(this.myuser.id);
         const user = await UsuarioRepository.findOne(this.myuser.id);
         if (user?.profileImageUrl) this.imageUrl = user.profileImageUrl;
 
-        // Obtener horarios si el usuario es un empleado
+        
         if (this.myuser.autoridad === "EMPLEADO") {
           this.horarios = await HorariosBarberosRepository.obtenerHorariosPorBarbero(this.myuser.id);
           this.horariosFormateados = this.formatearHorarios(this.horarios);
@@ -132,6 +133,7 @@ export default {
     },
     handleImageUpload(newImageUrl) {
       this.imageUrl = newImageUrl;
+      eventBus.emit("profile-image-updated");
     },
     goToEditProfile() {
       this.$router.push("/editProfile");

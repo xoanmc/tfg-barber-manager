@@ -81,6 +81,6 @@ public class HomePageInfoService {
         // Verificar si la imagen se guarda correctamente
         System.out.println("Imagen guardada en: " + destinationFile.getAbsolutePath());
 
-        return fileName; // Retorna solo el nombre del archivo
+        return fileName;
     }
 }

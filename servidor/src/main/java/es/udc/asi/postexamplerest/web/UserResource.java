@@ -37,7 +37,7 @@ public class UserResource {
     return userService.findAllEmpleados();
   }
 
-  @PreAuthorize("hasAuthority('CLIENTE')")
+  //@PreAuthorize("hasAuthority('CLIENTE')")
   @GetMapping("/barberos")
   public List<EmpleadoListaDTO> findAllBarberos() {
     return userService.findAllBarberos();

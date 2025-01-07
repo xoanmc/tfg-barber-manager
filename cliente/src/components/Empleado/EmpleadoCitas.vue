@@ -119,21 +119,17 @@ h2 {
   font-size: 2rem;
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95);
-  /* Sombreado para mejorar la legibilidad */
   color: #f8f9fa;
-  /* Color claro para contraste */
 }
 
 .card {
   border-radius: 10px;
   background-color: #f8f9fa;
   transition: opacity 0.3s ease-in-out;
-  /* Transición suave para opacidad */
 }
 
 .card.rechazada {
   opacity: 0.5;
-  /* Difumina la tarjeta al reducir su opacidad */
 }
 
 .card-title {

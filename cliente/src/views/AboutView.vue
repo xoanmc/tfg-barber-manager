@@ -11,13 +11,15 @@
           <h2 class="text-primary mb-4">Nuestra Historia</h2>
           <p v-if="!isJefe" class="fs-5">{{ aboutInfo.descripcion || "Aquí irá la historia de la barbería." }}</p>
           <div v-if="isJefe">
-            <textarea v-model="aboutInfo.descripcion" class="form-control mb-3" rows="5" placeholder="Editar la descripción de la barbería" required></textarea>
+            <textarea v-model="aboutInfo.descripcion" class="form-control mb-3" rows="5"
+              placeholder="Editar la descripción de la barbería" required></textarea>
             <input type="file" @change="onFileChange" class="form-control mb-3" />
             <button class="btn btn-primary w-100" @click="guardarInfo">Guardar Cambios</button>
           </div>
         </div>
         <div class="col-md-6 history-image">
-          <img :src="aboutInfo.imagen || defaultAboutImage" alt="Imagen de la barbería" class="shadow rounded img-fluid" />
+          <img :src="aboutInfo.imagen || defaultAboutImage" alt="Imagen de la barbería"
+            class="shadow rounded img-fluid" />
         </div>
       </div>
     </div>
@@ -27,9 +29,12 @@
       <h2 class="text-center text-primary mb-4">Nuestros Profesionales</h2>
       <div class="cards-container d-flex flex-wrap justify-content-center gap-4">
         <div v-for="profesional in profesionales" :key="profesional.id" class="profile-card text-center shadow-sm">
-          <img :src="profesional.imagen || defaultProfileFallback" alt="Imagen de perfil" class="profile-img" />
+          <div class="profile-img-container">
+            <img v-if="profesional.imagen" :src="profesional.imagen" alt="Imagen de perfil" class="profile-img" />
+            <div v-else class="profile-placeholder"></div>
+          </div>
           <p class="mt-3 fw-bold">{{ profesional.nombre }} {{ profesional.apellido }}</p>
-          <small class="text-muted">{{ profesional.login }}</small>
+          <small class="text-muted">@{{ profesional.login }}</small>
         </div>
       </div>
     </div>
@@ -38,41 +43,55 @@
 
 <script>
 import AboutRepository from "@/repositories/AboutRepository";
-import ProfesionalRepository from "@/repositories/ProfesionalRepository";
 import auth from "@/common/auth";
+import eventBus from "@/eventBus";
 
 export default {
   data() {
     return {
       aboutInfo: {
         descripcion: "",
-        imagen: "", // Imagen de la barbería
+        imagen: "",
       },
-      profesionales: [], // Lista de profesionales cargada del backend
-      selectedFile: null, // Imagen seleccionada para subir
-      defaultAboutImage: require('@/assets/defaultAboutImage.jpg'), // Imagen predeterminada de la barbería
+      profesionales: [],
+      selectedFile: null,
+      defaultAboutImage: require('@/assets/defaultAboutImage.jpg'),
       isJefe: auth.isJefe(),
     };
   },
   mounted() {
-    this.loadContent(); // Cargar contenido de la barbería
-    this.loadProfessionals(); // Cargar profesionales
+    this.loadContent();
+    this.loadProfessionals();
+
+    // Escuchar el evento de actualización de imagen de perfil
+    eventBus.on("profile-image-updated", this.loadProfessionals);
+  },
+  beforeUnmount() {
+
+    // Eliminar la suscripción al desmontar el componente
+    eventBus.off("profile-image-updated", this.loadProfessionals);
   },
   methods: {
     async loadContent() {
       try {
         const response = await AboutRepository.getContent();
-        this.aboutInfo = response;
+        console.log("Datos recibidos:", response);
+        this.aboutInfo.descripcion = response.descripcion; // Asignar descripción correctamente
+        this.aboutInfo.imagen = response.imagen || this.defaultAboutImage; // Asignar imagen o por defecto
       } catch (error) {
         console.error("Error al cargar el contenido de la barbería", error);
       }
     },
     async loadProfessionals() {
       try {
-        const response = await ProfesionalRepository.getAll();
-        this.profesionales = response; // Guardar lista de profesionales
+        const response = await AboutRepository.getProfessionals();
+        this.profesionales = response.map((profesional) => ({
+          ...profesional,
+          imagen: profesional.imagen || profesional.profileImageUrl,
+        }));
+
       } catch (error) {
-        console.error("Error al cargar los profesionales", error);
+        console.error("Error al cargar los barberos", error);
       }
     },
     onFileChange(event) {
@@ -81,7 +100,7 @@ export default {
         this.selectedFile = file;
         const reader = new FileReader();
         reader.onload = (e) => {
-          this.aboutInfo.imagen = e.target.result; // Mostrar vista previa de la imagen
+          this.aboutInfo.imagen = e.target.result;
         };
         reader.readAsDataURL(file);
       }
@@ -89,13 +108,14 @@ export default {
     async guardarInfo() {
       try {
         const formData = new FormData();
+        console.log("Descripción enviada:", this.aboutInfo.descripcion);
         formData.append("descripcion", this.aboutInfo.descripcion);
         if (this.selectedFile) {
           formData.append("imagen", this.selectedFile);
         }
-        await AboutRepository.updateContent(formData);
+        const response = await AboutRepository.updateContent(formData);
+        console.log("Respuesta del servidor al guardar:", response);
         alert("Información actualizada con éxito.");
-        this.loadContent(); // Recargar datos actualizados
       } catch (error) {
         console.error("Error al actualizar la información", error);
         alert("Hubo un error al guardar los cambios.");
@@ -111,13 +131,7 @@ export default {
 <style scoped>
 .about-container {
   padding: 60px 20px;
-}
 
-.banner {
-  
-  background-size: cover;
-  background-position: center;
-  padding: 50px 0;
 }
 
 .banner h1 {
@@ -140,16 +154,9 @@ export default {
 }
 
 .professionals-section {
-  background-color: transparent; /* Cambiar el fondo a transparente */
+  background-color: transparent;
   padding: 60px 20px;
   margin-top: 40px;
-}
-
-.cards-container {
-  background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco con transparencia */
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .profile-card {
@@ -197,13 +204,56 @@ button.btn-primary:hover {
 h1 {
   font-size: 2.5rem;
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95); /* Sombreado para mejorar la legibilidad */
-  color: #f8f9fa; /* Color claro para contraste */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95);
+  color: #f8f9fa;
 }
 
 h2 {
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95); /* Sombreado para mejorar la legibilidad */
-  color: #f8f9fa; /* Color claro para contraste */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95);
+  color: #f8f9fa;
+}
+
+.history-text {
+  color: #fff;
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.profile-img-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.profile-img {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-placeholder::before {
+  content: "\f007";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-size: 50px;
+  color: #9e9e9e;
 }
 </style>
