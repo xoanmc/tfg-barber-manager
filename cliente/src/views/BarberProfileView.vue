@@ -7,18 +7,14 @@
     </div>
 
     <div class="profile-main-section">
-      <!-- Imagen de perfil en el centro -->
       <div class="profile-image-container">
         <img :src="barberProfile.imagenPerfil || defaultImage" alt="Foto del barbero" class="profile-image">
       </div>
-
-      <!-- Biografía/Descripción centrada debajo de la imagen -->
       <div class="profile-description">
         <p>{{ barberProfile.descripcion || "Este barbero aún no ha proporcionado su biografía." }}</p>
       </div>
     </div>
 
-    <!-- Horarios debajo -->
     <div class="horarios-section">
       <h2 class="text-center text-primary">Horario</h2>
       <ul class="horarios-list">
@@ -28,26 +24,35 @@
         <li v-if="!horariosFormateados.length">Este barbero aún no ha proporcionado horarios.</li>
       </ul>
     </div>
+
+    <!-- Sección de reseñas -->
+    <div class="reviews-section mt-5" v-if="barberProfile.login">
+      <barber-review :barbero-login="barberProfile.login" :is-cliente="isCliente"></barber-review>
+    </div>
+    <p v-else>Cargando reseñas...</p>
   </div>
 </template>
 
 <script>
 import BarberProfileRepository from "@/repositories/BarberProfileRepository";
+import BarberReview from "@/views/BarberReviewView.vue";
 
 export default {
+  components: {
+    BarberReview,
+  },
   data() {
     return {
       barberProfile: {},
       defaultImage: require('@/assets/defaultProfileImage.jpg'),
-      horariosFormateados: [], // Horarios agrupados y formateados
+      horariosFormateados: [],
+      isCliente: true,  // Para simular que el usuario es un cliente
     };
   },
   methods: {
     formatearHorarios(horarios) {
       const diasOrdenados = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
       const grupos = [];
-
-      // Ordenar los horarios por día de la semana
       horarios.sort((a, b) => diasOrdenados.indexOf(a.diaSemana) - diasOrdenados.indexOf(b.diaSemana));
 
       let grupoActual = { dias: [], horaInicio: null, horaFin: null };
@@ -71,7 +76,6 @@ export default {
           };
         }
       }
-
       if (grupoActual.dias.length > 0) {
         grupos.push(grupoActual);
       }
@@ -88,6 +92,7 @@ export default {
     try {
       const response = await BarberProfileRepository.getBarberProfile(login);
       this.barberProfile = response;
+      console.log("Perfil cargado:", this.barberProfile);
       if (response.horarios) {
         this.horariosFormateados = this.formatearHorarios(response.horarios);
       }

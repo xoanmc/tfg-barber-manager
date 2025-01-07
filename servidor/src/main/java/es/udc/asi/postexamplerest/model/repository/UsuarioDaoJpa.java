@@ -62,6 +62,13 @@ public class UsuarioDaoJpa extends GenericDaoJpa implements UsuarioDao {
         return DataAccessUtils.singleResult(query.getResultList());
     }
 
+    @Override
+    public Empleado findEmpleadoByLogin(String login) {
+        TypedQuery<Empleado> query = entityManager.createQuery("SELECT e FROM Empleado e WHERE e.login = :login", Empleado.class)
+                .setParameter("login", login);
+        return DataAccessUtils.singleResult(query.getResultList());
+    }
+
     public Usuario findByEmail(String email) {
         return entityManager.createQuery("SELECT u FROM Usuario u WHERE u.email = :email", Usuario.class)
                 .setParameter("email", email)

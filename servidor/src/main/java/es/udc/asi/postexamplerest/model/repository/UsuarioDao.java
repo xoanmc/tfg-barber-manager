@@ -23,6 +23,8 @@ public interface UsuarioDao {
 
     Usuario findByLogin(String login);
 
+    Empleado findEmpleadoByLogin(String login);
+
     Usuario findByEmail(String Email);
 
     Cliente findClienteById(Long id);

@@ -69,6 +69,8 @@ public class SecurityConfiguration {
                 .antMatchers("/api/update").hasAuthority("JEFE")
                 .antMatchers("/api/about/**").permitAll()
                 .antMatchers("/api/barber-profile/**").permitAll()
+                .antMatchers("/api/reviews/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/reviews/add").hasAuthority("CLIENTE")
                 .antMatchers("/api/images/about/**").permitAll()
                 .antMatchers("/api/reserve").permitAll()
                 .antMatchers("/api/servicios/**").permitAll()
