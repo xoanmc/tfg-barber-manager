@@ -53,7 +53,7 @@ public class DatabaseLoader {
                 "pereira",
                 "+34 22222222",
                 LocalDate.of(1998, 5, 15),
-                "pepe.perez@gmail.com",
+                "pepinho.pereira2025@gmail.com",
                 "pepe",
                 "pepe",
                 5,
@@ -100,7 +100,7 @@ public class DatabaseLoader {
         empleado2.setTelefono("+34 666666666");
         empleado2.setFechaNacimiento(LocalDate.of(1987, 6, 24));
         empleado2.setPuesto("barbero");
-        empleado2.setEmail("lionel.messi@gmail.com");
+        empleado2.setEmail("lionel10.messi2025@gmail.com");
         empleado2.setLogin("messi");
         empleado2.setPassword(passwordEncoder.encode("messi"));
         empleado2.setSalario(3000.00);

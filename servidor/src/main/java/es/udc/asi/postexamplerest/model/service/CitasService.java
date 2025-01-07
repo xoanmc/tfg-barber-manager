@@ -112,6 +112,14 @@ public class CitasService {
                 detallesCita
         );
 
+        mailService.sendBarberNotificationEmail(
+                cita.getBarbero().getEmail(),
+                cita.getBarbero().getNombre(),
+                cita.getCliente().getNombre(),
+                detallesCita
+        );
+
+
         return nuevaCita;
     }
 

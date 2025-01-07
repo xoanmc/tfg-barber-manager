@@ -98,7 +98,7 @@ export default {
       try {
         console.log("Reservando cita con datos:", this.cita);
         await CitaRepository.reservarCita(this.cita);
-        alert("Cita reservada con éxito.");
+        alert("Cita reservada con éxito. Pendiente de confirmación por el barbero");
         this.$router.push({ name: "Home" });
       } catch (error) {
         console.error("Error al reservar la cita:", error);

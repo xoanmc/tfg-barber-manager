@@ -98,4 +98,27 @@ public class MailService {
             logger.error("Error al enviar el correo de confirmación de cita a: {}", to, e);
         }
     }
+
+    /**
+     * Envío de correo al barbero al reservar la cita.
+     */
+
+    public void sendBarberNotificationEmail(String to, String nombreBarbero, String nombreCliente, String detallesCita) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(to);
+            message.setSubject("Nueva cita pendiente de confirmación");
+            message.setText(String.format(
+                    "Hola %s,\n\nEl cliente %s ha realizado una reserva.\n\nDetalles de la cita:\n%s\n\nPor favor, ingresa al panel de administración para confirmarla.",
+                    nombreBarbero, nombreCliente, detallesCita
+            ));
+            mailSender.send(message);
+            logger.info("Correo de notificación enviado al barbero: {}", to);
+        } catch (Exception e) {
+            logger.error("Error al enviar el correo al barbero: {}", to, e);
+        }
+    }
+
+
+
 }
