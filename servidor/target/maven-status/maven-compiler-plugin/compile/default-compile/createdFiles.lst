@@ -6,6 +6,7 @@ es\udc\asi\postexamplerest\security\TokenProvider.class
 es\udc\asi\postexamplerest\model\domain\HomePageInfo.class
 es\udc\asi\postexamplerest\model\exception\OperationNotAllowed.class
 es\udc\asi\postexamplerest\model\domain\Jefe.class
+es\udc\asi\postexamplerest\model\domain\Peinado.class
 es\udc\asi\postexamplerest\model\exception\ModelException.class
 es\udc\asi\postexamplerest\web\util\ErrorDTO.class
 es\udc\asi\postexamplerest\model\exception\NotFoundException.class
@@ -34,6 +35,7 @@ es\udc\asi\postexamplerest\web\ProfileImageResource.class
 es\udc\asi\postexamplerest\model\repository\CitaDaoJpa.class
 es\udc\asi\postexamplerest\security\CustomUserPrincipal.class
 es\udc\asi\postexamplerest\model\service\dto\BarberProfileDTO.class
+es\udc\asi\postexamplerest\model\service\PeinadoService.class
 es\udc\asi\postexamplerest\model\repository\UsuarioDao.class
 es\udc\asi\postexamplerest\model\service\MailService.class
 es\udc\asi\postexamplerest\config\SecurityConfiguration$1.class
@@ -51,6 +53,7 @@ es\udc\asi\postexamplerest\model\repository\ServiciosDaoJpa.class
 es\udc\asi\postexamplerest\model\service\HomePageInfoService.class
 es\udc\asi\postexamplerest\model\service\dto\LoginDTO.class
 es\udc\asi\postexamplerest\model\repository\AboutPageInfoDao.class
+es\udc\asi\postexamplerest\web\PeinadoResource.class
 es\udc\asi\postexamplerest\model\domain\Cliente.class
 es\udc\asi\postexamplerest\web\HomeImageResource.class
 es\udc\asi\postexamplerest\web\CitasResource.class
@@ -60,6 +63,8 @@ es\udc\asi\postexamplerest\model\service\dto\ClienteListaDTO.class
 es\udc\asi\postexamplerest\config\PasswordEncoderBean.class
 es\udc\asi\postexamplerest\model\repository\HorarioDao.class
 es\udc\asi\postexamplerest\model\service\ServiciosService.class
+es\udc\asi\postexamplerest\model\repository\PeinadoDao.class
+es\udc\asi\postexamplerest\model\repository\PeinadoDaoJpa.class
 es\udc\asi\postexamplerest\model\service\dto\CitaDTO.class
 es\udc\asi\postexamplerest\model\domain\AutoridadUsuario.class
 es\udc\asi\postexamplerest\web\HorariosResource.class
