@@ -23,11 +23,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="empleado in empleados"
-            :key="empleado.id"
-            :class="{ 'table-warning': empleado.despedido }"
-          >
+          <tr v-for="empleado in empleados" :key="empleado.id"
+            :class="{ 'table-warning': empleado.despedido, 'clickable-row': !empleado.despedido }"
+            @click="verPerfilBarbero(empleado.login)">
             <td>{{ empleado.id }}</td>
             <td>{{ empleado.nombre }}</td>
             <td>{{ empleado.apellido }}</td>
@@ -37,12 +35,8 @@
             <td>{{ empleado.puesto }}</td>
             <td>{{ empleado.salario }}</td>
             <td>
-              <button
-                :disabled="empleado.despedido"
-                @click="despedirEmpleado(empleado.id)"
-                class="btn btn-sm"
-                :class="empleado.despedido ? 'btn-secondary' : 'btn-danger'"
-              >
+              <button :disabled="empleado.despedido" @click.stop="despedirEmpleado(empleado.id)" class="btn btn-sm"
+                :class="empleado.despedido ? 'btn-secondary' : 'btn-danger'">
                 {{ empleado.despedido ? "Despedido" : "Despedir" }}
               </button>
             </td>
@@ -72,6 +66,11 @@ export default {
         this.empleados = response;
       } catch (error) {
         console.error("Error obteniendo la lista de empleados", error);
+      }
+    },
+    verPerfilBarbero(login) {
+      if (login) {
+        this.$router.push({ name: "BarberProfileView", params: { login } });
       }
     },
     async despedirEmpleado(id) {
@@ -141,4 +140,14 @@ h1 {
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
 }
+
+.clickable-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.clickable-row:hover {
+  background-color: #f1f1f1; /* Color más claro al pasar el cursor */
+}
+
 </style>

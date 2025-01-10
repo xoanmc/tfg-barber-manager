@@ -21,7 +21,7 @@
               {{ cita.preferencias || "No especificadas" }}
             </p>
             <p class="card-text">
-              <strong>Estado:</strong>
+              <strong>Estado: </strong>
               {{ cita.estado }}
             </p>
 

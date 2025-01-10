@@ -2,7 +2,8 @@
     <div class="container">
         <div class="text-center">
             <h2 class="title">Opiniones de Clientes</h2>
-            <button v-if="isCliente" class="btn btn-primary mt-4" @click="showModal = true">Escribir una opinión</button>
+            <button v-if="isCliente" class="btn btn-primary mt-4" @click="showModal = true">Escribir una
+                opinión</button>
         </div>
 
         <div class="row mt-4" v-if="reviews.length">
@@ -11,9 +12,11 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ review.cliente.nombre }}</h5>
                         <p class="card-text">"{{ review.comentario }}"</p>
-                        <div class="text-warning">
-                            <i class="bi bi-star-fill" v-for="index in review.calificacion" :key="`filled-${review.id}-${index}`"></i>
-                            <i class="bi bi-star" v-for="index in 5 - review.calificacion" :key="`empty-${review.id}-${index}`"></i>
+                        <div class="stars-container text-warning">
+                            <i class="bi bi-star-fill" v-for="index in review.calificacion"
+                                :key="`filled-${review.id}-${index}`"></i>
+                            <i class="bi bi-star" v-for="index in 5 - review.calificacion"
+                                :key="`empty-${review.id}-${index}`"></i>
                         </div>
                         <button v-if="isAdmin" class="btn btn-danger mt-2 w-100" @click="deleteReview(review.id)">
                             Eliminar
@@ -28,11 +31,13 @@
             <div class="modal-content">
                 <h3 class="text-center">Deja tu Opinión</h3>
                 <div class="rating-container mb-3">
-                    <span v-for="index in 5" :key="index" class="star" :class="{ active: index <= newReview.calificacion }" @click="setRating(index)">
+                    <span v-for="index in 5" :key="index" class="star"
+                        :class="{ active: index <= newReview.calificacion }" @click="setRating(index)">
                         ★
                     </span>
                 </div>
-                <textarea v-model="newReview.comentario" placeholder="Escribe tu opinión..." class="form-control mt-3"></textarea>
+                <textarea v-model="newReview.comentario" placeholder="Escribe tu opinión..."
+                    class="form-control mt-3"></textarea>
                 <div class="d-flex justify-content-end mt-3">
                     <button class="btn btn-secondary me-2" @click="closeModal">Cerrar</button>
                     <button class="btn btn-primary" @click="submitReview">Publicar Reseña</button>
@@ -203,5 +208,17 @@ textarea {
     padding: 10px;
     border: 1px solid #ccc;
     resize: none;
+}
+
+.stars-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.stars-container i {
+    font-size: 24px;
+    margin: 0 2px;
 }
 </style>

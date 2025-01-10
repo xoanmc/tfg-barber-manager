@@ -144,7 +144,21 @@ export default {
       return auth.isJefe();
     },
   },
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  beforeUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
+  },
   methods: {
+    handleScroll() {
+      const navbar = document.querySelector(".navbar");
+      if (window.scrollY > 50) {
+        navbar.classList.add("scrolled");
+      } else {
+        navbar.classList.remove("scrolled");
+      }
+    },
     desautenticarme() {
       auth.logout();
       this.$router.push("/login");
@@ -186,15 +200,17 @@ export default {
 <style>
 /* Fondo global */
 .global-background {
-  position: relative;
-  /* Necesario para que el overlay funcione correctamente */
+  /*position: relative;*/
   background-image: url('~@/assets/background.jpg');
   background-size: cover;
+  background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
   min-height: 100vh;
   width: 100%;
+  position: relative;
 }
+
 
 .global-background::before {
   content: '';
@@ -219,13 +235,20 @@ export default {
 }
 
 .navbar {
-  background: transparent !important;
+  background-color: transparent;
+  /* Inicialmente transparente */
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
-  transition: background-color 0.3s ease, color 0.3s ease; /* Transiciones suaves */
-  
+  transition: background-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.navbar.scrolled {
+  background-color: rgba(0, 0, 0, 0.8);
+  /* Color al hacer scroll */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  /* Sombra para efecto */
 }
 
 .navbar .nav-link {

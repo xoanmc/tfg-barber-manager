@@ -11,17 +11,17 @@ public class Peinado {
     private String nombre;
 
     @Column(length = 1000)
-    private String descripcionTendencias;  // Descripción para la pantalla de tendencias
+    private String descripcionTendencias;  // descripción para la pantalla de tendencias
 
     @Column(length = 1000)
-    private String descripcionRecomendador;  // Descripción para el recomendador de peinados
+    private String descripcionRecomendador;  // descripción para el recomendador de peinados
 
     private boolean tendencia;
 
-    private String estructuraFacial;  // Tipo(s) de estructura facial recomendada
+    private String estructuraFacial;  // tipo(s) de estructura facial recomendada
 
     private String urlImagen;
-    
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

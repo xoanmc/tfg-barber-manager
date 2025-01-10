@@ -12,7 +12,7 @@
               {{ formatFechaHora(cita.fechaHora) }}
             </p>
             <p class="card-text">
-              <strong>Estado:</strong>
+              <strong>Estado: </strong>
               <span :class="{
                 'text-success': cita.estado === 'Confirmada',
                 'text-warning': cita.estado === 'Pendiente',
