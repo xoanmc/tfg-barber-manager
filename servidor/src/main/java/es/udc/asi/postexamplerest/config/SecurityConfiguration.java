@@ -66,11 +66,11 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.POST, "/api/register").permitAll()
                 .antMatchers("/api/confirm-registration").permitAll()
                 .antMatchers("/api/home").permitAll()
-                .antMatchers("/api/update").hasAuthority("JEFE")
                 .antMatchers("/api/about/**").permitAll()
                 .antMatchers("/api/barber-profile/**").permitAll()
-                .antMatchers("/api/reviews/**").permitAll()
+                .antMatchers("/api/reviews/delete/**").hasAuthority("JEFE")  // Primero reglas específicas
                 .antMatchers(HttpMethod.POST, "/api/reviews/add").hasAuthority("CLIENTE")
+                .antMatchers("/api/reviews/**").permitAll()  // Luego reglas generales
                 .antMatchers("/api/images/about/**").permitAll()
                 .antMatchers("/api/reserve").permitAll()
                 .antMatchers("/api/servicios/**").permitAll()

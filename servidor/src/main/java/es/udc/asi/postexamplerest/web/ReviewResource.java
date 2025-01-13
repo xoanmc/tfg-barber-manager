@@ -9,6 +9,7 @@ import es.udc.asi.postexamplerest.model.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -59,6 +60,7 @@ public class ReviewResource {
         return ResponseEntity.ok(createdReview);
     }
 
+    @PreAuthorize("hasAuthority('JEFE')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteReview(@PathVariable Long id) {
         reviewService.deleteReview(id);

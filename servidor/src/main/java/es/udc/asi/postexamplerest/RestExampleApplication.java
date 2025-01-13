@@ -11,8 +11,10 @@ import org.springframework.context.annotation.Lazy;
 
 import es.udc.asi.postexamplerest.config.DatabaseLoader;
 import es.udc.asi.postexamplerest.model.exception.UserLoginExistsException;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
+@EnableAsync
 public class RestExampleApplication {
   private final Logger logger = LoggerFactory.getLogger(RestExampleApplication.class);
 

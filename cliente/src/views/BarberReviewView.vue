@@ -2,6 +2,7 @@
     <div class="container">
         <div class="text-center">
             <h2 class="title">Opiniones de Clientes</h2>
+            <!-- Botón de escribir reseña solo visible para clientes -->
             <button v-if="isCliente" class="btn btn-primary mt-4" @click="showModal = true">Escribir una
                 opinión</button>
         </div>
@@ -18,7 +19,8 @@
                             <i class="bi bi-star" v-for="index in 5 - review.calificacion"
                                 :key="`empty-${review.id}-${index}`"></i>
                         </div>
-                        <button v-if="isAdmin" class="btn btn-danger mt-2 w-100" @click="deleteReview(review.id)">
+                        <!-- Botón eliminar solo visible para jefes -->
+                        <button v-if="isJefe" class="btn btn-danger mt-2 w-100" @click="deleteReview(review.id)">
                             Eliminar
                         </button>
                     </div>
@@ -27,6 +29,7 @@
         </div>
         <p v-else class="text-center">No hay opiniones aún.</p>
 
+        <!-- Modal de escribir reseña -->
         <div v-if="showModal" class="modal-overlay">
             <div class="modal-content">
                 <h3 class="text-center">Deja tu Opinión</h3>
@@ -47,8 +50,10 @@
     </div>
 </template>
 
+
 <script>
-import auth from "@/common/auth"; // Importación de autenticación
+import auth from "@/common/auth";
+import { getStore } from "@/common/store";
 import BarberReviewRepository from "@/repositories/BarberReviewRepository";
 
 export default {
@@ -69,7 +74,7 @@ export default {
                 barberoLogin: "",
                 cliente: { id: null, nombre: "" },
             },
-            isAdmin: false,
+            isJefe: false,
         };
     },
     methods: {
@@ -105,6 +110,20 @@ export default {
                 alert("Hubo un error al publicar la reseña.");
             }
         },
+        async deleteReview(reviewId) {
+            if (!confirm("¿Estás seguro de que quieres eliminar esta reseña?")) {
+                return;
+            }
+
+            try {
+                await BarberReviewRepository.deleteReview(reviewId);
+                this.reviews = this.reviews.filter(review => review.id !== reviewId);
+                alert("Reseña eliminada con éxito.");
+            } catch (error) {
+                console.error("Error al eliminar la reseña:", error);
+                alert("No se pudo eliminar la reseña. Por favor, inténtalo de nuevo.");
+            }
+        },
         setRating(rating) {
             this.newReview.calificacion = rating;
         },
@@ -116,8 +135,17 @@ export default {
         closeModal() {
             this.showModal = false;
         },
-        checkAuth() {
-            this.isCliente = auth.isCliente(); // Verifica si el usuario es cliente autenticado
+        async checkAuth() {
+            try {
+                await auth.isAuthenticationChecked;  // Espera a que se autentique
+                this.isCliente = auth.isCliente();  // Actualiza el estado de cliente
+                this.isJefe = auth.isJefe();  // Actualiza el estado de jefe
+                console.log("Rol del usuario:", getStore().state.user.autoridad);  // Muestra en consola
+            } catch (error) {
+                console.error("Error verificando autenticación:", error);
+                this.isCliente = false;
+                this.isJefe = false;
+            }
         },
     },
     mounted() {

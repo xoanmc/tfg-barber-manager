@@ -5,13 +5,19 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
+
 
 @Service
 public class MailService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Value("${properties.clientHost}")
+    private String clientHost;
 
     private static final Logger logger = LoggerFactory.getLogger(MailService.class);
 
@@ -22,6 +28,7 @@ public class MailService {
      * @param subject Asunto del correo.
      * @param text    Contenido del correo.
      */
+    @Async
     public void sendConfirmationEmail(String to, String subject, String text) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -45,6 +52,7 @@ public class MailService {
      * @param subject Asunto del correo.
      * @param text    Contenido del correo.
      */
+    @Async
     public void sendPasswordRecoveryEmail(String to, String subject, String text) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -64,6 +72,7 @@ public class MailService {
     /**
      * Envío de correo al cliente al realizar una reserva.
      */
+    @Async
     public void sendReservationPendingEmail(String to, String nombreCliente, String detallesCita) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -83,6 +92,7 @@ public class MailService {
     /**
      * Envío de correo al cliente al confirmar la reserva.
      */
+    @Async
     public void sendReservationConfirmedEmail(String to, String nombreCliente, String detallesCita) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -102,15 +112,19 @@ public class MailService {
     /**
      * Envío de correo al barbero al reservar la cita.
      */
-
+    @Async
     public void sendBarberNotificationEmail(String to, String nombreBarbero, String nombreCliente, String detallesCita) {
         try {
+            // Enlace para que el barbero confirme la cita
+            String urlConfirmacion = clientHost + "/empleadoCitas";  // Utiliza el host del cliente
+
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to);
             message.setSubject("Nueva cita pendiente de confirmación");
             message.setText(String.format(
-                    "Hola %s,\n\nEl cliente %s ha realizado una reserva.\n\nDetalles de la cita:\n%s\n\nPor favor, ingresa al panel de administración para confirmarla.",
-                    nombreBarbero, nombreCliente, detallesCita
+                    "Hola %s,\n\nEl cliente %s ha realizado una reserva.\n\nDetalles de la cita:\n%s\n\n" +
+                            "Por favor, haz clic en el siguiente enlace para acceder al panel de tus citas pendientes:\n%s\n\nGracias.",
+                    nombreBarbero, nombreCliente, detallesCita, urlConfirmacion
             ));
             mailSender.send(message);
             logger.info("Correo de notificación enviado al barbero: {}", to);
@@ -118,7 +132,4 @@ public class MailService {
             logger.error("Error al enviar el correo al barbero: {}", to, e);
         }
     }
-
-
-
 }

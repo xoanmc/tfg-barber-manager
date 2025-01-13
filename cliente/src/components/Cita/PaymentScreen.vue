@@ -96,12 +96,14 @@ export default {
     },
     async reservarCita() {
       try {
-        console.log("Reservando cita con datos:", this.cita);
+        this.loading = true; // Muestra un spinner
         await CitaRepository.reservarCita(this.cita);
-        alert("Cita reservada con éxito. Pendiente de confirmación por el barbero");
+        this.loading = false; // Oculta el spinner
+        alert("Cita reservada con éxito. Pendiente de confirmación por el barbero.");
         this.$router.push({ name: "Home" });
       } catch (error) {
         console.error("Error al reservar la cita:", error);
+        this.loading = false;
         alert("Ocurrió un error al reservar la cita. Por favor, inténtelo de nuevo.");
       }
     },

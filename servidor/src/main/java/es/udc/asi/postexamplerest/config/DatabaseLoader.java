@@ -112,7 +112,67 @@ public class DatabaseLoader {
         empleado2.setDespedido(false);
         userDAO.create(empleado2);
 
-        // Asignar horarios a Ronaldo
+        Empleado empleado3 = new Empleado();
+        empleado3.setNombre("neymar");
+        empleado3.setApellido("da Silva");
+        empleado3.setTelefono("+34 111111212");
+        empleado3.setFechaNacimiento(LocalDate.of(1992, 2, 5));
+        empleado3.setPuesto("barbero");
+        empleado3.setEmail("ney.da.silva@gmail.com");
+        empleado3.setLogin("neymar");
+        empleado3.setPassword(passwordEncoder.encode("neymar"));
+        empleado3.setSalario(3000.00);
+        empleado3.setContrato("11/02/2023");
+        empleado3.setDescripcion("Experto en cortes atrevidos");
+        empleado3.setDespedido(false);
+        userDAO.create(empleado3);
+
+        Empleado empleado4 = new Empleado();
+        empleado4.setNombre("diego");
+        empleado4.setApellido("maradona");
+        empleado4.setTelefono("+34 777777777");
+        empleado4.setFechaNacimiento(LocalDate.of(1960, 10, 30));
+        empleado4.setPuesto("barbero");
+        empleado4.setEmail("diego.maradona@gmail.com");
+        empleado4.setLogin("maradona");
+        empleado4.setPassword(passwordEncoder.encode("maradona"));
+        empleado4.setSalario(2800.00);
+        empleado4.setContrato("15/07/2023");
+        empleado4.setDescripcion("Especialista en peinados vintage y clásicos con estilo.");
+        empleado4.setDespedido(false);
+        userDAO.create(empleado4);
+
+        Empleado empleado5 = new Empleado();
+        empleado5.setNombre("johan");
+        empleado5.setApellido("cruyff");
+        empleado5.setTelefono("+34 888888888");
+        empleado5.setFechaNacimiento(LocalDate.of(1947, 4, 25));
+        empleado5.setPuesto("barbero");
+        empleado5.setEmail("johan.cruyff@gmail.com");
+        empleado5.setLogin("cruyff");
+        empleado5.setPassword(passwordEncoder.encode("cruyff"));
+        empleado5.setSalario(2700.00);
+        empleado5.setContrato("10/03/2023");
+        empleado5.setDescripcion("Pionero en técnicas modernas de degradados y cortes minimalistas.");
+        empleado5.setDespedido(false);
+        userDAO.create(empleado5);
+
+        Empleado empleado6 = new Empleado();
+        empleado6.setNombre("zinedine");
+        empleado6.setApellido("zidane");
+        empleado6.setTelefono("+34 999999999");
+        empleado6.setFechaNacimiento(LocalDate.of(1972, 6, 23));
+        empleado6.setPuesto("barbero");
+        empleado6.setEmail("zinedine.zidane@gmail.com");
+        empleado6.setLogin("zidane");
+        empleado6.setPassword(passwordEncoder.encode("zidane"));
+        empleado6.setSalario(2900.00);
+        empleado6.setContrato("01/09/2023");
+        empleado6.setDescripcion("Conocido por sus cortes refinados y pulidos, perfectos para eventos especiales.");
+        empleado6.setDespedido(false);
+        userDAO.create(empleado6);
+
+        //Horarios
         horarioDao.create(new Horario(empleado1, "Lunes", LocalTime.of(9, 0), LocalTime.of(18, 0)));
         horarioDao.create(new Horario(empleado1, "Martes", LocalTime.of(9, 0), LocalTime.of(18, 0)));
         horarioDao.create(new Horario(empleado1, "Miércoles", LocalTime.of(9, 0), LocalTime.of(18, 0)));
@@ -120,13 +180,34 @@ public class DatabaseLoader {
         horarioDao.create(new Horario(empleado1, "Viernes", LocalTime.of(9, 0), LocalTime.of(18, 0)));
         horarioDao.create(new Horario(empleado1, "Sábado", LocalTime.of(9, 0), LocalTime.of(18, 0)));
 
-        // Asignar horarios a Lionel
         horarioDao.create(new Horario(empleado2, "Lunes", LocalTime.of(10, 0), LocalTime.of(19, 0)));
         horarioDao.create(new Horario(empleado2, "Martes", LocalTime.of(10, 0), LocalTime.of(19, 0)));
         horarioDao.create(new Horario(empleado2, "Miércoles", LocalTime.of(10, 0), LocalTime.of(19, 0)));
         horarioDao.create(new Horario(empleado2, "Jueves", LocalTime.of(10, 0), LocalTime.of(19, 0)));
         horarioDao.create(new Horario(empleado2, "Viernes", LocalTime.of(10, 0), LocalTime.of(19, 0)));
 
+        horarioDao.create(new Horario(empleado3, "Lunes", LocalTime.of(9, 30), LocalTime.of(17, 30)));
+        horarioDao.create(new Horario(empleado3, "Martes", LocalTime.of(9, 30), LocalTime.of(17, 30)));
+        horarioDao.create(new Horario(empleado3, "Jueves", LocalTime.of(11, 0), LocalTime.of(19, 0)));
+        horarioDao.create(new Horario(empleado3, "Viernes", LocalTime.of(11, 0), LocalTime.of(19, 0)));
+        horarioDao.create(new Horario(empleado3, "Sábado", LocalTime.of(10, 0), LocalTime.of(15, 0)));
+
+        horarioDao.create(new Horario(empleado4, "Lunes", LocalTime.of(9, 0), LocalTime.of(17, 0)));
+        horarioDao.create(new Horario(empleado4, "Martes", LocalTime.of(9, 0), LocalTime.of(17, 0)));
+        horarioDao.create(new Horario(empleado4, "Miércoles", LocalTime.of(9, 0), LocalTime.of(17, 0)));
+        horarioDao.create(new Horario(empleado4, "Jueves", LocalTime.of(9, 0), LocalTime.of(17, 0)));
+        horarioDao.create(new Horario(empleado4, "Viernes", LocalTime.of(9, 0), LocalTime.of(17, 0)));
+
+        horarioDao.create(new Horario(empleado5, "Martes", LocalTime.of(10, 0), LocalTime.of(18, 0)));
+        horarioDao.create(new Horario(empleado5, "Miércoles", LocalTime.of(10, 0), LocalTime.of(18, 0)));
+        horarioDao.create(new Horario(empleado5, "Jueves", LocalTime.of(10, 0), LocalTime.of(18, 0)));
+        horarioDao.create(new Horario(empleado5, "Viernes", LocalTime.of(10, 0), LocalTime.of(18, 0)));
+        horarioDao.create(new Horario(empleado5, "Sábado", LocalTime.of(9, 0), LocalTime.of(14, 0)));
+
+        horarioDao.create(new Horario(empleado6, "Lunes", LocalTime.of(11, 0), LocalTime.of(19, 0)));
+        horarioDao.create(new Horario(empleado6, "Miércoles", LocalTime.of(11, 0), LocalTime.of(19, 0)));
+        horarioDao.create(new Horario(empleado6, "Viernes", LocalTime.of(11, 0), LocalTime.of(19, 0)));
+        horarioDao.create(new Horario(empleado6, "Sábado", LocalTime.of(10, 0), LocalTime.of(17, 0)));
 
         // Registro de jefes
         userService.registerJefe(

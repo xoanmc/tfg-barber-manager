@@ -33,6 +33,12 @@ spring:
           auth: true
           starttls:
             enable: true
+  task:
+    execution:
+      pool:
+        core-size: 4
+        max-size: 10
+        queue-capacity: 100
 logging:
   pattern:
     console: "%d{yyyy-MMM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg %n"
