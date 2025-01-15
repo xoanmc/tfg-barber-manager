@@ -64,7 +64,6 @@ export default {
         const imageUrl = await ImageRepository.uploadProfileImage(this.userId, this.selectedImage);
         this.imageUrl = imageUrl;
         this.$emit("imageUploaded", imageUrl);
-        alert("Imagen subida con éxito.");
       } catch (error) {
         console.error("Error al subir la imagen:", error);
         alert("Error al subir la imagen.");

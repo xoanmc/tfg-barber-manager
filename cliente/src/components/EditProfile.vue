@@ -181,7 +181,6 @@ export default {
         }
 
         await AccountRepository.updateAccount(this.profile);
-        alert("Perfil actualizado con éxito.");
         const redirectPath =
           this.profile.autoridad === "CLIENTE"
             ? "/perfilCliente"

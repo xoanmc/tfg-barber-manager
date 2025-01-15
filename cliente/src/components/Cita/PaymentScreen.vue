@@ -36,6 +36,24 @@
             Reservar
           </button>
         </div>
+        <!-- Modal de confirmación -->
+        <div v-if="mostrarAlerta" class="modal d-flex align-items-center justify-content-center"
+          style="background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050;">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">{{ alertaTitulo }}</h5>
+                <button type="button" class="btn-close" @click="cerrarAlerta"></button>
+              </div>
+              <div class="modal-body">
+                <p>{{ alertaMensaje }}</p>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary" @click="cerrarAlerta">Aceptar</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -57,6 +75,9 @@ export default {
       barberos: [],
       servicios: [],
       metodoPago: "sin_pago", // 'paypal' o 'sin_pago'
+      mostrarAlerta: false,
+      alertaTitulo: "",
+      alertaMensaje: "",
     };
   },
   async mounted() {
@@ -96,20 +117,26 @@ export default {
     },
     async reservarCita() {
       try {
-        this.loading = true; // Muestra un spinner
+        console.log("Reservando cita con datos:", this.cita);
         await CitaRepository.reservarCita(this.cita);
-        this.loading = false; // Oculta el spinner
-        alert("Cita reservada con éxito. Pendiente de confirmación por el barbero.");
-        this.$router.push({ name: "Home" });
+        this.mostrarAlertaPersonalizada("¡Éxito!", "Cita reservada con éxito. Pendiente de confirmación por el barbero");
       } catch (error) {
         console.error("Error al reservar la cita:", error);
-        this.loading = false;
-        alert("Ocurrió un error al reservar la cita. Por favor, inténtelo de nuevo.");
+        this.mostrarAlertaPersonalizada("Error", "Ocurrió un error al reservar la cita. Por favor, inténtelo de nuevo.");
       }
     },
     handlePayPalError(error) {
       console.error("Error con PayPal:", error);
-      alert("Hubo un problema con el pago de PayPal. Intente de nuevo.");
+      this.mostrarAlertaPersonalizada("Error de pago", "Hubo un problema con el pago de PayPal. Intente de nuevo.");
+    },
+    mostrarAlertaPersonalizada(titulo, mensaje) {
+      this.alertaTitulo = titulo;
+      this.alertaMensaje = mensaje;
+      this.mostrarAlerta = true;
+    },
+    cerrarAlerta() {
+      this.mostrarAlerta = false;
+      this.$router.push({ name: "Home" });
     },
   },
 };
@@ -200,4 +227,17 @@ input:checked+.slider {
 input:checked+.slider:before {
   transform: translateX(14px);
 }
+
+.modal {
+  z-index: 1050 !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 </style>

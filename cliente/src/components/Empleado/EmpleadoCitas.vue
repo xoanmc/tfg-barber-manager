@@ -92,7 +92,6 @@ export default {
       try {
         await CitaRepository.confirmarCita(citaId);
         await this.fetchCitas(); // Actualizar las citas después de confirmar
-        alert("Cita confirmada exitosamente");
       } catch (error) {
         console.error("Error confirmando cita", error);
         alert("Error al confirmar la cita");
@@ -103,7 +102,6 @@ export default {
       try {
         await CitaRepository.rechazarCita(citaId);
         await this.fetchCitas(); // Actualizar las citas después de rechazar
-        alert("Cita rechazada exitosamente");
       } catch (error) {
         console.error("Error rechazando cita", error);
         alert("Error al rechazar la cita");

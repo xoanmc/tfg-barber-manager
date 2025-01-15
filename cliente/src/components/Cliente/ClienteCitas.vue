@@ -84,7 +84,6 @@ export default {
       try {
         await CitaRepository.cancelarCita(citaId);
         await this.fetchCitas();
-        alert("Cita cancelada exitosamente");
       } catch (err) {
         console.error("Error al cancelar la cita:", err);
         alert("No se pudo cancelar la cita");

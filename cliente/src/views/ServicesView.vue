@@ -150,7 +150,6 @@ export default {
       try {
         await ServicesRepository.deleteServicio(servicioId);
         this.servicios.splice(index, 1);
-        alert("Servicio eliminado correctamente");
       } catch (error) {
         console.error("Error eliminando el servicio", error);
         alert("Hubo un error al eliminar el servicio");
@@ -164,7 +163,6 @@ export default {
     async guardarServicios() {
       try {
         await ServicesRepository.updateServicios(this.servicios);
-        alert("Servicios actualizados con éxito");
       } catch (error) {
         console.error("Error guardando los servicios", error);
         alert("Hubo un error al guardar los servicios");

@@ -83,10 +83,8 @@ export default {
         try {
           if (estadoActual) {
             await UsuarioRepository.bloquearCliente(id);
-            alert("Cliente bloqueado con éxito.");
           } else {
             await UsuarioRepository.activarCliente(id);
-            alert("Cliente activado con éxito.");
           }
           const cliente = this.clientes.find((c) => c.id === id);
           if (cliente) {

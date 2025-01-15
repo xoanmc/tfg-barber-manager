@@ -77,7 +77,6 @@ export default {
       if (confirm("¿Estás seguro de que deseas despedir a este empleado?")) {
         try {
           await UsuarioRepository.despedir(id);
-          alert("Empleado despedido con éxito.");
           const empleado = this.empleados.find((e) => e.id === id);
           if (empleado) {
             empleado.despedido = true;

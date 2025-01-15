@@ -104,7 +104,6 @@ export default {
                 await BarberReviewRepository.addReview(this.newReview);
                 this.fetchReviews();
                 this.resetReviewForm();
-                alert("¡Gracias por tu reseña!");
             } catch (error) {
                 console.error("Error al publicar la reseña:", error);
                 alert("Hubo un error al publicar la reseña.");
@@ -118,7 +117,6 @@ export default {
             try {
                 await BarberReviewRepository.deleteReview(reviewId);
                 this.reviews = this.reviews.filter(review => review.id !== reviewId);
-                alert("Reseña eliminada con éxito.");
             } catch (error) {
                 console.error("Error al eliminar la reseña:", error);
                 alert("No se pudo eliminar la reseña. Por favor, inténtalo de nuevo.");

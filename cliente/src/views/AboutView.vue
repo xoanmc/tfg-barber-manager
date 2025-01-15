@@ -1,12 +1,12 @@
 <template>
   <div class="about-container">
-
     <!-- Sección de Nuestra Historia -->
     <div class="history-section container mt-5">
       <div class="row align-items-center">
         <div class="col-md-6 history-text">
           <h2 class="text-primary mb-4">Nuestra Historia</h2>
-          <p v-if="!isJefe" class="history-text">{{ aboutInfo.descripcion || "Aquí irá la historia de la barbería." }}</p>
+          <p v-if="!isJefe" class="history-text">{{ aboutInfo.descripcion || "Aquí irá la historia de la barbería." }}
+          </p>
           <div v-if="isJefe">
             <textarea v-model="aboutInfo.descripcion" class="form-control mb-3" rows="5"
               placeholder="Editar la descripción de la barbería" required></textarea>
@@ -36,6 +36,24 @@
         </div>
       </div>
     </div>
+
+    <div v-if="mostrarAlerta" class="modal d-flex align-items-center justify-content-center"
+      style="background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050;">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ alertaTitulo }}</h5>
+            <button type="button" class="btn-close" @click="cerrarAlerta"></button>
+          </div>
+          <div class="modal-body">
+            <p>{{ alertaMensaje }}</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" @click="cerrarAlerta">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -55,6 +73,9 @@ export default {
       selectedFile: null,
       defaultAboutImage: require('@/assets/defaultAboutImage.jpg'),
       isJefe: auth.isJefe(),
+      mostrarAlerta: false,
+      alertaTitulo: "",
+      alertaMensaje: "",
     };
   },
   mounted() {
@@ -113,11 +134,19 @@ export default {
         }
         const response = await AboutRepository.updateContent(formData);
         console.log("Respuesta del servidor al guardar:", response);
-        alert("Información actualizada con éxito.");
+        this.mostrarAlertaPersonalizada("¡Éxito!", "Información actualizada.");
       } catch (error) {
         console.error("Error al actualizar la información", error);
-        alert("Hubo un error al guardar los cambios.");
+        this.mostrarAlertaPersonalizada("Error", "Hubo un error al guardar los cambios.");
       }
+    },
+    mostrarAlertaPersonalizada(titulo, mensaje) {
+      this.alertaTitulo = titulo;
+      this.alertaMensaje = mensaje;
+      this.mostrarAlerta = true;
+    },
+    cerrarAlerta() {
+      this.mostrarAlerta = false;
     },
     verPerfil(profesional) {
       this.$router.push(`/barber-profile/${profesional.login}`);
@@ -249,5 +278,22 @@ h2 {
   font-weight: 900;
   font-size: 50px;
   color: #9e9e9e;
+}
+
+.modal {
+  z-index: 1050 !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-close {
+  border: none;
+  background-color: transparent;
 }
 </style>
