@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Configuration
 public class DatabaseLoader {
@@ -43,6 +44,9 @@ public class DatabaseLoader {
 
     @Autowired
     private PeinadoDao peinadoDao;
+
+    @Autowired
+    private CitaDao citaDao;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -355,5 +359,54 @@ public class DatabaseLoader {
         } else {
             System.out.println("Los peinados en tendencia ya están cargados.");
         }
+
+        // Obtener la lista completa de servicios y filtrar por nombre
+        List<Servicio> servicios = serviciosDao.findAll();
+        Servicio cortar = servicios.stream().filter(s -> s.getNombre().equals("Cortar")).findFirst().orElseThrow(() -> new RuntimeException("Servicio 'Cortar' no encontrado"));
+        Servicio afeitar = servicios.stream().filter(s -> s.getNombre().equals("Afeitar")).findFirst().orElseThrow(() -> new RuntimeException("Servicio 'Afeitar' no encontrado"));
+        Servicio cortarAfeitar = servicios.stream().filter(s -> s.getNombre().equals("Cortar + Afeitar")).findFirst().orElseThrow(() -> new RuntimeException("Servicio 'Cortar + Afeitar' no encontrado"));
+
+        //Citas precargadas
+        Cita cita1 = new Cita(null, pepe, empleado2, LocalDate.of(2025, 8, 25), LocalTime.of(10, 0), "Confirmada", cortar);
+        cita1.setPreferencias("Sin preferencias");
+        citaDao.create(cita1);
+
+        Cita cita2 = new Cita(null, pepe, empleado2, LocalDate.of(2025, 8, 26), LocalTime.of(11, 30), "Confirmada", afeitar);
+        cita2.setPreferencias("Prefiere barba perfilada");
+        citaDao.create(cita2);
+
+        Cita cita3 = new Cita(null, pepe, empleado2, LocalDate.of(2025, 8, 27), LocalTime.of(15, 0), "Confirmada", cortarAfeitar);
+        cita3.setPreferencias("Solicita corte clásico");
+        citaDao.create(cita3);
+
+        Cita cita4 = new Cita(null, pepe, empleado2, LocalDate.of(2025, 8, 28), LocalTime.of(16, 0), "Confirmada", cortar);
+        cita4.setPreferencias("Corte moderno degradado");
+        citaDao.create(cita4);
+
+        Cita cita5 = new Cita(null, pepe, empleado2, LocalDate.of(2025, 8, 29), LocalTime.of(9, 0), "Confirmada", afeitar);
+        cita5.setPreferencias("Afeitado completo con toalla caliente");
+        citaDao.create(cita5);
+
+        Cita cita6 = new Cita(null, maria, empleado2, LocalDate.of(2025, 8, 30), LocalTime.of(10, 0), "Confirmada", cortar);
+        cita6.setPreferencias("Sin preferencias");
+        citaDao.create(cita6);
+
+        Cita cita7 = new Cita(null, maria, empleado2, LocalDate.of(2025, 8, 31), LocalTime.of(11, 30), "Confirmada", afeitar);
+        cita7.setPreferencias("Sin especificaciones");
+        citaDao.create(cita7);
+
+        Cita cita8 = new Cita(null, maria, empleado2, LocalDate.of(2025, 9, 1), LocalTime.of(14, 0), "Confirmada", cortarAfeitar);
+        cita8.setPreferencias("Solicita un afeitado relajante");
+        citaDao.create(cita8);
+
+        Cita cita9 = new Cita(null, maria, empleado2, LocalDate.of(2025, 9, 2), LocalTime.of(15, 0), "Confirmada", cortar);
+        cita9.setPreferencias("Prefiere un corte limpio y fresco");
+        citaDao.create(cita9);
+
+        Cita cita10 = new Cita(null, maria, empleado2, LocalDate.of(2025, 9, 3), LocalTime.of(9, 30), "Confirmada", afeitar);
+        cita10.setPreferencias("Afeitado suave y natural");
+        citaDao.create(cita10);
+
+        System.out.println("10 citas confirmadas con Lionel Messi creadas correctamente.");
     }
 }

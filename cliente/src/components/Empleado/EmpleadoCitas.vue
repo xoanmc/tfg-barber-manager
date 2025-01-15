@@ -2,8 +2,15 @@
   <div class="container py-5">
     <h2 class="text-center mb-4">Citas Programadas</h2>
 
+    <!-- Filtro por fecha -->
+    <div class="text-center mb-4">
+      <label for="fechaFiltro" class="form-label fw-bold text-primary">Filtrar por Día</label>
+      <input type="date" id="fechaFiltro" v-model="filtroFecha" @change="filtrarPorFecha"
+        class="form-control w-50 mx-auto" />
+    </div>
+
     <div v-if="citas.length" class="row g-3">
-      <div class="col-12" v-for="cita in citas" :key="cita.id">
+      <div class="col-12" v-for="cita in citasFiltradas" :key="cita.id">
         <!-- Aplicar clase 'rechazada' si la cita está rechazada -->
         <div class="card shadow-sm" :class="{ 'rechazada': cita.estado === 'Rechazada' }">
           <div class="card-body text-center d-flex flex-column align-items-center">
@@ -52,6 +59,8 @@ export default {
   data() {
     return {
       citas: [],
+      citasFiltradas: [],
+      filtroFecha: "",
     };
   },
   mounted() {
@@ -62,13 +71,28 @@ export default {
       try {
         const citas = await CitaRepository.getCitasBarbero();
 
-        // Combinar fecha y hora en `fechaHora`
-        this.citas = citas.filter(cita => cita.estado !== "Cancelada").map(cita => ({
-          ...cita,
-          fechaHora: `${cita.fecha}T${cita.hora}`,
-        }));
+        this.citas = citas
+          .filter(cita => cita.estado !== "Cancelada")
+          .map(cita => ({
+            ...cita,
+            fechaHora: `${cita.fecha}T${cita.hora}`,
+          }))
+          .sort((a, b) => new Date(a.fechaHora) - new Date(b.fechaHora));
+
+        this.citasFiltradas = this.citas; // Inicializar con todas las citas
       } catch (error) {
         console.error("Error obteniendo las citas del barbero", error);
+      }
+    },
+
+    filtrarPorFecha() {
+      if (!this.filtroFecha) {
+        this.citasFiltradas = this.citas; // Mostrar todas si no se selecciona fecha
+      } else {
+        this.citasFiltradas = this.citas.filter(cita => {
+          const fechaCita = new Date(cita.fecha).toISOString().split('T')[0]; // Convertir a "YYYY-MM-DD"
+          return fechaCita === this.filtroFecha;
+        });
       }
     },
 

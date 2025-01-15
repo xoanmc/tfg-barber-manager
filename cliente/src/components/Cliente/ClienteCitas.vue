@@ -29,6 +29,12 @@
               <strong>Preferencias:</strong>
               {{ cita.preferencias || "No especificadas" }}
             </p>
+
+            <button v-if="cita.estado === 'Confirmada'" class="btn btn-primary mt-3"
+              @click="redirigirBarberProfile(cita.barbero.login)">
+              Puntuar Servicio
+            </button>
+
             <button v-if="cita.estado === 'Pendiente'" class="btn btn-danger mt-3" @click="cancelarCita(cita.id)">
               Cancelar
             </button>
@@ -105,6 +111,14 @@ export default {
         return "Fecha/Hora inválidas";
       }
     },
+    redirigirBarberProfile(login) {
+      if (login) {
+        this.$router.push(`/barber-profile/${login}`);
+      } else {
+        console.error("Login del barbero no disponible");
+        alert("El perfil del barbero no está disponible.");
+      }
+    },
   },
 };
 </script>
@@ -155,5 +169,15 @@ h2 {
   font-size: 1.5rem;
   font-weight: bold;
   color: #f8f9fa;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004085;
 }
 </style>
