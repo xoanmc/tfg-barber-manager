@@ -66,6 +66,7 @@ es\udc\asi\postexamplerest\model\service\ServiciosService.class
 es\udc\asi\postexamplerest\model\repository\PeinadoDao.class
 es\udc\asi\postexamplerest\model\repository\PeinadoDaoJpa.class
 es\udc\asi\postexamplerest\model\service\dto\CitaDTO.class
+es\udc\asi\postexamplerest\model\domain\EstructuraFacial.class
 es\udc\asi\postexamplerest\model\domain\AutoridadUsuario.class
 es\udc\asi\postexamplerest\web\HorariosResource.class
 es\udc\asi\postexamplerest\model\repository\CitaDao.class

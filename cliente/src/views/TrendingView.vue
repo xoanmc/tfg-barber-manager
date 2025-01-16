@@ -1,44 +1,78 @@
 <template>
   <div class="container py-5">
     <h2 class="text-center text-primary mb-4">Peinados en Tendencia</h2>
+
+    <!-- Grid de peinados -->
     <div v-if="peinados.length > 0" class="grid-container">
       <div class="grid-item" v-for="peinado in peinados" :key="peinado.id">
         <img :src="require(`@/assets/${peinado.imagen}`)" :alt="peinado.nombre" />
+        
+        <!-- Botón de check siempre visible -->
+        <div v-if="isJefe" class="toggle-container">
+          <button
+            class="toggle-button"
+            :class="peinado.tendencia ? 'btn-success' : 'btn-secondary'"
+            @click="toggleTendencia(peinado.id)"
+          >
+            {{ peinado.tendencia ? "✓" : "✕" }}
+          </button>
+        </div>
+        
+        <!-- Descripción que aparece al pasar el cursor -->
         <div class="image-overlay">
           <h5>{{ peinado.nombre }}</h5>
           <p class="mb-0">{{ peinado.descripcionTendencias }}</p>
         </div>
       </div>
     </div>
+
+    <!-- Mensaje cuando no hay peinados -->
     <div v-else class="text-center mt-5">
-      <p class="text-muted">No hay peinados en tendencia actualmente.</p>
+      <p class="text-muted">No hay peinados disponibles actualmente.</p>
     </div>
   </div>
 </template>
 
 <script>
+import auth from "@/common/auth";
 import PeinadoRepository from "@/repositories/PeinadoRepository";
 
 export default {
   data() {
     return {
-      peinados: [],
+      peinados: [], // Lista de peinados
+      isJefe: false, // Indica si el usuario es jefe
     };
   },
   async mounted() {
     try {
-      const peinadosCargados = await PeinadoRepository.obtenerPeinadosEnTendencia();
-      this.peinados = peinadosCargados.map((peinado) => {
-        return {
-          ...peinado,
-          imagen: this.getImagenFileName(peinado.nombre),
-        };
-      });
+      // Determinar si el usuario es jefe
+      this.isJefe = auth.isJefe();
+
+      // Cargar peinados según el rol del usuario
+      const peinadosCargados = this.isJefe
+        ? await PeinadoRepository.obtenerPeinados() // Cargar todos los peinados si es jefe
+        : await PeinadoRepository.obtenerPeinadosEnTendencia(); // Solo peinados en tendencia para otros usuarios
+
+      // Mapear peinados con las imágenes correspondientes
+      this.peinados = peinadosCargados.map((peinado) => ({
+        ...peinado,
+        imagen: this.getImagenFileName(peinado.nombre),
+      }));
     } catch (error) {
-      console.error("Error al cargar los peinados en tendencia:", error);
+      console.error("Error al cargar los peinados:", error);
     }
   },
   methods: {
+    async toggleTendencia(peinadoId) {
+      try {
+        await PeinadoRepository.toggleTendencia(peinadoId);
+        const peinado = this.peinados.find((p) => p.id === peinadoId);
+        peinado.tendencia = !peinado.tendencia; // Alternar el estado de tendencia
+      } catch (error) {
+        console.error("Error al actualizar la tendencia:", error);
+      }
+    },
     getImagenFileName(nombre) {
       const mapping = {
         "The Modern Pompadour": "The Modern Pompadour.png",
@@ -53,7 +87,7 @@ export default {
         "Textured Undercuts": "Textured Undercuts.png",
       };
 
-      return mapping[nombre] || "defaultBanner.jpg"; // Imagen por defecto si no se encuentra
+      return mapping[nombre] || "defaultBanner.jpg"; // Imagen por defecto
     },
   },
 };
@@ -107,10 +141,46 @@ h2 {
   padding: 1.5rem;
   transform: translateY(100%);
   transition: transform 0.3s ease;
+  opacity: 0;
+  /* Ocultar inicialmente */
 }
 
 .grid-item:hover .image-overlay {
+  opacity: 1;
+  /* Mostrar al pasar el cursor */
   transform: translateY(0);
+}
+
+.toggle-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  /* Asegura que esté encima de la imagen */
+}
+
+.toggle-button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.toggle-button:hover {
+  opacity: 0.8;
 }
 
 .text-muted {

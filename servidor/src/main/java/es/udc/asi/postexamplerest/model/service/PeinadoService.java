@@ -13,6 +13,11 @@ public class PeinadoService {
     @Autowired
     private PeinadoDao peinadoDao;
 
+    public List<Peinado> obtenerTodosLosPeinados() {
+        return peinadoDao.findAll();
+    }
+
+
     public List<Peinado> obtenerPeinadosEnTendencia() {
         return peinadoDao.findByTendenciaTrue();
     }
@@ -20,4 +25,11 @@ public class PeinadoService {
     public Peinado guardarPeinado(Peinado peinado) {
         return peinadoDao.save(peinado);
     }
+
+    public void toggleTendencia(Long id) {
+        Peinado peinado = peinadoDao.findById(id).orElseThrow(() -> new RuntimeException("Peinado no encontrado"));
+        peinado.setTendencia(!peinado.isTendencia());
+        peinadoDao.save(peinado);
+    }
+
 }

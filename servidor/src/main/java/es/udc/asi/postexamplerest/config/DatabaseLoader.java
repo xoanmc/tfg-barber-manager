@@ -269,7 +269,7 @@ public class DatabaseLoader {
             modernPompadour.setNombre("The Modern Pompadour");
             modernPompadour.setDescripcionTendencias("Un clásico atemporal con un toque moderno, el pompadour sigue siendo una fuerza dominante en la moda capilar masculina.");
             modernPompadour.setDescripcionRecomendador("Este peinado añade altura y estructura, equilibrando bien los rostros con ángulos marcados.");
-            modernPompadour.setEstructuraFacial("Ovalado, Cuadrado, Diamante, Rectangular");
+            modernPompadour.setEstructurasFaciales(List.of(EstructuraFacial.OVALADA, EstructuraFacial.CUADRADO, EstructuraFacial.DIAMANTE, EstructuraFacial.RECTANGULAR));
             modernPompadour.setUrlImagen("https://example.com/pompadour.jpg");
             modernPompadour.setTendencia(false);
             peinadoDao.save(modernPompadour);
@@ -278,7 +278,7 @@ public class DatabaseLoader {
             texturedCrop.setNombre("Textured Crop");
             texturedCrop.setDescripcionTendencias("El corte de pelo texturizado sigue ganando popularidad, ya que ofrece una opción elegante que requiere poco mantenimiento.");
             texturedCrop.setDescripcionRecomendador("El volumen y la textura añaden dimensión, suavizando las líneas duras o redondeadas.");
-            texturedCrop.setEstructuraFacial("Redondo, Cuadrado, Triangular");
+            texturedCrop.setEstructurasFaciales(List.of(EstructuraFacial.REDONDA, EstructuraFacial.CUADRADO, EstructuraFacial.TRIANGULO));
             texturedCrop.setUrlImagen("https://example.com/textured_crop.jpg");
             texturedCrop.setTendencia(true);
             peinadoDao.save(texturedCrop);
@@ -287,7 +287,7 @@ public class DatabaseLoader {
             messyQuiff.setNombre("Messy Quiff");
             messyQuiff.setDescripcionTendencias("Para quienes prefieren un look ligeramente desordenado, el messy quiff es la opción.");
             messyQuiff.setDescripcionRecomendador("El aspecto desordenado añade carácter al rostro y complementa los ángulos marcados o alargados.");
-            messyQuiff.setEstructuraFacial("Ovalado, Corazón, Rectangular");
+            messyQuiff.setEstructurasFaciales(List.of(EstructuraFacial.OVALADA, EstructuraFacial.CORAZON, EstructuraFacial.RECTANGULAR));
             messyQuiff.setUrlImagen("https://example.com/messy_quiff.jpg");
             messyQuiff.setTendencia(true);
             peinadoDao.save(messyQuiff);
@@ -296,7 +296,7 @@ public class DatabaseLoader {
             midLengthWaves.setNombre("Mid Length Waves");
             midLengthWaves.setDescripcionTendencias("Este peinado desprende un aire playero y relajado, perfecto para el hombre moderno.");
             midLengthWaves.setDescripcionRecomendador("Las ondas medias equilibran los rostros más angulares y proporcionan un aire relajado.");
-            midLengthWaves.setEstructuraFacial("Triángulo Invertido, Corazón, Ovalado Largo");
+            midLengthWaves.setEstructurasFaciales(List.of(EstructuraFacial.TRIANGULO_INVERTIDO, EstructuraFacial.CORAZON, EstructuraFacial.OVALADO_LARGO));
             midLengthWaves.setUrlImagen("https://example.com/mid_length_waves.jpg");
             midLengthWaves.setTendencia(true);
             peinadoDao.save(midLengthWaves);
@@ -305,7 +305,7 @@ public class DatabaseLoader {
             sleekSidePart.setNombre("Sleek Side Part");
             sleekSidePart.setDescripcionTendencias("Ideal para quienes prefieren un look sofisticado y clásico, la raya al lado es adecuada para distintos tipos de cabello y formas de cara.");
             sleekSidePart.setDescripcionRecomendador("La raya al lado estiliza los rostros rectos y añade simetría, proporcionando un aire sofisticado.");
-            sleekSidePart.setEstructuraFacial("Ovalado, Cuadrado, Rectangular, Triángulo Invertido");
+            sleekSidePart.setEstructurasFaciales(List.of(EstructuraFacial.OVALADA, EstructuraFacial.CUADRADO, EstructuraFacial.RECTANGULAR, EstructuraFacial.TRIANGULO_INVERTIDO));
             sleekSidePart.setUrlImagen("https://example.com/sleek_side_part.jpg");
             sleekSidePart.setTendencia(true);
             peinadoDao.save(sleekSidePart);
@@ -314,7 +314,7 @@ public class DatabaseLoader {
             buzzCut.setNombre("Buzz Cut");
             buzzCut.setDescripcionTendencias("Ideal para quienes buscan un estilo sencillo y fresco.");
             buzzCut.setDescripcionRecomendador("Este corte minimalista destaca las características faciales y resalta los ángulos fuertes.");
-            buzzCut.setEstructuraFacial("Ovalado Largo, Diamante, Cuadrado, Corazón");
+            buzzCut.setEstructurasFaciales(List.of(EstructuraFacial.OVALADO_LARGO, EstructuraFacial.DIAMANTE, EstructuraFacial.CUADRADO, EstructuraFacial.CORAZON));
             buzzCut.setUrlImagen("https://example.com/buzz_cut.jpg");
             buzzCut.setTendencia(true);
             peinadoDao.save(buzzCut);
@@ -323,7 +323,7 @@ public class DatabaseLoader {
             taperedFade.setNombre("Tapered Fade");
             taperedFade.setDescripcionTendencias("El tapered fade con longitud en la parte superior ofrece un aspecto limpio y pulido a la vez que permite versatilidad en el peinado.");
             taperedFade.setDescripcionRecomendador("El fade progresivo da definición y estructura, ideal para rostros que necesitan equilibrio.");
-            taperedFade.setEstructuraFacial("Ovalado, Cuadrado, Triángulo Invertido");
+            taperedFade.setEstructurasFaciales(List.of(EstructuraFacial.OVALADA, EstructuraFacial.CUADRADO, EstructuraFacial.TRIANGULO_INVERTIDO));
             taperedFade.setUrlImagen("https://example.com/tapered_fade.jpg");
             taperedFade.setTendencia(true);
             peinadoDao.save(taperedFade);
@@ -332,7 +332,7 @@ public class DatabaseLoader {
             modernMullet.setNombre("Modern Mullet");
             modernMullet.setDescripcionTendencias("Combina lados más cortos con un largo a capas y texturizado en la parte trasera, ofreciendo una estética elegante pero vanguardista.");
             modernMullet.setDescripcionRecomendador("Este peinado juega con el volumen en la parte trasera, aportando dimensión y un look vanguardista.");
-            modernMullet.setEstructuraFacial("Rectangular, Triangular, Diamante");
+            modernMullet.setEstructurasFaciales(List.of(EstructuraFacial.RECTANGULAR, EstructuraFacial.TRIANGULO, EstructuraFacial.DIAMANTE));
             modernMullet.setUrlImagen("https://example.com/modern_mullet.jpg");
             modernMullet.setTendencia(true);
             peinadoDao.save(modernMullet);
@@ -341,7 +341,7 @@ public class DatabaseLoader {
             naturalWaves.setNombre("Natural Waves and Curls");
             naturalWaves.setDescripcionTendencias("Los hombres están haciendo hincapié en las ondas y los rizos, que trabajan con el movimiento natural del cabello.");
             naturalWaves.setDescripcionRecomendador("Los rizos naturales aportan suavidad y movimiento, equilibrando las líneas rectas y resaltando los rostros alargados.");
-            naturalWaves.setEstructuraFacial("Triángulo Invertido, Redondo, Ovalado Largo, Cuadrado");
+            naturalWaves.setEstructurasFaciales(List.of(EstructuraFacial.TRIANGULO_INVERTIDO, EstructuraFacial.REDONDA, EstructuraFacial.OVALADO_LARGO, EstructuraFacial.CUADRADO));
             naturalWaves.setUrlImagen("https://example.com/natural_waves.jpg");
             naturalWaves.setTendencia(true);
             peinadoDao.save(naturalWaves);
@@ -350,7 +350,7 @@ public class DatabaseLoader {
             texturedUndercuts.setNombre("Textured Undercuts");
             texturedUndercuts.setDescripcionTendencias("Los undercuts siguen siendo los favoritos de los hombres, pero con un énfasis en la textura y dimensión.");
             texturedUndercuts.setDescripcionRecomendador("El contraste entre los lados rapados y la textura superior resalta los rasgos faciales sin endurecerlos demasiado.");
-            texturedUndercuts.setEstructuraFacial("Ovalado, Cuadrado, Rectangular, Corazón");
+            texturedUndercuts.setEstructurasFaciales(List.of(EstructuraFacial.OVALADA, EstructuraFacial.CUADRADO, EstructuraFacial.RECTANGULAR, EstructuraFacial.CORAZON));
             texturedUndercuts.setUrlImagen("https://example.com/textured_undercuts.jpg");
             texturedUndercuts.setTendencia(false);
             peinadoDao.save(texturedUndercuts);

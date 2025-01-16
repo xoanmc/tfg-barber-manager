@@ -4,6 +4,7 @@ import es.udc.asi.postexamplerest.model.domain.Peinado;
 import es.udc.asi.postexamplerest.model.service.PeinadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,13 @@ public class PeinadoResource {
     @Autowired
     private PeinadoService peinadoService;
 
+    @GetMapping
+    @PreAuthorize("hasAuthority('JEFE')")
+    public List<Peinado> obtenerTodosLosPeinados() {
+        return peinadoService.obtenerTodosLosPeinados();
+    }
+
+
     @GetMapping("/tendencias")
     public List<Peinado> obtenerPeinadosEnTendencia() {
         return peinadoService.obtenerPeinadosEnTendencia();
@@ -25,4 +33,12 @@ public class PeinadoResource {
         Peinado nuevoPeinado = peinadoService.guardarPeinado(peinado);
         return ResponseEntity.ok(nuevoPeinado);
     }
+
+    @PreAuthorize("hasAuthority('JEFE')")
+    @PutMapping("/{id}/toggle-tendencia")
+    public ResponseEntity<Void> toggleTendencia(@PathVariable Long id) {
+        peinadoService.toggleTendencia(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

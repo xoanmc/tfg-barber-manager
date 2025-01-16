@@ -1,6 +1,7 @@
 package es.udc.asi.postexamplerest.model.domain;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Peinado {
@@ -18,28 +19,67 @@ public class Peinado {
 
     private boolean tendencia;
 
-    private String estructuraFacial;  // tipo(s) de estructura facial recomendada
+    @ElementCollection(fetch = FetchType.EAGER, targetClass = EstructuraFacial.class)
+    @Enumerated(EnumType.STRING) // Almacena los valores como texto en la base de datos
+    @CollectionTable(name = "peinado_estructura_facial", joinColumns = @JoinColumn(name = "peinado_id"))
+    @Column(name = "estructura_facial")
+    private List<EstructuraFacial> estructurasFaciales;
 
     private String urlImagen;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getDescripcionTendencias() { return descripcionTendencias; }
-    public void setDescripcionTendencias(String descripcionTendencias) { this.descripcionTendencias = descripcionTendencias; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    public String getDescripcionRecomendador() { return descripcionRecomendador; }
-    public void setDescripcionRecomendador(String descripcionRecomendador) { this.descripcionRecomendador = descripcionRecomendador; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public boolean isTendencia() { return tendencia; }
-    public void setTendencia(boolean tendencia) { this.tendencia = tendencia; }
+    public String getDescripcionTendencias() {
+        return descripcionTendencias;
+    }
 
-    public String getEstructuraFacial() { return estructuraFacial; }
-    public void setEstructuraFacial(String estructuraFacial) { this.estructuraFacial = estructuraFacial; }
+    public void setDescripcionTendencias(String descripcionTendencias) {
+        this.descripcionTendencias = descripcionTendencias;
+    }
 
-    public String getUrlImagen() { return urlImagen; }
-    public void setUrlImagen(String urlImagen) { this.urlImagen = urlImagen; }
+    public String getDescripcionRecomendador() {
+        return descripcionRecomendador;
+    }
+
+    public void setDescripcionRecomendador(String descripcionRecomendador) {
+        this.descripcionRecomendador = descripcionRecomendador;
+    }
+
+    public boolean isTendencia() {
+        return tendencia;
+    }
+
+    public void setTendencia(boolean tendencia) {
+        this.tendencia = tendencia;
+    }
+
+    public List<EstructuraFacial> getEstructurasFaciales() {
+        return estructurasFaciales;
+    }
+
+    public void setEstructurasFaciales(List<EstructuraFacial> estructurasFaciales) {
+        this.estructurasFaciales = estructurasFaciales;
+    }
+
+    public String getUrlImagen() {
+        return urlImagen;
+    }
+
+    public void setUrlImagen(String urlImagen) {
+        this.urlImagen = urlImagen;
+    }
 }

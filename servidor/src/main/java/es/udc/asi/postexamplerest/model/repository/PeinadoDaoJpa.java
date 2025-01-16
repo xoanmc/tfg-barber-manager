@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -27,4 +28,16 @@ public class PeinadoDaoJpa extends GenericDaoJpa implements PeinadoDao {
             return entityManager.merge(peinado);
         }
     }
+
+    @Override
+    public Optional<Peinado> findById(Long id) {
+        return Optional.ofNullable(entityManager.find(Peinado.class, id));
+    }
+
+    @Override
+    public List<Peinado> findAll() {
+        return entityManager.createQuery("SELECT p FROM Peinado p", Peinado.class).getResultList();
+    }
+
+
 }
