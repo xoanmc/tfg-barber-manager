@@ -274,40 +274,41 @@ public class UsuarioService {
         return new AccountDTO(user);
     }
 
-  public void despedirEmpleado(Long id) throws NotFoundException {
+    @Transactional
+    public void despedirEmpleado(Long id) throws NotFoundException {
+        Usuario usuario = usuarioDAO.findById(id);
+        if (usuario == null || !(usuario instanceof Empleado)) {
+            throw new NotFoundException("Empleado no encontrado", Empleado.class);
+        }
 
-    Usuario usuario = usuarioDAO.findById(id);
-    if (usuario == null || !(usuario instanceof Empleado)) {
-      throw new NotFoundException("Empleado no encontrado", Empleado.class);
+        Empleado empleado = (Empleado) usuario;
+        empleado.setDespedido(true); // Cambiar el estado a despedido
+        usuarioDAO.update(empleado); // Persistir el cambio en la base de datos
     }
 
-    Empleado empleado = (Empleado) usuario;
-    empleado.setDespedido(true);
 
-    usuarioDAO.update(empleado);
-  }
 
-  @Transactional(readOnly = false)
-  public void bloquearCliente(Long id) throws NotFoundException {
-    Usuario usuario = usuarioDAO.findById(id);
-    if (usuario == null || !(usuario instanceof Cliente)) {
-      throw new NotFoundException("Cliente no encontrado", Cliente.class);
+    @Transactional(readOnly = false)
+    public void bloquearCliente(Long id) throws NotFoundException {
+        Usuario usuario = usuarioDAO.findById(id);
+        if (usuario == null || !(usuario instanceof Cliente)) {
+            throw new NotFoundException("Cliente no encontrado", Cliente.class);
+        }
+        Cliente cliente = (Cliente) usuario;
+        cliente.setActivo(false);
+        usuarioDAO.update(cliente);
     }
-    Cliente cliente = (Cliente) usuario;
-    cliente.setActivo(false);
-    usuarioDAO.update(cliente);
-  }
 
-  @Transactional(readOnly = false)
-  public void cambiarEstadoCliente(Long id, boolean activo) throws NotFoundException {
-    Usuario usuario = usuarioDAO.findById(id);
-    if (usuario == null || !(usuario instanceof Cliente)) {
-      throw new NotFoundException("Cliente no encontrado", Cliente.class);
+    @Transactional(readOnly = false)
+    public void cambiarEstadoCliente(Long id, boolean activo) throws NotFoundException {
+        Usuario usuario = usuarioDAO.findById(id);
+        if (usuario == null || !(usuario instanceof Cliente)) {
+            throw new NotFoundException("Cliente no encontrado", Cliente.class);
+        }
+        Cliente cliente = (Cliente) usuario;
+        cliente.setActivo(activo);
+        usuarioDAO.update(cliente);
     }
-    Cliente cliente = (Cliente) usuario;
-    cliente.setActivo(activo);
-    usuarioDAO.update(cliente);
-  }
 
     @Transactional
     public String uploadProfileImage(Long userId, MultipartFile file) throws NotFoundException, IOException {

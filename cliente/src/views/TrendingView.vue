@@ -2,22 +2,26 @@
   <div class="container py-5">
     <h2 class="text-center text-primary mb-4">Peinados en Tendencia</h2>
 
+    <!-- Botón para añadir un nuevo peinado (solo visible para JEFE) -->
+<!--     <div v-if="isJefe" class="mb-4 text-end">
+      <button class="btn btn-primary" @click="irANuevoPeinado">
+        Añadir Nuevo Peinado
+      </button>
+    </div> -->
+
     <!-- Grid de peinados -->
     <div v-if="peinados.length > 0" class="grid-container">
       <div class="grid-item" v-for="peinado in peinados" :key="peinado.id">
-        <img :src="require(`@/assets/${peinado.imagen}`)" :alt="peinado.nombre" />
-        
+        <img :src="getImagenSrc(peinado)" :alt="peinado.nombre" />
+
         <!-- Botón de check siempre visible -->
         <div v-if="isJefe" class="toggle-container">
-          <button
-            class="toggle-button"
-            :class="peinado.tendencia ? 'btn-success' : 'btn-secondary'"
-            @click="toggleTendencia(peinado.id)"
-          >
+          <button class="toggle-button" :class="peinado.tendencia ? 'btn-success' : 'btn-secondary'"
+            @click="toggleTendencia(peinado.id)">
             {{ peinado.tendencia ? "✓" : "✕" }}
           </button>
         </div>
-        
+
         <!-- Descripción que aparece al pasar el cursor -->
         <div class="image-overlay">
           <h5>{{ peinado.nombre }}</h5>
@@ -40,8 +44,8 @@ import PeinadoRepository from "@/repositories/PeinadoRepository";
 export default {
   data() {
     return {
-      peinados: [], // Lista de peinados
-      isJefe: false, // Indica si el usuario es jefe
+      peinados: [],
+      isJefe: false,
     };
   },
   async mounted() {
@@ -54,24 +58,58 @@ export default {
         ? await PeinadoRepository.obtenerPeinados() // Cargar todos los peinados si es jefe
         : await PeinadoRepository.obtenerPeinadosEnTendencia(); // Solo peinados en tendencia para otros usuarios
 
-      // Mapear peinados con las imágenes correspondientes
+      // Mapear imágenes nuevas y precargadas
       this.peinados = peinadosCargados.map((peinado) => ({
         ...peinado,
-        imagen: this.getImagenFileName(peinado.nombre),
+        imagen: this.isImagenFija(peinado.nombre)
+          ? require(`@/assets/${this.getImagenFileName(peinado.nombre)}`)
+          : peinado.urlImagen,
       }));
+
+      console.log("Peinados cargados:", this.peinados);
+
     } catch (error) {
       console.error("Error al cargar los peinados:", error);
     }
   },
   methods: {
+    irANuevoPeinado() {
+      this.$router.push("/trending/nuevo-peinado"); // Redirige al formulario de nuevo peinado
+    },
     async toggleTendencia(peinadoId) {
       try {
         await PeinadoRepository.toggleTendencia(peinadoId);
         const peinado = this.peinados.find((p) => p.id === peinadoId);
-        peinado.tendencia = !peinado.tendencia; // Alternar el estado de tendencia
+        peinado.tendencia = !peinado.tendencia; // alternar estado de tendencia
       } catch (error) {
         console.error("Error al actualizar la tendencia:", error);
       }
+    },
+    getImagenSrc(peinado) {
+      if (this.isImagenFija(peinado.nombre)) {
+        return require(`@/assets/${this.getImagenFileName(peinado.nombre)}`);
+      }
+      if (peinado.urlImagen) {
+        console.log("Cargando imagen dinámica desde el backend:", peinado.urlImagen);
+        return peinado.urlImagen; // Usar URL absoluta generada por el backend
+      }
+      return "/api/peinados/images/default.jpg"; // Imagen por defecto
+    },
+    isImagenFija(nombre) {
+      // Lista de nombres con imágenes fijas
+      const nombresConImagenesFijas = [
+        "The Modern Pompadour",
+        "Textured Crop",
+        "Messy Quiff",
+        "Mid Length Waves",
+        "Sleek Side Part",
+        "Buzz Cut",
+        "Tapered Fade",
+        "Modern Mullet",
+        "Natural Waves and Curls",
+        "Textured Undercuts",
+      ];
+      return nombresConImagenesFijas.includes(nombre);
     },
     getImagenFileName(nombre) {
       const mapping = {

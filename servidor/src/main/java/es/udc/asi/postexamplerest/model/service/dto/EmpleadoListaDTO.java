@@ -125,4 +125,20 @@ public class EmpleadoListaDTO {
     public void setImagen(String imagen) {
         this.imagen = imagen;
     }
+
+    public String getContrato() {
+        return contrato;
+    }
+
+    public void setContrato(String contrato) {
+        this.contrato = contrato;
+    }
+
+    public boolean isDespedido() {
+        return despedido;
+    }
+
+    public void setDespedido(boolean despedido) {
+        this.despedido = despedido;
+    }
 }

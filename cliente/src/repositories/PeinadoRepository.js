@@ -8,8 +8,11 @@ export default {
   },
 
   async guardarPeinado(peinado) {
-    const response = await HTTP.post(`/peinados/guardar`, peinado);
-    return response.data;
+    return await HTTP.post(`/peinados/guardar`, peinado, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   },
 
   async obtenerPeinados() {
@@ -19,5 +22,9 @@ export default {
 
   async toggleTendencia(peinadoId) {
     await HTTP.put(`/peinados/${peinadoId}/toggle-tendencia`);
+  },
+
+  async obtenerUrlImagenPeinado(fileName) {
+    return `/peinados/images/${fileName}`;
   },
 };

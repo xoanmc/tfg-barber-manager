@@ -6,6 +6,7 @@ import BarberProfileView from "@/views/BarberProfileView.vue";
 import HomeView from "../views/HomeView.vue";
 import ServicesView from "@/views/ServicesView.vue";
 import TrendingView from "@/views/TrendingView.vue";
+import NewTrendingHairstyle from "@/components/NewTrendingHairstyle.vue"; 
 import ReserveForm from "@/components/Cita/ReserveForm.vue";
 import PaymentScreen from "@/components/Cita/PaymentScreen.vue";
 
@@ -150,6 +151,12 @@ const routes = [{
     name: "trending",
     component: TrendingView,
     meta: { public: true },
+},
+{
+    path: "/trending/nuevo-peinado",
+    name: "NewTrendingHairstyle",
+    component: NewTrendingHairstyle,
+    meta: { authority: "JEFE" },
 },
 {
     path: "/reserve",
