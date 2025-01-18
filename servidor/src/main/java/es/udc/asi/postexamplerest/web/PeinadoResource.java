@@ -1,5 +1,6 @@
 package es.udc.asi.postexamplerest.web;
 
+import es.udc.asi.postexamplerest.model.domain.EstructuraFacial;
 import es.udc.asi.postexamplerest.model.domain.Peinado;
 import es.udc.asi.postexamplerest.model.service.PeinadoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.net.URLDecoder;
@@ -38,6 +40,17 @@ public class PeinadoResource {
     public List<Peinado> obtenerPeinadosEnTendencia() {
         return peinadoService.obtenerPeinadosEnTendencia();
     }
+
+    @GetMapping("/estructuras/{estructuraFacial}")
+    public List<Peinado> obtenerPeinadosPorEstructura(@PathVariable String estructuraFacial) {
+        try {
+            EstructuraFacial estructura = EstructuraFacial.valueOf(estructuraFacial.toUpperCase());
+            return peinadoService.obtenerPeinadosPorEstructura(estructura);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Estructura facial no válida", e);
+        }
+    }
+
 
     @PostMapping("/guardar")
     @PreAuthorize("hasAuthority('JEFE')")

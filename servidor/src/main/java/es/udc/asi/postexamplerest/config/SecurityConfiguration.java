@@ -80,6 +80,7 @@ public class SecurityConfiguration {
                 .antMatchers("/api/reset-password", "/api/password-recovery").permitAll()
                 .antMatchers("/api/images/homepage/**").permitAll()
                 .antMatchers("/api/peinados/tendencias").permitAll()
+                .antMatchers("/api/peinados/estructuras/**").permitAll()
                 .antMatchers("/api/peinados").permitAll()
                 .antMatchers("/api/peinados/images/**").permitAll()
                 .antMatchers("/**").authenticated() // Todas las demás rutas requieren autenticación

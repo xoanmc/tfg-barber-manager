@@ -35,6 +35,13 @@ public class PeinadoService {
         return peinadoDao.findByTendenciaTrue();
     }
 
+    public List<Peinado> obtenerPeinadosPorEstructura(EstructuraFacial estructuraFacial) {
+        return peinadoDao.findAll().stream()
+                .filter(peinado -> peinado.getEstructurasFaciales().contains(estructuraFacial))
+                .collect(Collectors.toList());
+    }
+
+
     public void guardarPeinado(String nombre, String descripcionTendencias, String estructurasFaciales, MultipartFile imagen) {
         try {
             // Convertir estructuras faciales a lista

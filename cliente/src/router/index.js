@@ -6,7 +6,9 @@ import BarberProfileView from "@/views/BarberProfileView.vue";
 import HomeView from "../views/HomeView.vue";
 import ServicesView from "@/views/ServicesView.vue";
 import TrendingView from "@/views/TrendingView.vue";
-import NewTrendingHairstyle from "@/components/NewTrendingHairstyle.vue"; 
+import RecomendadorView from "@/views/RecomendadorView.vue";
+import PeinadosRecomendadosView from "@/views/PeinadosRecomendadosView.vue";
+import NewTrendingHairstyle from "@/components/NewTrendingHairstyle.vue";
 import ReserveForm from "@/components/Cita/ReserveForm.vue";
 import PaymentScreen from "@/components/Cita/PaymentScreen.vue";
 
@@ -157,6 +159,18 @@ const routes = [{
     name: "NewTrendingHairstyle",
     component: NewTrendingHairstyle,
     meta: { authority: "JEFE" },
+},
+{
+    path: "/trending/recomendador/:estructuraFacial",
+    name: "PeinadosRecomendadosView",
+    component: PeinadosRecomendadosView,
+    meta: { public: true },
+},
+{
+    path: "/trending/recomendador",
+    name: "RecomendadorView",
+    component: RecomendadorView,
+    meta: { public: true },
 },
 {
     path: "/reserve",

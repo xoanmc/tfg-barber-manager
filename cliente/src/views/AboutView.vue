@@ -104,11 +104,12 @@ export default {
     async loadProfessionals() {
       try {
         const response = await AboutRepository.getProfessionals();
-        this.profesionales = response.map((profesional) => ({
-          ...profesional,
-          imagen: profesional.imagen || profesional.profileImageUrl,
-        }));
-
+        this.profesionales = response
+          .filter((profesional) => !profesional.despedido) // Excluir empleados despedidos
+          .map((profesional) => ({
+            ...profesional,
+            imagen: profesional.imagen || profesional.profileImageUrl,
+          }));
       } catch (error) {
         console.error("Error al cargar los barberos", error);
       }

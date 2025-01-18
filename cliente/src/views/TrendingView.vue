@@ -9,6 +9,13 @@
       </button>
     </div> -->
 
+     <!-- Botón para el recomendador de peinados -->
+     <div class="mb-4 text-center">
+      <button class="btn btn-primary" @click="irARecomendador">
+        Prueba nuestro recomendador de peinados
+      </button>
+    </div>
+
     <!-- Grid de peinados -->
     <div v-if="peinados.length > 0" class="grid-container">
       <div class="grid-item" v-for="peinado in peinados" :key="peinado.id">
@@ -73,8 +80,11 @@ export default {
     }
   },
   methods: {
+    irARecomendador() {
+      this.$router.push("/trending/recomendador");
+    },
     irANuevoPeinado() {
-      this.$router.push("/trending/nuevo-peinado"); // Redirige al formulario de nuevo peinado
+      this.$router.push("/trending/nuevo-peinado");
     },
     async toggleTendencia(peinadoId) {
       try {

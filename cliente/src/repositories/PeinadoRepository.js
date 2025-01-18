@@ -7,6 +7,16 @@ export default {
     return response.data;
   },
 
+  async obtenerPeinadosPorEstructura(estructuraFacial) {
+    try {
+      const response = await HTTP.get(`/peinados/estructuras/${estructuraFacial}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener peinados por estructura facial:", error);
+      throw error;
+    }
+  },
+
   async guardarPeinado(peinado) {
     return await HTTP.post(`/peinados/guardar`, peinado, {
       headers: {
