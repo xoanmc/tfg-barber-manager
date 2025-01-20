@@ -52,7 +52,7 @@
                 Clientes
               </router-link>
             </li>
-            <li class="nav-item" v-if="isJefe">
+            <li class="nav-item">
               <router-link to="/promociones" class="nav-link" active-class="active">
                 Promociones
               </router-link>
@@ -189,7 +189,7 @@ export default {
       this.$router.push("/users/clientes");
     },
     irAGestionPromociones() {
-      this.$router.push("/promotions"); // definir esta ruta en el router
+      this.$router.push("/promociones"); // definir esta ruta en el router
     },
   },
 };

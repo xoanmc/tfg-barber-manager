@@ -87,7 +87,7 @@ export default {
       this.$router.push("/users/clientes");
     },
     irAGestionPromociones() {
-      this.$router.push("/promotions");
+      this.$router.push("/promociones");
     },
   },
 };

@@ -118,7 +118,7 @@ public class DatabaseLoader {
 
         Empleado empleado3 = new Empleado();
         empleado3.setNombre("neymar");
-        empleado3.setApellido("da Silva");
+        empleado3.setApellido("da silva");
         empleado3.setTelefono("+34 111111212");
         empleado3.setFechaNacimiento(LocalDate.of(1992, 2, 5));
         empleado3.setPuesto("barbero");

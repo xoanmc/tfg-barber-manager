@@ -9,10 +9,10 @@
       </button>
     </div> -->
 
-     <!-- Botón para el recomendador de peinados -->
-     <div class="mb-4 text-center">
-      <button class="btn btn-primary" @click="irARecomendador">
-        Prueba nuestro recomendador de peinados
+ <!-- Botón para el recomendador de peinados -->
+ <div class="mb-4 text-center">
+      <button class="recomendador-button" @click="irARecomendador">
+        💇‍♂️ Prueba nuestro recomendador de peinados 💇‍♀️
       </button>
     </div>
 
@@ -101,12 +101,12 @@ export default {
       }
       if (peinado.urlImagen) {
         console.log("Cargando imagen dinámica desde el backend:", peinado.urlImagen);
-        return peinado.urlImagen; // Usar URL absoluta generada por el backend
+        return peinado.urlImagen;
       }
-      return "/api/peinados/images/default.jpg"; // Imagen por defecto
+      return "/api/peinados/images/default.jpg";
     },
     isImagenFija(nombre) {
-      // Lista de nombres con imágenes fijas
+
       const nombresConImagenesFijas = [
         "The Modern Pompadour",
         "Textured Crop",
@@ -234,5 +234,34 @@ h2 {
 .text-muted {
   font-size: 1.2rem;
   color: #777;
+}
+
+.recomendador-button {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(90deg, #ff8c00, #ff2e63);
+  padding: 15px 30px;
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.recomendador-button:hover {
+  background: linear-gradient(90deg, #ff2e63, #ff8c00);
+  transform: translateY(-5px);
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.recomendador-button:focus {
+  outline: none;
+}
+
+.recomendador-button:active {
+  transform: translateY(0);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 </style>

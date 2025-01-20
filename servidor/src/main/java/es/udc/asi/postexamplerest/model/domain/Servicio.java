@@ -18,6 +18,10 @@ public class Servicio {
   public Servicio() {
   }
 
+  public Servicio(Long id) {
+    this.id = id;
+  }
+
   public Servicio(String nombre, String descripcion, Double precio) {
     this.nombre = nombre;
     this.descripcion = descripcion;

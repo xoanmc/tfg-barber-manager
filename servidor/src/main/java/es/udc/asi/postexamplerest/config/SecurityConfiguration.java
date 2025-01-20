@@ -83,6 +83,7 @@ public class SecurityConfiguration {
                 .antMatchers("/api/peinados/estructuras/**").permitAll()
                 .antMatchers("/api/peinados").permitAll()
                 .antMatchers("/api/peinados/images/**").permitAll()
+                .antMatchers("/api/promociones/**").permitAll()
                 .antMatchers("/**").authenticated() // Todas las demás rutas requieren autenticación
                 .and()
                 .apply(securityConfigurerAdapter());

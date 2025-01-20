@@ -25,6 +25,7 @@ es\udc\asi\postexamplerest\model\repository\util\GenericDaoJpa.class
 es\udc\asi\postexamplerest\model\service\CitasService.class
 es\udc\asi\postexamplerest\model\domain\Cita.class
 es\udc\asi\postexamplerest\model\exception\UserLoginExistsException.class
+es\udc\asi\postexamplerest\model\service\PromocionService.class
 es\udc\asi\postexamplerest\security\MyUserDetailsService.class
 es\udc\asi\postexamplerest\model\domain\Review.class
 es\udc\asi\postexamplerest\model\domain\Empleado.class
@@ -36,10 +37,12 @@ es\udc\asi\postexamplerest\model\repository\CitaDaoJpa.class
 es\udc\asi\postexamplerest\security\CustomUserPrincipal.class
 es\udc\asi\postexamplerest\model\service\dto\BarberProfileDTO.class
 es\udc\asi\postexamplerest\model\service\PeinadoService.class
+es\udc\asi\postexamplerest\model\domain\Promocion.class
 es\udc\asi\postexamplerest\model\repository\UsuarioDao.class
 es\udc\asi\postexamplerest\model\service\MailService.class
 es\udc\asi\postexamplerest\config\SecurityConfiguration$1.class
 es\udc\asi\postexamplerest\model\repository\HorarioDaoJpa.class
+es\udc\asi\postexamplerest\model\repository\PromocionDaoJpa.class
 es\udc\asi\postexamplerest\security\MyUnauthorizedEntryPoint.class
 es\udc\asi\postexamplerest\web\HomePageInfoResource.class
 es\udc\asi\postexamplerest\security\JWTConfigurer.class
@@ -67,10 +70,12 @@ es\udc\asi\postexamplerest\model\repository\PeinadoDao.class
 es\udc\asi\postexamplerest\model\repository\PeinadoDaoJpa.class
 es\udc\asi\postexamplerest\model\service\dto\CitaDTO.class
 es\udc\asi\postexamplerest\model\domain\EstructuraFacial.class
+es\udc\asi\postexamplerest\model\repository\PromocionDao.class
 es\udc\asi\postexamplerest\model\domain\AutoridadUsuario.class
 es\udc\asi\postexamplerest\web\HorariosResource.class
 es\udc\asi\postexamplerest\model\repository\CitaDao.class
 es\udc\asi\postexamplerest\model\service\dto\EmpleadoListaDTO.class
+es\udc\asi\postexamplerest\model\service\dto\PromocionDTO.class
 es\udc\asi\postexamplerest\web\exceptions\RequestBodyNotValidException.class
 es\udc\asi\postexamplerest\model\service\dto\AccountDTO.class
 es\udc\asi\postexamplerest\security\SecurityUtils.class
@@ -81,5 +86,6 @@ es\udc\asi\postexamplerest\model\service\HorariosService.class
 es\udc\asi\postexamplerest\model\domain\Horario.class
 es\udc\asi\postexamplerest\model\repository\AboutPageInfoDaoJpa.class
 es\udc\asi\postexamplerest\model\repository\UsuarioDaoJpa.class
+es\udc\asi\postexamplerest\web\PromocionResource.class
 es\udc\asi\postexamplerest\RestExampleApplication.class
 es\udc\asi\postexamplerest\model\service\AboutPageInfoService.class

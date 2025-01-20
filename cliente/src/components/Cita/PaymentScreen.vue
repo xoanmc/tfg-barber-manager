@@ -7,8 +7,17 @@
         <!-- Resumen de la cita -->
         <div class="mb-4">
           <h3 class="fs-5 fw-semibold text-secondary mb-3">Resumen de la cita:</h3>
-          <p><strong>Barbero:</strong> {{ cita.barberoId ? obtenerNombreBarbero(cita.barberoId) : "Cualquiera" }}</p>
-          <p><strong>Servicio:</strong> {{ obtenerNombreServicio(cita.servicioId) }}</p>
+          <p><strong>Barbero: </strong> {{ cita.barberoId ? obtenerNombreBarbero(cita.barberoId) : "Cualquiera" }}</p>
+          <p><strong>Servicio: </strong> {{ obtenerNombreServicio(cita.servicioId) }}</p>
+          <p><strong>Precio: </strong>
+            <span v-if="precioConDescuento !== precioOriginal">
+              <s class="text-danger fw-bold me-2">{{ precioOriginal.toFixed(2) }} €</s>
+              <span class="text-success fw-bold">{{ precioConDescuento.toFixed(2) }} €</span>
+            </span>
+            <span v-else>
+              {{ precioOriginal.toFixed(2) }} €
+            </span>
+          </p>
           <p><strong>Fecha:</strong> {{ cita.fecha }}</p>
           <p><strong>Hora:</strong> {{ cita.hora }}</p>
         </div>
@@ -24,10 +33,9 @@
           </div>
         </div>
 
-
         <!-- Botón de PayPal -->
         <div v-if="metodoPago === 'paypal'" class="mb-4">
-          <PayPalButton :amount="calcularPrecio()" @pago-completado="reservarCita" @pago-error="handlePayPalError" />
+          <PayPalButton :amount="precioConDescuento" @pago-completado="reservarCita" @pago-error="handlePayPalError" />
         </div>
 
         <!-- Botón de Reservar -->
@@ -36,6 +44,7 @@
             Reservar
           </button>
         </div>
+
         <!-- Modal de confirmación -->
         <div v-if="mostrarAlerta" class="modal d-flex align-items-center justify-content-center"
           style="background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050;">
@@ -59,11 +68,13 @@
   </div>
 </template>
 
+
 <script>
 import PayPalButton from "@/components/Cita/PayPalButton";
 import UsuarioRepository from "@/repositories/UsuarioRepository";
 import ServicesRepository from "@/repositories/ServicesRepository";
 import CitaRepository from "@/repositories/CitaRepository";
+import PromocionRepository from "@/repositories/PromocionRepository";
 
 export default {
   components: {
@@ -74,6 +85,8 @@ export default {
       cita: {},
       barberos: [],
       servicios: [],
+      precioOriginal: 0,
+      precioConDescuento: 0,
       metodoPago: "sin_pago", // 'paypal' o 'sin_pago'
       mostrarAlerta: false,
       alertaTitulo: "",
@@ -99,6 +112,42 @@ export default {
       try {
         this.barberos = await UsuarioRepository.findAllBarberos();
         this.servicios = await ServicesRepository.findAllServicios();
+
+        const servicioSeleccionado = this.servicios.find(
+          (servicio) => servicio.id === this.cita.servicioId
+        );
+
+        if (servicioSeleccionado) {
+          this.precioOriginal = servicioSeleccionado.precio;
+
+          // Obtener promociones activas para el servicio en la fecha seleccionada
+          const promociones = await PromocionRepository.getPromociones(
+            servicioSeleccionado.id,
+            this.cita.fecha
+          );
+
+          // Filtrar promociones válidas para el servicio específico y fecha
+          const promocionesValidas = promociones.filter((promocion) => {
+            const fechaActual = new Date(this.cita.fecha);
+            return (
+              promocion.servicioId === servicioSeleccionado.id && // Verificar que sea para el servicio correcto
+              promocion.activo &&
+              fechaActual >= new Date(promocion.fechaInicio) &&
+              fechaActual <= new Date(promocion.fechaFin)
+            );
+          });
+
+          // Si hay promociones válidas, aplicar la que tiene el mayor descuento
+          if (promocionesValidas.length > 0) {
+            const mayorPromocion = promocionesValidas.reduce((max, promocion) =>
+              promocion.porcentajeDescuento > max.porcentajeDescuento ? promocion : max
+            );
+            const descuento = mayorPromocion.porcentajeDescuento / 100;
+            this.precioConDescuento = this.precioOriginal * (1 - descuento);
+          } else {
+            this.precioConDescuento = this.precioOriginal; // Sin descuento
+          }
+        }
       } catch (error) {
         console.error("Error cargando datos:", error);
       }
@@ -110,10 +159,6 @@ export default {
     obtenerNombreServicio(servicioId) {
       const servicio = this.servicios.find((s) => s.id === servicioId);
       return servicio ? servicio.nombre : "";
-    },
-    calcularPrecio() {
-      const servicio = this.servicios.find((s) => s.id === this.cita.servicioId);
-      return servicio ? servicio.precio : 0;
     },
     async reservarCita() {
       try {
@@ -240,4 +285,19 @@ input:checked+.slider:before {
   justify-content: center;
 }
 
+.text-danger {
+  color: red !important;
+}
+
+.text-success {
+  color: green !important;
+}
+
+.fw-bold {
+  font-weight: bold;
+}
+
+.me-2 {
+  margin-right: 0.5rem;
+}
 </style>

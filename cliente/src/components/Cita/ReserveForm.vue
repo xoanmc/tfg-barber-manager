@@ -8,19 +8,8 @@
         <div class="mb-4">
           <label for="barbero" class="form-label fs-6 fw-semibold text-secondary">Selecciona Barbero:</label>
           <select v-model="cita.barberoId" id="barbero" class="form-select" @change="actualizarHorariosDisponibles">
-            <!--<option value="" selected>Cualquiera</option>-->
             <option v-for="barbero in barberos" :key="barbero.id" :value="barbero.id">
               {{ barbero.nombre }}
-            </option>
-          </select>
-        </div>
-
-        <!-- Selección de servicio -->
-        <div class="mb-4">
-          <label for="servicio" class="form-label fs-6 fw-semibold text-secondary">Selecciona Servicio:</label>
-          <select v-model="cita.servicioId" id="servicio" class="form-select">
-            <option v-for="servicio in servicios" :key="servicio.id" :value="servicio.id">
-              {{ servicio.nombre }} - {{ servicio.precio }}€
             </option>
           </select>
         </div>
@@ -45,13 +34,22 @@
           <p>No hay horarios disponibles para la fecha seleccionada.</p>
         </div>
 
+        <!-- Selección de servicio -->
+        <div class="mb-4">
+          <label for="servicio" class="form-label fs-6 fw-semibold text-secondary">Selecciona Servicio:</label>
+          <select v-model="cita.servicioId" id="servicio" class="form-select">
+            <option v-for="servicio in servicios" :key="servicio.id" :value="servicio.id">
+              {{ servicio.nombre }}
+            </option>
+          </select>
+        </div>
+
         <!-- Selección de preferencias -->
         <div class="mb-4">
           <label for="preferencias" class="form-label fs-6 fw-semibold text-secondary">Preferencias (Opcional):</label>
           <textarea v-model="cita.preferencias" id="preferencias" class="form-control" rows="3"
             placeholder="Escribe aquí tus preferencias de servicio..."></textarea>
         </div>
-
 
         <!-- Botón de continuar -->
         <div class="d-grid">
@@ -72,6 +70,7 @@ import { Spanish } from "flatpickr/dist/l10n/es.js";
 import UsuarioRepository from "@/repositories/UsuarioRepository";
 import ServicesRepository from "@/repositories/ServicesRepository";
 import HorariosBarberosRepository from "@/repositories/HorariosBarberosRepository";
+import PromocionRepository from "@/repositories/PromocionRepository";
 
 export default {
   components: {
@@ -110,9 +109,30 @@ export default {
         console.error("Error cargando barberos:", error);
       }
     },
-    async cargarServicios() {
+    async cargarServicios(fechaSeleccionada = null) {
       try {
         const servicios = await ServicesRepository.findAllServicios();
+        const fecha = fechaSeleccionada || this.cita.fecha || new Date().toISOString().split("T")[0];
+
+        for (let servicio of servicios) {
+          const promociones = await PromocionRepository.getPromociones();
+          servicio.promocionAplicable = promociones.find(
+            (promocion) =>
+              promocion.servicioId === servicio.id &&
+              promocion.activo &&
+              new Date(fecha) >= new Date(promocion.fechaInicio) &&
+              new Date(fecha) <= new Date(promocion.fechaFin)
+          );
+
+          if (servicio.promocionAplicable) {
+            servicio.precioConDescuento =
+              servicio.precio -
+              (servicio.precio * servicio.promocionAplicable.porcentajeDescuento) / 100;
+          } else {
+            servicio.precioConDescuento = servicio.precio;
+          }
+        }
+
         this.servicios = servicios.sort((a, b) => a.nombre.localeCompare(b.nombre));
       } catch (error) {
         console.error("Error cargando servicios:", error);
@@ -130,6 +150,9 @@ export default {
           this.cita.fecha
         );
         this.horariosDisponibles = horarios;
+
+        // Recalcular servicios y precios según la fecha seleccionada
+        await this.cargarServicios(this.cita.fecha);
       } catch (error) {
         console.error("Error obteniendo horarios disponibles:", error);
       }

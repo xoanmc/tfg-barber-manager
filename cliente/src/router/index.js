@@ -5,6 +5,7 @@ import AboutView from "../views/AboutView.vue";
 import BarberProfileView from "@/views/BarberProfileView.vue";
 import HomeView from "../views/HomeView.vue";
 import ServicesView from "@/views/ServicesView.vue";
+import PromocionView from "@/views/PromocionView.vue";
 import TrendingView from "@/views/TrendingView.vue";
 import RecomendadorView from "@/views/RecomendadorView.vue";
 import PeinadosRecomendadosView from "@/views/PeinadosRecomendadosView.vue";
@@ -176,6 +177,12 @@ const routes = [{
     path: "/reserve",
     name: "reserve",
     component: ReserveForm,
+    meta: { public: true },
+},
+{
+    path: "/promociones",
+    name: "PromocionView",
+    component: PromocionView,
     meta: { public: true },
 },
 //EMPLEADO

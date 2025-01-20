@@ -53,12 +53,12 @@ export default {
                 return require(`@/assets/${this.getImagenFileName(peinado.nombre)}`);
             }
             if (peinado.urlImagen) {
-                return peinado.urlImagen; // Usar URL dinámica del backend si está disponible
+                return peinado.urlImagen;
             }
-            return require("@/assets/defaultBanner.jpg"); // Imagen predeterminada si no se encuentra
+            return require("@/assets/defaultBanner.jpg");
         },
         isImagenFija(nombre) {
-            // Lista de nombres con imágenes fijas
+
             const nombresConImagenesFijas = [
                 "The Modern Pompadour",
                 "Textured Crop",

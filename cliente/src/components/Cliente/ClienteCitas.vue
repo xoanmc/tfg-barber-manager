@@ -2,7 +2,14 @@
   <div class="container py-5">
     <h2 class="text-center mb-4">Mis Citas</h2>
 
-    <div v-if="citas.length" class="row g-3">
+    <!-- Botón para hacer reserva -->
+    <div class="text-center mt-4  mb-5">
+      <router-link to="/reserve" class="btn btn-primary">
+        ¿Quieres hacer una reserva?
+      </router-link>
+    </div>
+
+    <div v-if="citas.length" class="row g-3  mt-5">
       <div class="col-12" v-for="cita in citas" :key="cita.id">
         <div class="card shadow-sm" :class="{ 'rechazada': cita.estado === 'Rechazada' }">
           <div class="card-body text-center d-flex flex-column align-items-center">
@@ -45,10 +52,9 @@
 
     <div v-else class="text-center">
       <p class="text-muted">No tienes citas reservadas.</p>
-      <router-link to="/reserve" class="btn btn-primary mt-3">
-        ¿Quieres hacer una reserva?
-      </router-link>
     </div>
+
+
   </div>
 </template>
 
