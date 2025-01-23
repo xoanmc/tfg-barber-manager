@@ -1,22 +1,24 @@
 <template>
   <div class="about-container">
+
     <!-- Sección de Nuestra Historia -->
     <div class="history-section container mt-5">
-      <div class="row align-items-center">
-        <div class="col-md-6 history-text">
+      <div class="row align-items-center" :class="{ 'flex-column': isJefe, 'flex-md-row-reverse': !isJefe }">
+        <div class="col-md-6 history-image mb-4">
+          <img :src="aboutInfo.imagen || defaultAboutImage" alt="Imagen de la barbería"
+            class="shadow rounded img-fluid" />
+        </div>
+        <div class="col-md-6 history-text text-center" :class="{ 'text-md-start': !isJefe, 'text-center': isJefe }">
           <h2 class="text-primary mb-4">Nuestra Historia</h2>
-          <p v-if="!isJefe" class="history-text">{{ aboutInfo.descripcion || "Aquí irá la historia de la barbería." }}
+          <p v-if="!isJefe" class="history-text">
+            {{ aboutInfo.descripcion || "Aquí irá la historia de la barbería." }}
           </p>
-          <div v-if="isJefe">
+          <div v-if="isJefe" class="text-left">
             <textarea v-model="aboutInfo.descripcion" class="form-control mb-3" rows="5"
               placeholder="Editar la descripción de la barbería" required></textarea>
             <input type="file" @change="onFileChange" class="form-control mb-3" />
             <button class="btn btn-primary w-100" @click="guardarInfo">Guardar Cambios</button>
           </div>
-        </div>
-        <div class="col-md-6 history-image">
-          <img :src="aboutInfo.imagen || defaultAboutImage" alt="Imagen de la barbería"
-            class="shadow rounded img-fluid" />
         </div>
       </div>
     </div>
@@ -162,18 +164,45 @@ export default {
 
 }
 
+.flex-column {
+  flex-direction: column !important;
+}
+
+.flex-md-row-reverse {
+  flex-direction: row-reverse !important;
+}
+
 .history-section {
   margin-bottom: 60px;
 }
 
 .history-text {
-  color: #333;
+  color: #fff;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  text-align: justify;
 }
 
 .history-image img {
   max-width: 100%;
   border-radius: 10px;
   object-fit: cover;
+}
+
+textarea.form-control {
+  border-radius: 10px;
+}
+
+button.btn-primary {
+  background-color: #007BFF;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+button.btn-primary:hover {
+  background-color: #0056b3;
 }
 
 .professionals-section {

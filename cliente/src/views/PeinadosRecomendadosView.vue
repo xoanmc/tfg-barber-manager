@@ -1,5 +1,12 @@
 <template>
     <div class="container py-5">
+        <!-- Botón de Volver -->
+        <div class="mb-4">
+            <button @click="volverAlRecomendador" class="btn btn-secondary">
+                ← Volver al Recomendador
+            </button>
+        </div>
+
         <h2 class="text-center text-primary mb-4">Peinados Recomendados para {{ tipoRostro }}</h2>
         <div v-if="peinados.length > 0" class="grid-container">
             <div class="grid-item" v-for="peinado in peinados" :key="peinado.id">
@@ -48,6 +55,9 @@ export default {
         }
     },
     methods: {
+        volverAlRecomendador() {
+            this.$router.push("/trending/recomendador");
+        },
         getImagenSrc(peinado) {
             if (this.isImagenFija(peinado.nombre)) {
                 return require(`@/assets/${this.getImagenFileName(peinado.nombre)}`);
@@ -94,6 +104,21 @@ export default {
 </script>
 
 <style scoped>
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
 h2 {
     font-size: 2.5rem;
     font-weight: bold;

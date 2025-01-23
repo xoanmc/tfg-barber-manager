@@ -3,14 +3,14 @@
     <h2 class="text-center text-primary mb-4">Peinados en Tendencia</h2>
 
     <!-- Botón para añadir un nuevo peinado (solo visible para JEFE) -->
-<!--     <div v-if="isJefe" class="mb-4 text-end">
+    <div v-if="isJefe" class="mb-4 text-end">
       <button class="btn btn-primary" @click="irANuevoPeinado">
         Añadir Nuevo Peinado
       </button>
-    </div> -->
+    </div>
 
- <!-- Botón para el recomendador de peinados -->
- <div class="mb-4 text-center">
+    <!-- Botón para el recomendador de peinados -->
+    <div class="mb-4 text-center">
       <button class="recomendador-button" @click="irARecomendador">
         💇‍♂️ Prueba nuestro recomendador de peinados 💇‍♀️
       </button>
@@ -68,9 +68,11 @@ export default {
       // Mapear imágenes nuevas y precargadas
       this.peinados = peinadosCargados.map((peinado) => ({
         ...peinado,
-        imagen: this.isImagenFija(peinado.nombre)
-          ? require(`@/assets/${this.getImagenFileName(peinado.nombre)}`)
-          : peinado.urlImagen,
+        imagen: peinado.urlImagen // Si tiene una URL de imagen, úsala directamente
+          ? peinado.urlImagen
+          : this.isImagenFija(peinado.nombre) // Si es una imagen fija, usa el archivo local
+            ? require(`@/assets/${this.getImagenFileName(peinado.nombre)}`)
+            : require("@/assets/default.png"), // Usa la imagen por defecto si no hay URL ni nombre fijo
       }));
 
       console.log("Peinados cargados:", this.peinados);

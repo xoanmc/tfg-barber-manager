@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,8 +25,8 @@ public class PeinadoService {
     @Value("${properties.upload.path}")
     private String uploadBasePath;
 
-    @Value("${properties.clientHost}")
-    private String clientHost;
+    @Value("${app.base.url}")
+    private String appBaseUrl;
 
     public List<Peinado> obtenerTodosLosPeinados() {
         return peinadoDao.findAll();
@@ -78,7 +79,7 @@ public class PeinadoService {
             Files.createDirectories(rutaDirectorio);
         }
 
-        String nombreArchivo = System.currentTimeMillis() + "_" + imagen.getOriginalFilename().replaceAll("[^a-zA-Z0-9\\.\\-_]", "_");
+        String nombreArchivo = UUID.randomUUID() + "_" + imagen.getOriginalFilename().replaceAll("[^a-zA-Z0-9\\.\\-_]", "_");
         Path rutaArchivo = rutaDirectorio.resolve(nombreArchivo);
 
         Files.copy(imagen.getInputStream(), rutaArchivo);
@@ -86,7 +87,7 @@ public class PeinadoService {
         // Log para depuración
         System.out.println("Archivo guardado en: " + rutaArchivo.toString());
 
-        return clientHost + "/api/peinados/images/" + nombreArchivo;
+        return appBaseUrl + "/api/peinados/images/" + nombreArchivo;
     }
 
     public void toggleTendencia(Long id) {

@@ -100,7 +100,7 @@ h2 {
   color: white;
   padding: 10px;
   text-align: center;
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.3s ease;
 }
 
