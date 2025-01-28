@@ -11,9 +11,9 @@ public class Horario {
     private Long id;
 
     @ManyToOne
-    private Empleado barbero;  // Relación con el barbero
+    private Empleado barbero;
 
-    private String diaSemana; // Ejemplo: "Lunes", "Martes", etc.
+    private String diaSemana;
     private LocalTime horaInicio;
     private LocalTime horaFin;
 

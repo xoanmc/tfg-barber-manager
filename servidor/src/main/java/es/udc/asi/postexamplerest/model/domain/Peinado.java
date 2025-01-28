@@ -12,15 +12,15 @@ public class Peinado {
     private String nombre;
 
     @Column(length = 1000)
-    private String descripcionTendencias;  // descripción para la pantalla de tendencias
+    private String descripcionTendencias;
 
     @Column(length = 1000)
-    private String descripcionRecomendador;  // descripción para el recomendador de peinados
+    private String descripcionRecomendador;
 
     private boolean tendencia;
 
     @ElementCollection(fetch = FetchType.EAGER, targetClass = EstructuraFacial.class)
-    @Enumerated(EnumType.STRING) // Almacena los valores como texto en la base de datos
+    @Enumerated(EnumType.STRING) // almacena valores como texto en BD
     @CollectionTable(name = "peinado_estructura_facial", joinColumns = @JoinColumn(name = "peinado_id"))
     @Column(name = "estructura_facial")
     private List<EstructuraFacial> estructurasFaciales;

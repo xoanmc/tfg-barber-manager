@@ -21,10 +21,9 @@ public class Review {
     private int calificacion;
     private LocalDate fecha;
 
-    @Transient  // Campo transitorio, no persistente en la BD
+    @Transient  // campo transitorio, no persistente en la BD
     private String barberoLogin;
 
-    // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public Empleado getBarbero() { return barbero; }

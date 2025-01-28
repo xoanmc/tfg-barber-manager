@@ -15,20 +15,17 @@ public class ServiciosResource {
   @Autowired
   private ServiciosService serviciosService;
 
-  // Cualquier persona puede obtener la lista de servicios
   @GetMapping
   public List<Servicio> getServicios() {
     return serviciosService.findAll();
   }
 
-  // Solo los jefes pueden actualizar la lista de servicios
   @PreAuthorize("hasAuthority('JEFE')")
   @PostMapping("/update")
   public void updateServicios(@RequestBody List<Servicio> servicios) {
     serviciosService.updateServicios(servicios);
   }
 
-  // Eliminar un servicio por ID
   @PreAuthorize("hasAuthority('JEFE')")
   @DeleteMapping("/{id}")
   public void deleteServicio(@PathVariable Long id) {

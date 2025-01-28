@@ -48,12 +48,11 @@ public class UsuarioService {
     private TokenProvider tokenProvider;
 
     @Value("${app.base.url}")
-    private String appBaseUrl; // Base URL para generar enlaces de confirmación
+    private String appBaseUrl;
 
     @Value("${properties.upload.path}")
     private String uploadBasePath;
 
-    // Método para obtener la URL de la imagen de perfil
     public String getProfileImageUrl(Long userId) throws NotFoundException {
         Usuario usuario = usuarioDAO.findById(userId);
         if (usuario == null) {
@@ -62,7 +61,6 @@ public class UsuarioService {
         return usuario.getProfileImageUrl();
     }
 
-    // Métodos para encontrar y gestionar clientes y empleados
     @PreAuthorize("hasAuthority('JEFE')")
     public List<ClienteListaDTO> findAllClientes() {
         return usuarioDAO.findAllClientes().stream()
@@ -84,7 +82,6 @@ public class UsuarioService {
                 .collect(Collectors.toList());
     }
 
-    // Método para buscar un usuario por ID
     public AccountDTO findById(Long id) throws NotFoundException {
         Usuario usuario = usuarioDAO.findById(id);
         if (usuario == null) {
@@ -113,15 +110,13 @@ public class UsuarioService {
         cliente.setPassword(encryptedPassword);
         cliente.setCitas(citas);
         cliente.setPrimeraCita(primeraCita);
-        cliente.setActivo(false); // Cliente inactivo hasta que confirme el correo
+        cliente.setActivo(false); // cliente inactivo hasta que confirme correo
 
-        // Generar token JWT de confirmación
         String confirmationToken = tokenProvider.createEmailVerificationToken(cliente.getLogin());
         cliente.setConfirmationToken(confirmationToken);
 
         usuarioDAO.create(cliente);
 
-        // Enviar correo solo si sendEmail es true
         if (sendEmail) {
             sendConfirmationEmail(cliente, confirmationToken);
         }
@@ -129,7 +124,6 @@ public class UsuarioService {
         return cliente;
     }
 
-    // Método para enviar el correo de confirmación
     private void sendConfirmationEmail(Cliente cliente, String token) {
         String confirmationUrl = appBaseUrl + "/api/confirm-registration?token=" + token;
         String subject = "Confirma tu registro";
@@ -148,13 +142,11 @@ public class UsuarioService {
             throw new NotFoundException("Usuario no encontrado", Cliente.class);
         }
 
-        cliente.setActivo(true); // Activar cliente
-        cliente.setConfirmationToken(null); // Limpiar el token
+        cliente.setActivo(true);
+        cliente.setConfirmationToken(null);
         usuarioDAO.update(cliente);
     }
 
-
-    // Registrar Empleado con todos los campos adicionales
     @Transactional(readOnly = false)
     public void registerEmpleado(String nombre, String apellido, String telefono, LocalDate fechaNacimiento,
                                  String puesto, String email, String login, String password, double salario,
@@ -196,7 +188,7 @@ public class UsuarioService {
         jefe.setNombre(nombre);
         jefe.setApellido(apellido);
         jefe.setTelefono(telefono);
-        jefe.setEmail(email); // Establecer email
+        jefe.setEmail(email);
         jefe.setLogin(login);
         jefe.setPassword(encryptedPassword);
 
@@ -227,7 +219,7 @@ public class UsuarioService {
 
     @Transactional(readOnly = false)
     public AccountDTO updateProfile(AccountDTO accountDTO) throws NotFoundException, OperationNotAllowed {
-        // Obtener el usuario autenticado
+
         String currentUserLogin = SecurityUtils.getCurrentUserLogin();
         if (currentUserLogin == null) {
             throw new OperationNotAllowed("No se puede identificar al usuario actual");
@@ -238,12 +230,10 @@ public class UsuarioService {
             throw new NotFoundException("Usuario no encontrado: " + currentUserLogin, Usuario.class);
         }
 
-        // Validar que el ID proporcionado en el DTO coincide con el usuario autenticado
         if (!user.getId().equals(accountDTO.getId())) {
             throw new OperationNotAllowed("No puedes editar el perfil de otro usuario");
         }
 
-        // Validar que el email no esté en uso por otro usuario
         if (accountDTO.getEmail() != null && !accountDTO.getEmail().equals(user.getEmail())) {
             Usuario existingUser = usuarioDAO.findByEmail(accountDTO.getEmail());
             if (existingUser != null) {
@@ -251,19 +241,17 @@ public class UsuarioService {
             }
         }
 
-        // Validar que el login no pueda ser cambiado
         if (accountDTO.getLogin() != null && !accountDTO.getLogin().equals(user.getLogin())) {
             throw new OperationNotAllowed("No se permite cambiar el login del usuario");
         }
 
-        // Actualizar los datos permitidos
         if (accountDTO.getNombre() != null) user.setNombre(accountDTO.getNombre());
         if (accountDTO.getApellido() != null) user.setApellido(accountDTO.getApellido());
         if (accountDTO.getEmail() != null) user.setEmail(accountDTO.getEmail());
         if (accountDTO.getTelefono() != null) user.setTelefono(accountDTO.getTelefono());
         if (accountDTO.getFechaNacimiento() != null) user.setFechaNacimiento(accountDTO.getFechaNacimiento());
 
-        // Campos adicionales para empleados
+        // campos adicionales para empleados
         if (user instanceof Empleado empleado) {
             if (accountDTO.getHorario() != null) empleado.setHorario(accountDTO.getHorario());
             if (accountDTO.getDescripcion() != null) empleado.setDescripcion(accountDTO.getDescripcion());
@@ -282,11 +270,9 @@ public class UsuarioService {
         }
 
         Empleado empleado = (Empleado) usuario;
-        empleado.setDespedido(true); // Cambiar el estado a despedido
-        usuarioDAO.update(empleado); // Persistir el cambio en la base de datos
+        empleado.setDespedido(true);
+        usuarioDAO.update(empleado);
     }
-
-
 
     @Transactional(readOnly = false)
     public void bloquearCliente(Long id) throws NotFoundException {
@@ -318,7 +304,7 @@ public class UsuarioService {
             throw new NotFoundException(userId.toString(), Usuario.class);
         }
 
-        // Crear directorio si no existe
+        // crear directorio si no existe
         String uploadDir = uploadBasePath + "/profile-images/";
         File directory = new File(uploadDir);
         if (!directory.exists()) {
@@ -328,7 +314,6 @@ public class UsuarioService {
             }
         }
 
-        // Guardar el archivo
         String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
         File destinationFile = new File(uploadDir + fileName);
 
@@ -340,7 +325,6 @@ public class UsuarioService {
             throw new IOException("Error al guardar el archivo: " + e.getMessage(), e);
         }
 
-        // Actualizar la URL en el modelo y guardarla en la base de datos
         String imageUrl = appBaseUrl + "/api/images/profile/" + fileName;
         user.setProfileImageUrl(imageUrl);
         usuarioDAO.update(user);
@@ -356,7 +340,6 @@ public class UsuarioService {
             throw new NotFoundException("Usuario con el correo: " + email + " no encontrado.", Usuario.class);
         }
 
-        // Generar token de recuperación
         String token = UUID.randomUUID().toString();
         usuario.setPasswordRecoveryToken(token);
         System.out.println("Actualizando usuario con token: " + token);
@@ -364,7 +347,7 @@ public class UsuarioService {
         System.out.println("Usuario actualizado.");
 
 
-        // Enviar correo con instrucciones
+        // enviar correo con instrucciones
         String recoveryUrl = appBaseUrl + "/api/reset-password?token=" + token;
         String subject = "Recuperación de contraseña";
         String message = String.format(
@@ -385,9 +368,9 @@ public class UsuarioService {
         }
         System.out.println("Usuario encontrado: " + usuario.getLogin());
 
-        // Validar el token y actualizar la contraseña
+        // validar token y actualizar contraseña
         usuario.setPassword(passwordEncoder.encode(newPassword));
-        usuario.setPasswordRecoveryToken(null); // Limpiar el token después de usarlo
+        usuario.setPasswordRecoveryToken(null);
         usuarioDAO.update(usuario);
     }
 }

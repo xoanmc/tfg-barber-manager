@@ -49,18 +49,15 @@ public class TokenProvider {
     SecretKey key = Keys.hmacShaKeyFor(properties.getJwtSecretKey().getBytes(StandardCharsets.UTF_8));
     Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken).getBody();
 
-    // Obtiene login (nombre de usuario) desde el token
     String login = claims.getSubject();
     GrantedAuthority authority = new SimpleGrantedAuthority(claims.get(AUTHORITIES_KEY).toString());
     Collection<GrantedAuthority> authorities = Collections.singleton(authority);
 
-    // Carga usuario desde la base de datos
     Usuario usuario = userDAO.findByLogin(login); // Asegúrate de tener acceso a `userDAO` en esta clase
     if (usuario == null) {
       throw new UsernameNotFoundException("User " + login + " not found");
     }
 
-    // Envuelve `Usuario` en `CustomUserPrincipal`
     CustomUserPrincipal customUserPrincipal = new CustomUserPrincipal(usuario);
     return new UsernamePasswordAuthenticationToken(customUserPrincipal, authToken, authorities);
   }

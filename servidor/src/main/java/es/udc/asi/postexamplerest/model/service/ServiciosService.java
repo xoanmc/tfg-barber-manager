@@ -23,9 +23,9 @@ public class ServiciosService {
   public void updateServicios(List<Servicio> servicios) {
     for (Servicio servicio : servicios) {
       if (servicio.getId() == null) {
-        serviciosDao.create(servicio); // Crear nuevo servicio
+        serviciosDao.create(servicio);
       } else {
-        serviciosDao.update(servicio); // Actualizar servicio existente
+        serviciosDao.update(servicio);
       }
       System.out.println("Servicio guardado: " + servicio.getNombre() + " - Precio: " + servicio.getPrecio());
     }

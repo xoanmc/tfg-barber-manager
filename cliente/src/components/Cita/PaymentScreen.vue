@@ -1,6 +1,15 @@
 <template>
   <div class="container py-5 d-flex justify-content-center align-items-center vh-100">
-    <div class="card shadow-lg" style="max-width: 500px; width: 100%; border-radius: 15px;">
+
+    <!-- Banner de éxito animado -->
+    <div v-if="showBanner" class="alert alert-success text-center fade-in" role="alert">
+      <p class="mb-2 fw-bold">¡Reserva realizada con éxito!</p>
+      <p>Recibirá un mail cuando el barbero confirme la cita.</p>
+      <button class="btn btn-primary mt-3" @click="redirectToHome">Aceptar</button>
+    </div>
+
+    <!-- Formulario de pago -->
+    <div v-else class="card shadow-lg w-100 mx-3" style="max-width: 500px; border-radius: 15px;">
       <div class="card-body p-4">
         <h2 class="card-title text-center text-primary mb-4">Confirma tu Reserva</h2>
 
@@ -44,25 +53,6 @@
             Reservar
           </button>
         </div>
-
-        <!-- Modal de confirmación -->
-        <div v-if="mostrarAlerta" class="modal d-flex align-items-center justify-content-center"
-          style="background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050;">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">{{ alertaTitulo }}</h5>
-                <button type="button" class="btn-close" @click="cerrarAlerta"></button>
-              </div>
-              <div class="modal-body">
-                <p>{{ alertaMensaje }}</p>
-              </div>
-              <div class="modal-footer">
-                <button class="btn btn-primary" @click="cerrarAlerta">Aceptar</button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -82,13 +72,13 @@ export default {
   },
   data() {
     return {
+      showBanner: false,
       cita: {},
       barberos: [],
       servicios: [],
       precioOriginal: 0,
       precioConDescuento: 0,
       metodoPago: "sin_pago", // 'paypal' o 'sin_pago'
-      mostrarAlerta: false,
       alertaTitulo: "",
       alertaMensaje: "",
     };
@@ -164,23 +154,17 @@ export default {
       try {
         console.log("Reservando cita con datos:", this.cita);
         await CitaRepository.reservarCita(this.cita);
-        this.mostrarAlertaPersonalizada("¡Éxito!", "Cita reservada con éxito. Pendiente de confirmación por el barbero");
+        this.showBanner = true;
       } catch (error) {
         console.error("Error al reservar la cita:", error);
-        this.mostrarAlertaPersonalizada("Error", "Ocurrió un error al reservar la cita. Por favor, inténtelo de nuevo.");
+        alert("Ocurrió un error al reservar la cita. Por favor, inténtelo de nuevo.");
       }
     },
     handlePayPalError(error) {
       console.error("Error con PayPal:", error);
-      this.mostrarAlertaPersonalizada("Error de pago", "Hubo un problema con el pago de PayPal. Intente de nuevo.");
+      alert("Hubo un problema con el pago de PayPal. Intente de nuevo.");
     },
-    mostrarAlertaPersonalizada(titulo, mensaje) {
-      this.alertaTitulo = titulo;
-      this.alertaMensaje = mensaje;
-      this.mostrarAlerta = true;
-    },
-    cerrarAlerta() {
-      this.mostrarAlerta = false;
+    redirectToHome() {
       this.$router.push({ name: "Home" });
     },
   },
@@ -192,6 +176,13 @@ export default {
   border: none;
   border-radius: 15px;
   background-color: #f8f9fa;
+}
+
+.alert {
+  max-width: 400px;
+  margin: 0 auto;
+  border-radius: 15px;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
 .card-title {
@@ -273,18 +264,6 @@ input:checked+.slider:before {
   transform: translateX(14px);
 }
 
-.modal {
-  z-index: 1050 !important;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .text-danger {
   color: red !important;
 }
@@ -299,5 +278,17 @@ input:checked+.slider:before {
 
 .me-2 {
   margin-right: 0.5rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

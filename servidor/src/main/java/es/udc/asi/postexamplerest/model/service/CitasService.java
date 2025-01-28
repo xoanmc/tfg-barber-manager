@@ -69,18 +69,18 @@ public class CitasService {
         cita.setCliente(clienteAutenticado);
         cita.setServicio(servicio);
 
-        // Validar conflicto de horarios del barbero
+        // validar conflicto de horarios del barbero
         List<Cita> citasConflicto = citasDao.findCitasByBarberoIdAndFecha(barbero.getId(), cita.getFecha());
 
-        // Calcular el rango de tiempo de la nueva cita
+        // calcular rango de tiempo de la nueva cita
         LocalTime inicioNuevaCita = cita.getHora();
-        LocalTime finNuevaCita = inicioNuevaCita.plusMinutes(30); // Duración estándar de la cita
+        LocalTime finNuevaCita = inicioNuevaCita.plusMinutes(30); // duración estándar de la cita
 
         boolean conflicto = citasConflicto.stream().anyMatch(citaExistente -> {
             LocalTime inicioExistente = citaExistente.getHora();
-            LocalTime finExistente = inicioExistente.plusMinutes(30); // Duración estándar de las citas existentes
+            LocalTime finExistente = inicioExistente.plusMinutes(30);
 
-            // Verificar si hay solapamiento entre las citas
+            // verificar solapamiento entre citas
             return inicioNuevaCita.isBefore(finExistente) && finNuevaCita.isAfter(inicioExistente);
         });
 
@@ -92,10 +92,8 @@ public class CitasService {
             cita.setPreferencias("");
         }
 
-        // Crear cita en la base de datos
         Cita nuevaCita = citasDao.create(cita);
 
-        // Envío del correo al cliente informando que la cita está pendiente de confirmación
         String detallesCita = String.format(
                 "- Servicio: %s\n- Barbero: %s %s\n- Fecha: %s\n- Hora: %s\n- Preferencias: %s",
                 servicio.getNombre(),
@@ -119,7 +117,6 @@ public class CitasService {
                 detallesCita
         );
 
-
         return nuevaCita;
     }
 
@@ -131,7 +128,7 @@ public class CitasService {
         cita.setEstado("Confirmada");
         citasDao.update(cita);
 
-        // Envío del correo al cliente informando que su cita ha sido confirmada
+        // envío de correo al cliente -> cita confirmada
         String detallesCita = String.format(
                 "- Servicio: %s\n- Barbero: %s %s\n- Fecha: %s\n- Hora: %s\n- Preferencias: %s",
                 cita.getServicio().getNombre(),
@@ -164,5 +161,4 @@ public class CitasService {
         if (cita == null) throw new RuntimeException("Cita no encontrada.");
         citasDao.delete(cita);
     }
-
 }

@@ -20,7 +20,6 @@ public class EmpleadoListaDTO {
     private boolean despedido;
     private String imagen;
 
-    // Constructor
     public EmpleadoListaDTO(Empleado empleado) {
         this.id = empleado.getId();
         this.nombre = empleado.getNombre();
@@ -37,7 +36,6 @@ public class EmpleadoListaDTO {
         this.imagen = empleado.getProfileImageUrl();
     }
 
-    // Getters y setters
     public Long getId() {
         return id;
     }

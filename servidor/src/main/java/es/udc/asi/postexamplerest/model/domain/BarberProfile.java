@@ -13,11 +13,11 @@ public class BarberProfile {
     private String nombre;
     private String apellido;
     private String descripcion;
-    private String imagenPerfil; // Nombre del archivo de imagen
-    private String login; // Identificador único para URL amigable
+    private String imagenPerfil;
+    private String login;
 
     @OneToMany(mappedBy = "barbero", cascade = CascadeType.ALL)
-    private List<Horario> horarios; // Horarios del barbero
+    private List<Horario> horarios;
 
     public BarberProfile() {
     }
@@ -29,7 +29,6 @@ public class BarberProfile {
         this.login = login;
     }
 
-    // Getters y Setters
     public Long getId() {
         return id;
     }

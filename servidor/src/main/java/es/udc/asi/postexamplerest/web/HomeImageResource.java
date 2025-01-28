@@ -24,7 +24,6 @@ public class HomeImageResource {
     @GetMapping("/{filename:.+}")
     public ResponseEntity<Resource> getImage(@PathVariable String filename) {
         try {
-            // Construir la ruta completa utilizando la variable configurada
             String uploadDir = uploadBasePath + "/homepage-images/";
             Path imagePath = Paths.get(uploadDir).resolve(filename).normalize();
 
@@ -34,7 +33,6 @@ public class HomeImageResource {
                 return ResponseEntity.notFound().build();
             }
 
-            // Determinar el tipo de contenido dinámicamente
             String contentType = Files.probeContentType(imagePath);
             if (contentType == null) {
                 contentType = "application/octet-stream";

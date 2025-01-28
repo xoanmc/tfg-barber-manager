@@ -33,12 +33,11 @@
         throw new UsernameNotFoundException("User " + login + " not found");
       }
 
-      // Verificar si el usuario es un cliente y si está activo
       if (user instanceof Cliente cliente && !cliente.isActivo()) {
         throw new UsernameNotFoundException("User " + login + " has not confirmed registration yet.");
       }
 
       logger.info("Loaded user {} with authority {}", login, user.getAutoridad().name());
-      return new CustomUserPrincipal(user);  // Asegúrate de devolver CustomUserPrincipal
+      return new CustomUserPrincipal(user);
     }
   }

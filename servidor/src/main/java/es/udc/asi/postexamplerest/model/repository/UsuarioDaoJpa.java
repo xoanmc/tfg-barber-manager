@@ -95,7 +95,4 @@ public class UsuarioDaoJpa extends GenericDaoJpa implements UsuarioDao {
                 .findFirst()
                 .orElse(null);
     }
-
-
-
 }

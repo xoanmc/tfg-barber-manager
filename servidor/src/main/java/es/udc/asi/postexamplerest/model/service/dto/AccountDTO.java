@@ -24,15 +24,15 @@ public class AccountDTO {
   private String puesto;
   private String autoridad;
 
-  @JsonFormat(pattern = "yyyy-MM-dd") // Formato explícito para la fecha
+  @JsonFormat(pattern = "yyyy-MM-dd") // formato explícito para la fecha
   private LocalDate fechaNacimiento;
 
   private double salario;
   private String contrato;
-  private int citas;  // Campo para el número de citas del cliente
-  private String primeraCita;  // Campo para la fecha de la primera cita
-  private String horario;  // Campo para empleados
-  private String descripcion;  // Campo para empleados
+  private int citas;
+  private String primeraCita;
+  private String horario;
+  private String descripcion;
   private String fotoPerfil;
 
   public AccountDTO() {
@@ -42,18 +42,18 @@ public class AccountDTO {
     this.id = usuario.getId();
     this.nombre = usuario.getNombre();
     this.apellido = usuario.getApellido();
-    this.email = usuario.getEmail(); // Asignar el nuevo campo email
+    this.email = usuario.getEmail();
     this.telefono = usuario.getTelefono();
     this.login = usuario.getLogin();
 
-    // Si es un cliente, llenamos campos adicionales para clientes
+    // campos adicionales para clientes
     if (usuario instanceof Cliente cliente) {
       this.citas = cliente.getCitas();
       this.primeraCita = cliente.getPrimeraCita();
-      this.fechaNacimiento = cliente.getFechaNacimiento(); // Campo fechaNacimiento
+      this.fechaNacimiento = cliente.getFechaNacimiento();
     }
 
-    // Si es un empleado, llenamos campos adicionales para empleados
+    // campos adicionales para empleados
     if (usuario instanceof Empleado empleado) {
       this.puesto = empleado.getPuesto();
       this.salario = empleado.getSalario();
@@ -64,8 +64,6 @@ public class AccountDTO {
 
     this.autoridad = usuario.getAutoridad().name();
   }
-
-  // Getters y Setters para todos los campos
 
   public Long getId() {
     return id;
@@ -194,5 +192,4 @@ public class AccountDTO {
   public void setDescripcion(String descripcion) {
     this.descripcion = descripcion;
   }
-
 }

@@ -144,7 +144,9 @@ export default {
 </script>
 
 <style scoped>
+
 h2 {
+  margin-top: 50px;
   font-size: 2.5rem;
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95);

@@ -51,7 +51,6 @@ public class PeinadoResource {
         }
     }
 
-
     @PostMapping("/guardar")
     @PreAuthorize("hasAuthority('JEFE')")
     public ResponseEntity<String> guardarPeinado(

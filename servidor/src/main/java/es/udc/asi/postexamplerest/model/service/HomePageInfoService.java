@@ -23,7 +23,6 @@ public class HomePageInfoService {
         HomePageInfo info = homePageInfoDao.find();
 
         if (info.getImagen() != null && !info.getImagen().isEmpty()) {
-            // URL absoluta al endpoint REST
             String imageUrl = "http://localhost:8080/api/images/homepage/" + info.getImagen();
             info.setImagen(imageUrl);
         }
@@ -33,31 +32,26 @@ public class HomePageInfoService {
 
     @Transactional(readOnly = false)
     public void updateHomePageInfo(HomePageInfo homePageInfo) {
-        // Método de sobrecarga para aceptar solo HomePageInfo sin imagen
         homePageInfoDao.update(homePageInfo);
     }
 
     @Transactional(readOnly = false)
     public void updateHomePageInfo(HomePageInfo updatedInfo, MultipartFile imagen) {
         try {
-            // Recupera la instancia existente desde la base de datos
             HomePageInfo existingInfo = homePageInfoDao.find();
 
             if (existingInfo == null) {
                 throw new RuntimeException("No existe información de la página de inicio.");
             }
 
-            // Actualiza los campos que se reciben
             existingInfo.setNombre(updatedInfo.getNombre());
             existingInfo.setDescripcion(updatedInfo.getDescripcion());
 
-            // Si se proporciona una nueva imagen, guárdala y actualiza el nombre del archivo
             if (imagen != null && !imagen.isEmpty()) {
                 String fileName = saveHomePageImage(imagen);
                 existingInfo.setImagen(fileName);
             }
 
-            // Guarda la información actualizada
             homePageInfoDao.update(existingInfo);
 
         } catch (IOException e) {
@@ -78,7 +72,6 @@ public class HomePageInfoService {
 
         imagen.transferTo(destinationFile);
 
-        // Verificar si la imagen se guarda correctamente
         System.out.println("Imagen guardada en: " + destinationFile.getAbsolutePath());
 
         return fileName;

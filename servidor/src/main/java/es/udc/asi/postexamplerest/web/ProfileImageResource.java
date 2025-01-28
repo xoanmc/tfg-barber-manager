@@ -22,7 +22,7 @@ public class ProfileImageResource {
 
     @GetMapping("/{fileName}")
     public ResponseEntity<Resource> getProfileImage(@PathVariable String fileName) {
-        // Construye el directorio dinámicamente usando uploadBasePath
+
         String uploadDir = uploadBasePath + "/profile-images/";
         try {
             File file = new File(uploadDir + fileName);

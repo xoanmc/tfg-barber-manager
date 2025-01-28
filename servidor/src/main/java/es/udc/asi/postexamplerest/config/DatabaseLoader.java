@@ -54,7 +54,7 @@ public class DatabaseLoader {
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     public void loadData() throws UserLoginExistsException {
 
-        // Registro de clientes
+        // registro de clientes
         Cliente pepe = userService.registerCliente(
                 "pepe",
                 "pereira",
@@ -85,7 +85,7 @@ public class DatabaseLoader {
         maria.setActivo(true); // Marcar como activo
         userDAO.update(maria);
 
-        // Registro de empleados
+        // registro de empleados
         Empleado empleado1 = new Empleado();
         empleado1.setNombre("ronaldo");
         empleado1.setApellido("nazario");
@@ -176,7 +176,7 @@ public class DatabaseLoader {
         empleado6.setDespedido(false);
         userDAO.create(empleado6);
 
-        //Horarios
+        //horarios
         horarioDao.create(new Horario(empleado1, "Lunes", LocalTime.of(9, 0), LocalTime.of(18, 0)));
         horarioDao.create(new Horario(empleado1, "Martes", LocalTime.of(9, 0), LocalTime.of(18, 0)));
         horarioDao.create(new Horario(empleado1, "Miércoles", LocalTime.of(9, 0), LocalTime.of(18, 0)));
@@ -213,7 +213,7 @@ public class DatabaseLoader {
         horarioDao.create(new Horario(empleado6, "Viernes", LocalTime.of(11, 0), LocalTime.of(19, 0)));
         horarioDao.create(new Horario(empleado6, "Sábado", LocalTime.of(10, 0), LocalTime.of(17, 0)));
 
-        // Registro de jefes
+        // registro de jefes
         userService.registerJefe(
                 "lucia",
                 "lopez",
@@ -223,7 +223,7 @@ public class DatabaseLoader {
                 "lucia"
         );
 
-        // Cargar datos por defecto en la tabla de HomePageInfo
+        // cargar datos por defecto en HomePageInfo
         if (homePageInfoDao.find() == null) {
             HomePageInfo homePageInfo = new HomePageInfo("TFG Barber", "La mejor barbería de la ciudad.");
             homePageInfoService.updateHomePageInfo(homePageInfo);
@@ -232,7 +232,7 @@ public class DatabaseLoader {
             System.out.println("HomePageInfo ya está cargado.");
         }
 
-        // Cargar servicios predeterminados si no existen
+        // cargar servicios predeterminados
         if (serviciosDao.findAll().isEmpty()) {
             Servicio cortar = new Servicio("Cortar", "Corte de cabello estándar", 15.00);
             Servicio afeitar = new Servicio("Afeitar", "Afeitado tradicional con toalla caliente", 10.00);
@@ -247,7 +247,7 @@ public class DatabaseLoader {
             System.out.println("Los servicios ya están cargados.");
         }
 
-        // Cargar datos por defecto de AboutPageInfo si no existe
+        // cargar datos por defecto de AboutPageInfo
         if (aboutPageInfoDao.find() == null) {
             AboutPageInfo aboutPageInfo = new AboutPageInfo();
             aboutPageInfo.setDescripcion("Nuestra barbería nació con la misión de ofrecer un espacio donde tradición y " +
@@ -263,7 +263,7 @@ public class DatabaseLoader {
             System.out.println("AboutPageInfo ya está cargado.");
         }
 
-        // Cargar peinados predeterminados
+        // cargar peinados predeterminados
         if (peinadoDao.findByTendenciaTrue().isEmpty()) {
             Peinado modernPompadour = new Peinado();
             modernPompadour.setNombre("The Modern Pompadour");
@@ -360,13 +360,12 @@ public class DatabaseLoader {
             System.out.println("Los peinados en tendencia ya están cargados.");
         }
 
-        // Obtener la lista completa de servicios y filtrar por nombre
         List<Servicio> servicios = serviciosDao.findAll();
         Servicio cortar = servicios.stream().filter(s -> s.getNombre().equals("Cortar")).findFirst().orElseThrow(() -> new RuntimeException("Servicio 'Cortar' no encontrado"));
         Servicio afeitar = servicios.stream().filter(s -> s.getNombre().equals("Afeitar")).findFirst().orElseThrow(() -> new RuntimeException("Servicio 'Afeitar' no encontrado"));
         Servicio cortarAfeitar = servicios.stream().filter(s -> s.getNombre().equals("Cortar + Afeitar")).findFirst().orElseThrow(() -> new RuntimeException("Servicio 'Cortar + Afeitar' no encontrado"));
 
-        //Citas precargadas
+        // citas precargadas
         Cita cita1 = new Cita(null, pepe, empleado2, LocalDate.of(2025, 8, 25), LocalTime.of(10, 0), "Confirmada", cortar);
         cita1.setPreferencias("Sin preferencias");
         citaDao.create(cita1);

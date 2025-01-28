@@ -19,7 +19,7 @@ public class Cita {
     private Usuario cliente;  // relación con el cliente
 
     @ManyToOne
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NONE) // Deshabilita el uso de type info
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
     private Usuario barbero;  // relación con el barbero
 
     @JsonFormat(pattern = "yyyy-MM-dd")

@@ -24,21 +24,18 @@ public class HorariosResource {
     @Autowired
     private HorariosService horariosService;
 
-    // Obtener horarios de un barbero específico
     @GetMapping("/barbero/{barberoId}")
     @PreAuthorize("hasAuthority('EMPLEADO') or hasAuthority('CLIENTE')")
     public List<Horario> obtenerHorariosPorBarbero(@PathVariable Long barberoId) {
         return horariosService.obtenerHorariosPorBarbero(barberoId);
     }
 
-    // Actualizar horarios de un barbero
     @PostMapping("/barbero/{barberoId}")
     @PreAuthorize("hasAuthority('EMPLEADO')")
     public void actualizarHorario(@PathVariable Long barberoId, @RequestBody List<Horario> horarios) {
         horariosService.actualizarHorario(barberoId, horarios);
     }
 
-    // Obtener todos los horarios
     @GetMapping("/todos")
     @PreAuthorize("hasAuthority('CLIENTE')")
     public List<Map<String, Object>> obtenerTodosLosHorarios() {
@@ -71,6 +68,4 @@ public class HorariosResource {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Formato de fecha inválido");
         }
     }
-
-
 }

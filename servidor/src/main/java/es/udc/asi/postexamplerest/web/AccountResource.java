@@ -130,7 +130,7 @@ public class AccountResource {
             String login = tokenProvider.validateEmailVerificationToken(token);
             userService.confirmarRegistro(login);
 
-            // Redirige al frontend
+            // redirige al frontend
             return ResponseEntity.status(302)
                     .header("Location", "http://localhost:1234/confirmRegistration?success=true")
                     .build();

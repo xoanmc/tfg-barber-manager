@@ -13,7 +13,6 @@ public interface CitaDao {
 
   void update(Cita cita);
 
-  // Eliminar una cita por su ID
   void delete(Cita cita);
 
   Cita findById(Long id);

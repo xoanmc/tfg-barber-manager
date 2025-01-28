@@ -11,7 +11,6 @@ public class PromocionDTO {
     private LocalDate fechaFin;
     private boolean activo;
 
-    // Getters y Setters
     public Long getId() {
         return id;
     }

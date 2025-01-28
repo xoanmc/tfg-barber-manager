@@ -10,5 +10,4 @@ public interface PeinadoDao {
     Peinado save(Peinado peinado);
     Optional<Peinado> findById(Long id);
     List<Peinado> findAll();
-    //List<Peinado> findByEstructurasFacialesContaining(EstructuraFacial estructuraFacial);
 }

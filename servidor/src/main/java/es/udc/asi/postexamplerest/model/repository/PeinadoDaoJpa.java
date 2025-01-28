@@ -38,6 +38,4 @@ public class PeinadoDaoJpa extends GenericDaoJpa implements PeinadoDao {
     public List<Peinado> findAll() {
         return entityManager.createQuery("SELECT p FROM Peinado p", Peinado.class).getResultList();
     }
-
-
 }

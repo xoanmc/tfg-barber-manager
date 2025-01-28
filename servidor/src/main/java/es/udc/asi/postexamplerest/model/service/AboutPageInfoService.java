@@ -57,7 +57,6 @@ public class AboutPageInfoService {
         }
     }
 
-
     private String saveAboutPageImage(MultipartFile imagen) throws IOException {
         String uploadDir = UPLOAD_DIR + "/about-images/";
 

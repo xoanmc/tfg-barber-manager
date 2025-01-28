@@ -37,10 +37,8 @@ public class MailService {
             message.setText(text);
             mailSender.send(message);
 
-            // Log para confirmar envío exitoso
             logger.info("Correo de confirmación enviado a: {}", to);
         } catch (Exception e) {
-            // Log para capturar cualquier error al enviar el correo
             logger.error("Error al enviar el correo de confirmación a: {}", to, e);
         }
     }
@@ -61,10 +59,8 @@ public class MailService {
             message.setText(text);
             mailSender.send(message);
 
-            // Log para confirmar envío exitoso
             logger.info("Correo de recuperación de contraseña enviado a: {}", to);
         } catch (Exception e) {
-            // Log para capturar cualquier error al enviar el correo
             logger.error("Error al enviar el correo de recuperación de contraseña a: {}", to, e);
         }
     }
@@ -115,8 +111,7 @@ public class MailService {
     @Async
     public void sendBarberNotificationEmail(String to, String nombreBarbero, String nombreCliente, String detallesCita) {
         try {
-            // Enlace para que el barbero confirme la cita
-            String urlConfirmacion = clientHost + "/empleadoCitas";  // Utiliza el host del cliente
+            String urlConfirmacion = clientHost + "/empleadoCitas";
 
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to);

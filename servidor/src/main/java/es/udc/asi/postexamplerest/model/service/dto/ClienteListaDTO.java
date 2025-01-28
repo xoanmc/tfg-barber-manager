@@ -24,13 +24,12 @@ public class ClienteListaDTO {
         this.nombre = cliente.getNombre();
         this.apellido = cliente.getApellido();
         this.telefono = cliente.getTelefono();
-        this.fechaNacimiento = cliente.getFechaNacimiento(); // Asignar fechaNacimiento
+        this.fechaNacimiento = cliente.getFechaNacimiento();
         this.citas = cliente.getCitas();
         this.primeraCita = cliente.getPrimeraCita();
         this.activo = cliente.isActivo();
     }
 
-    // Getters y setters
     public Long getId() {
         return id;
     }

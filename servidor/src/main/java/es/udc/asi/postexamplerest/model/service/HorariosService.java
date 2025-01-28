@@ -32,12 +32,10 @@ public class HorariosService {
     @Autowired
     private CitaDao citaDao;
 
-    // Obtener horarios por barbero
     public List<Horario> obtenerHorariosPorBarbero(Long barberoId) {
         return horarioDao.findByBarberoId(barberoId);
     }
 
-    // Crear o actualizar horarios
     public void actualizarHorario(Long barberoId, List<Horario> horariosActualizados) {
         Usuario usuario = usuarioDao.findById(barberoId);
         if (usuario == null || !(usuario instanceof Empleado)) {
@@ -45,19 +43,15 @@ public class HorariosService {
         }
         Empleado barbero = (Empleado) usuario;
 
-
-        // Eliminar los horarios actuales del barbero
         List<Horario> horariosExistentes = horarioDao.findByBarberoId(barberoId);
         horariosExistentes.forEach(horarioDao::delete);
 
-        // Guardar los nuevos horarios
         horariosActualizados.forEach(horario -> {
             horario.setBarbero(barbero);
             horarioDao.create(horario);
         });
     }
 
-    // Obtener todos los horarios (para disponibilidad general)
     public List<Horario> obtenerTodosLosHorarios() {
         return horarioDao.findAll();
     }
@@ -70,13 +64,11 @@ public class HorariosService {
         System.out.println("Fecha seleccionada: " + fecha);
         System.out.println("Día de la semana: " + diaSemana);
 
-        // Filtrar horarios por día de la semana
         List<Horario> horariosDia = horarios.stream()
                 .filter(h -> h.getDiaSemana().equalsIgnoreCase(diaSemana))
                 .collect(Collectors.toList());
         System.out.println("Horarios del barbero para el día seleccionado: " + horariosDia);
 
-        // Obtener todas las citas existentes para el día y barbero
         List<Cita> citasDelDia = citaDao.findCitasByBarberoIdAndFecha(barberoId, fecha);
         System.out.println("Citas existentes para el día seleccionado: " + citasDelDia);
 
@@ -87,12 +79,12 @@ public class HorariosService {
                 LocalTime finalSlot = slot;
                 LocalTime slotFin = slot.plusMinutes(30);
 
-                // Verificar si el slot actual está ocupado
+                // verificar si slot actual está ocupado
                 boolean ocupado = citasDelDia.stream().anyMatch(cita -> {
                     LocalTime citaInicio = cita.getHora();
                     LocalTime citaFin = citaInicio.plusMinutes(30); // Duración estándar de las citas
 
-                    // Comprobar si el slot actual se solapa con una cita existente
+                    // comprobar si slot actual se solapa con una cita existente
                     return (finalSlot.isBefore(citaFin) && slotFin.isAfter(citaInicio));
                 });
 
@@ -106,6 +98,4 @@ public class HorariosService {
         System.out.println("Slots disponibles calculados: " + slotsDisponibles);
         return slotsDisponibles;
     }
-
-
 }

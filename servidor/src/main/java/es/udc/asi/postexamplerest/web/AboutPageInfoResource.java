@@ -55,7 +55,6 @@ public class AboutPageInfoResource {
         }
     }
 
-
     @GetMapping("/barberos")
     public ResponseEntity<List<EmpleadoListaDTO>> getBarberos() {
         try {

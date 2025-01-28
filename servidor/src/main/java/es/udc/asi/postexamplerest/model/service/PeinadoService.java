@@ -45,17 +45,15 @@ public class PeinadoService {
 
     public void guardarPeinado(String nombre, String descripcionTendencias, String estructurasFaciales, MultipartFile imagen) {
         try {
-            // Convertir estructuras faciales a lista
+            // convertir estructuras faciales a lista
             List<EstructuraFacial> listaEstructuras = Arrays.stream(estructurasFaciales.split(","))
                     .map(String::trim)
                     .map(String::toUpperCase)
                     .map(EstructuraFacial::valueOf)
                     .collect(Collectors.toList());
 
-            // Guardar la imagen en el disco
             String urlImagen = guardarImagenPeinado(imagen);
 
-            // Crear y guardar el objeto Peinado
             Peinado nuevoPeinado = new Peinado();
             nuevoPeinado.setNombre(nombre);
             nuevoPeinado.setDescripcionTendencias(descripcionTendencias);

@@ -12,6 +12,7 @@
         <div class="col-lg-6">
           <div class="card shadow-lg">
             <div class="card-body text-center">
+              
               <!-- Componente para manejar la imagen de perfil -->
               <ProfileImage
                 :userId="myuser.id"

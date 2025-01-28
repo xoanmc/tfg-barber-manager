@@ -18,10 +18,10 @@ public class Empleado extends Usuario {
     private String contrato;
 
     @Column
-    private String horario;  // Nuevo campo para el horario de trabajo
+    private String horario;
 
     @Column
-    private String descripcion;  // Nuevo campo para la descripción del empleado
+    private String descripcion;
 
     @Column(nullable = true)
     private boolean despedido = false;

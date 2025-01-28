@@ -11,7 +11,7 @@ public class AboutPageInfo {
 
     @Column(columnDefinition = "TEXT")
     private String descripcion;
-    private String imagen;  // Nombre del archivo de imagen
+    private String imagen;
 
     public AboutPageInfo() {
     }

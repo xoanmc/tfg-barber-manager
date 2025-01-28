@@ -41,11 +41,10 @@ public class CitasResource {
     @PostMapping("/reservar")
     @PreAuthorize("hasAuthority('CLIENTE')")
     public Cita reservarCita(@RequestBody CitaDTO citaDTO, Authentication authentication) {
-        // Obtener el cliente autenticado
+
         CustomUserPrincipal customUserPrincipal = (CustomUserPrincipal) authentication.getPrincipal();
         Usuario cliente = customUserPrincipal.getUsuario();
 
-        // Buscar el barbero y el servicio por ID usando los servicios correspondientes
         Usuario barbero = citasService.findBarberoById(citaDTO.getBarberoId());
         Servicio servicio = citasService.findServicioById(citaDTO.getServicioId());
 
@@ -64,7 +63,6 @@ public class CitasResource {
         cita.setHora(citaDTO.getHora());
         cita.setPreferencias(citaDTO.getPreferencias());
 
-        // Reservar la cita
         return citasService.reservarCita(cita, cliente);
     }
 
@@ -101,5 +99,4 @@ public class CitasResource {
     public void rechazarCita(@PathVariable Long citaId) {
         citasService.rechazarCita(citaId);
     }
-
 }

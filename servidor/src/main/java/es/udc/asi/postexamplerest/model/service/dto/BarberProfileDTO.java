@@ -10,7 +10,7 @@ public class BarberProfileDTO {
     private String apellido;
     private String login;
     private String descripcion;
-    private String imagenPerfil;  // URL de la imagen
+    private String imagenPerfil;
     private List<Horario> horarios;
 
     public BarberProfileDTO(String nombre, String apellido, String login, String descripcion, String imagenPerfil, List<Horario> horarios) {

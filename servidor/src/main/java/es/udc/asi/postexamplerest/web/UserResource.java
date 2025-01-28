@@ -43,7 +43,6 @@ public class UserResource {
         return userService.findAllBarberos();
     }
 
-    // Endpoint para subir la imagen de perfil
     @PostMapping("/upload/{userId}")
     public ResponseEntity<Map<String, String>> uploadProfileImage(@PathVariable Long userId, @RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
@@ -51,7 +50,6 @@ public class UserResource {
         }
 
         try {
-            // Prints para depuración
             System.out.println("Subiendo imagen para usuario ID: " + userId);
             System.out.println("Nombre del archivo: " + file.getOriginalFilename());
             System.out.println("Tamaño del archivo: " + file.getSize());
@@ -69,7 +67,6 @@ public class UserResource {
         }
     }
 
-    // Endpoint para obtener la URL de la imagen de perfil
     @GetMapping("/profile-image/{userId}")
     public ResponseEntity<Map<String, String>> getProfileImage(@PathVariable Long userId) {
         try {
@@ -82,13 +79,11 @@ public class UserResource {
         }
     }
 
-    // Endpoint para obtener la información de un usuario por ID
     @GetMapping("/{id}")
     public AccountDTO findOne(@PathVariable Long id) throws NotFoundException {
         return userService.findById(id);
     }
 
-    // Endpoint para eliminar un usuario por ID
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) throws NotFoundException, OperationNotAllowed {
         userService.deleteById(id);
@@ -108,6 +103,4 @@ public class UserResource {
         }
 
     }
-
-
 }

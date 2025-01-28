@@ -1,13 +1,13 @@
 <template>
     <div class="container py-5">
-        <!-- Botón de Volver -->
-        <div class="mb-4">
+        <!-- Contenedor para alinear el botón y el título -->
+        <div class="header-container">
             <button @click="volverAlRecomendador" class="btn btn-secondary">
                 ← Volver al Recomendador
             </button>
+            <h2 class="text-primary">Peinados Recomendados para {{ tipoRostro }}</h2>
         </div>
 
-        <h2 class="text-center text-primary mb-4">Peinados Recomendados para {{ tipoRostro }}</h2>
         <div v-if="peinados.length > 0" class="grid-container">
             <div class="grid-item" v-for="peinado in peinados" :key="peinado.id">
                 <img :src="getImagenSrc(peinado)" :alt="peinado.nombre" />
@@ -23,6 +23,7 @@
         </div>
     </div>
 </template>
+
 
 
 
@@ -104,6 +105,17 @@ export default {
 </script>
 
 <style scoped>
+
+/* Contenedor del botón y el título */
+.header-container {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between; /* Alinea el botón a la izquierda y el título a la derecha */
+    align-items: center; /* Asegura alineación vertical */
+    margin-bottom: 20px; /* Espaciado inferior */
+}
+
+/* Estilos del botón */
 .btn-secondary {
     background-color: #6c757d;
     border: none;
@@ -119,14 +131,19 @@ export default {
     background-color: #5a6268;
 }
 
+/* Estilos del título */
 h2 {
     font-size: 2.5rem;
     font-weight: bold;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95);
     color: #0d6efd;
+    flex-grow: 1; /* Permite que el título ocupe el espacio restante */
+    text-align: center; /* Centra el texto dentro del espacio asignado */
 }
 
+
 .grid-container {
+    margin-top: 50px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;

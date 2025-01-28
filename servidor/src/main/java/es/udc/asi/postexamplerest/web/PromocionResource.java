@@ -26,7 +26,6 @@ public class PromocionResource {
                 .toList();
     }
 
-
     @GetMapping("/{servicioId}/{fecha}")
     public List<Promocion> findPromociones(@PathVariable Long servicioId, @PathVariable LocalDate fecha) {
         return promocionService.findPromocionesByServicioAndFecha(new Servicio(servicioId), fecha);
@@ -39,7 +38,6 @@ public class PromocionResource {
         Promocion savedPromocion = promocionService.savePromocion(promocion);
         return toDTO(savedPromocion);
     }
-
 
     @PreAuthorize("hasAuthority('JEFE')")
     @PutMapping("/{id}")
@@ -73,7 +71,6 @@ public class PromocionResource {
         dto.setActivo(promocion.isActivo());
         return dto;
     }
-
 
     private Promocion toEntity(PromocionDTO dto) {
         Promocion promocion = new Promocion();

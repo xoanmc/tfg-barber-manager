@@ -232,6 +232,14 @@ export default {
 </script>
 
 <style scoped>
+h1 {
+  margin-top: 50px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95);
+  color: #0d6efd;
+}
+
 .promociones-container {
   text-align: center;
   padding: 50px 20px;
@@ -288,6 +296,13 @@ export default {
 
 .text-danger {
   color: red;
+}
+
+.text-muted {
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7);
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #f8f9fa;
 }
 
 .form-container {

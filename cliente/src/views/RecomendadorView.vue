@@ -48,6 +48,7 @@ export default {
 
 <style scoped>
 h2 {
+  margin-top: 50px;
   font-size: 2.5rem;
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95);
@@ -60,6 +61,7 @@ h2 {
 }
 
 .grid-container {
+  margin-top: 50px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "properties")
 public class Properties {
-  // Necesario para usarlo en JWTFilter
+  // necesario para usarlo en JWTFilter
   public static String CLIENT_HOST;
 
   private String clientHost;

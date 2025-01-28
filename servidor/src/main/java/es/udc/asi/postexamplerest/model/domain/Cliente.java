@@ -13,13 +13,13 @@ public class Cliente extends Usuario {
   private int citas;
 
   @Column
-  private String primeraCita; // Fecha de la primera cita
+  private String primeraCita;
 
   @Column(name = "confirmation_token", unique = true)
   private String confirmationToken;
 
   @Column
-  private boolean activo = false; // Campo específico para validar el registro de clientes
+  private boolean activo = false;
 
   public Cliente() {
     setAutoridad(AutoridadUsuario.CLIENTE);

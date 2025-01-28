@@ -61,7 +61,6 @@ public class CitaDaoJpa extends GenericDaoJpa implements CitaDao {
     return query.getResultList();
   }
 
-
   @Override
   public List<Cita> findCitasByClienteIdAndFechaHoraBetween(Long clienteId, LocalDateTime inicio, LocalDateTime fin) {
     TypedQuery<Cita> query = entityManager.createQuery("SELECT c FROM Cita c WHERE c.cliente.id = :clienteId AND c.fechaHora BETWEEN :inicio AND :fin", Cita.class);
@@ -79,5 +78,4 @@ public class CitaDaoJpa extends GenericDaoJpa implements CitaDao {
     query.setParameter("fecha", fecha);
     return query.getResultList();
   }
-
 }
