@@ -84,12 +84,10 @@ export default {
     this.loadContent();
     this.loadProfessionals();
 
-    // Escuchar el evento de actualización de imagen de perfil
     eventBus.on("profile-image-updated", this.loadProfessionals);
   },
   beforeUnmount() {
 
-    // Eliminar la suscripción al desmontar el componente
     eventBus.off("profile-image-updated", this.loadProfessionals);
   },
   methods: {
@@ -97,8 +95,8 @@ export default {
       try {
         const response = await AboutRepository.getContent();
         console.log("Datos recibidos:", response);
-        this.aboutInfo.descripcion = response.descripcion; // Asignar descripción correctamente
-        this.aboutInfo.imagen = response.imagen || this.defaultAboutImage; // Asignar imagen o por defecto
+        this.aboutInfo.descripcion = response.descripcion;
+        this.aboutInfo.imagen = response.imagen || this.defaultAboutImage;
       } catch (error) {
         console.error("Error al cargar el contenido de la barbería", error);
       }
@@ -107,7 +105,7 @@ export default {
       try {
         const response = await AboutRepository.getProfessionals();
         this.profesionales = response
-          .filter((profesional) => !profesional.despedido) // Excluir empleados despedidos
+          .filter((profesional) => !profesional.despedido)
           .map((profesional) => ({
             ...profesional,
             imagen: profesional.imagen || profesional.profileImageUrl,

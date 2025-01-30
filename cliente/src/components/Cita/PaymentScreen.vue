@@ -110,24 +110,21 @@ export default {
         if (servicioSeleccionado) {
           this.precioOriginal = servicioSeleccionado.precio;
 
-          // Obtener promociones activas para el servicio en la fecha seleccionada
           const promociones = await PromocionRepository.getPromociones(
             servicioSeleccionado.id,
             this.cita.fecha
           );
 
-          // Filtrar promociones válidas para el servicio específico y fecha
           const promocionesValidas = promociones.filter((promocion) => {
             const fechaActual = new Date(this.cita.fecha);
             return (
-              promocion.servicioId === servicioSeleccionado.id && // Verificar que sea para el servicio correcto
+              promocion.servicioId === servicioSeleccionado.id && 
               promocion.activo &&
               fechaActual >= new Date(promocion.fechaInicio) &&
               fechaActual <= new Date(promocion.fechaFin)
             );
           });
 
-          // Si hay promociones válidas, aplicar la que tiene el mayor descuento
           if (promocionesValidas.length > 0) {
             const mayorPromocion = promocionesValidas.reduce((max, promocion) =>
               promocion.porcentajeDescuento > max.porcentajeDescuento ? promocion : max
@@ -135,7 +132,7 @@ export default {
             const descuento = mayorPromocion.porcentajeDescuento / 100;
             this.precioConDescuento = this.precioOriginal * (1 - descuento);
           } else {
-            this.precioConDescuento = this.precioOriginal; // Sin descuento
+            this.precioConDescuento = this.precioOriginal; 
           }
         }
       } catch (error) {

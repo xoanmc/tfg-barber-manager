@@ -79,7 +79,7 @@ export default {
           }))
           .sort((a, b) => new Date(a.fechaHora) - new Date(b.fechaHora));
 
-        this.citasFiltradas = this.citas; // Inicializar con todas las citas
+        this.citasFiltradas = this.citas;
       } catch (error) {
         console.error("Error obteniendo las citas del barbero", error);
       }
@@ -87,10 +87,10 @@ export default {
 
     filtrarPorFecha() {
       if (!this.filtroFecha) {
-        this.citasFiltradas = this.citas; // Mostrar todas si no se selecciona fecha
+        this.citasFiltradas = this.citas; 
       } else {
         this.citasFiltradas = this.citas.filter(cita => {
-          const fechaCita = new Date(cita.fecha).toISOString().split('T')[0]; // Convertir a "YYYY-MM-DD"
+          const fechaCita = new Date(cita.fecha).toISOString().split('T')[0]; // convertir a "YYYY-MM-DD"
           return fechaCita === this.filtroFecha;
         });
       }
@@ -115,7 +115,7 @@ export default {
     async confirmarCita(citaId) {
       try {
         await CitaRepository.confirmarCita(citaId);
-        await this.fetchCitas(); // Actualizar las citas después de confirmar
+        await this.fetchCitas();
       } catch (error) {
         console.error("Error confirmando cita", error);
         alert("Error al confirmar la cita");
@@ -125,7 +125,7 @@ export default {
     async rechazarCita(citaId) {
       try {
         await CitaRepository.rechazarCita(citaId);
-        await this.fetchCitas(); // Actualizar las citas después de rechazar
+        await this.fetchCitas();
       } catch (error) {
         console.error("Error rechazando cita", error);
         alert("Error al rechazar la cita");

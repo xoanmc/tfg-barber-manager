@@ -198,9 +198,7 @@ export default {
 
 
 <style>
-/* Fondo global */
 .global-background {
-  /*position: relative;*/
   background-image: url('~@/assets/background.jpg');
   background-size: cover;
   background-attachment: fixed;
@@ -236,7 +234,6 @@ export default {
 
 .navbar {
   background-color: transparent;
-  /* Inicialmente transparente */
   position: fixed;
   top: 0;
   width: 100%;
@@ -245,10 +242,8 @@ export default {
 }
 
 .navbar.scrolled {
-  background-color: rgba(0, 0, 0, 0.8);
-  /* Color al hacer scroll */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  /* Sombra para efecto */
+  background-color: rgba(0, 0, 0, 0.8);      /* color al hacer scroll */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* sombra para efecto */
 }
 
 .navbar .nav-link {
@@ -260,16 +255,13 @@ export default {
 }
 
 .navbar-brand {
-  color: white !important;
-  /* Logo en blanco */
+  color: white !important; /* logo en blanco */
 }
 
 .logo-circle {
   height: 40px;
   width: 40px;
-  border-radius: 50%;
-  /* hace que la imagen sea circular */
-  object-fit: cover;
-  /* para que la imagen se ajuste dentro del círculo */
+  border-radius: 50%; /* hace que la imagen sea circular */
+  object-fit: cover;  /* para que la imagen se ajuste dentro del círculo */
 }
 </style>

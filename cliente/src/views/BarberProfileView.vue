@@ -46,7 +46,7 @@ export default {
       barberProfile: {},
       defaultImage: require('@/assets/defaultProfileImage.jpg'),
       horariosFormateados: [],
-      isCliente: true,  // Para simular que el usuario es un cliente
+      isCliente: true, 
     };
   },
   methods: {

@@ -61,8 +61,8 @@ export default {
       myuser: null,
       imageUrl: "",
       loading: true,
-      horarios: [], // Horarios obtenidos del backend
-      horariosFormateados: [], // Horarios agrupados y formateados
+      horarios: [], 
+      horariosFormateados: [], 
     };
   },
   async mounted() {
@@ -104,10 +104,9 @@ export default {
           grupoActual.dias.length > 0 &&
           diasOrdenados.indexOf(horario.diaSemana) === diasOrdenados.indexOf(grupoActual.dias[grupoActual.dias.length - 1]) + 1
         ) {
-          // Si es consecutivo y tiene el mismo horario, añadir el día al grupo
+          // si es consecutivo y tiene el mismo horario, añadir el día al grupo
           grupoActual.dias.push(horario.diaSemana);
         } else {
-          // Guardar el grupo actual y empezar uno nuevo
           if (grupoActual.dias.length > 0) {
             grupos.push({ ...grupoActual });
           }
@@ -119,12 +118,10 @@ export default {
         }
       }
 
-      // Guardar el último grupo
       if (grupoActual.dias.length > 0) {
         grupos.push(grupoActual);
       }
 
-      // Formatear los grupos para la vista
       return grupos.map((grupo) => ({
         intervaloDias: grupo.dias.length > 1 ? `${grupo.dias[0]} - ${grupo.dias[grupo.dias.length - 1]}` : grupo.dias[0],
         horaInicio: grupo.horaInicio,

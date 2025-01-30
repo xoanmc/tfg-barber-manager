@@ -254,8 +254,7 @@ public class DatabaseLoader {
                     "modernidad se encuentren para brindar un servicio excepcional. Desde nuestros inicios, nos hemos " +
                     "dedicado a perfeccionar el arte del corte de cabello y el afeitado clásico, con un equipo de " +
                     "profesionales apasionados por su oficio. Con cada visita, nuestros clientes disfrutan de una " +
-                    "experiencia única, en un ambiente acogedor y lleno de estilo. Nuestra historia continúa escribiéndose " +
-                    "gracias a la confianza y fidelidad de cada cliente que nos acompaña en este viaje.");
+                    "experiencia única.");
             aboutPageInfo.setImagen(null);  // No hay imagen por defecto
             aboutPageInfoService.updateAboutPageInfo(aboutPageInfo, null);
             System.out.println("Datos por defecto de AboutPageInfo cargados.");

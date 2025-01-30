@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     async autenticarme() {
-      // Resetear mensajes de error antes de intentar autenticación
+      // resetear mensajes de error antes de intentar autenticación
       this.errors = {
         login: null,
         password: null,
@@ -75,24 +75,18 @@ export default {
       };
 
       try {
-        // Llamada al método de autenticación
         await auth.login({
           login: this.auxLogin,
           password: this.auxPass,
         });
 
-        // Redirigir al inicio si el login es exitoso
         this.$router.push("/");
       } catch (e) {
-        // Analizar el tipo de error recibido del servidor
         if (e.response && e.response.status === 401) {
-          // Credenciales incorrectas
           this.errors.general = "Credenciales incorrectas. Por favor, verifica tu login y contraseña.";
         } else if (e.response && e.response.status === 404) {
-          // Usuario no encontrado
           this.errors.login = "El usuario no existe.";
         } else {
-          // Error genérico
           this.errors.general = "Ocurrió un error inesperado. Por favor, inténtalo más tarde.";
         }
 

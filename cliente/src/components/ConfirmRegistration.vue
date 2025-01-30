@@ -23,10 +23,8 @@
       const query = this.$route.query;
   
       if (query.success === "true") {
-        // Mensaje de éxito
         this.message = "Registro confirmado exitosamente. Ahora puedes iniciar sesión.";
       } else {
-        // Mensaje de error basado en el código de error
         this.error = this.getErrorMessage(query.error);
       }
     },

@@ -108,10 +108,8 @@ export default {
     },
     promocionesFiltradas() {
       if (this.isJefe) {
-        // Mostrar todas las promociones al usuario jefe
         return this.promociones;
       } else {
-        // Solo mostrar promociones activas al cliente
         return this.promociones.filter((promocion) => promocion.activo);
       }
     },
@@ -174,13 +172,11 @@ export default {
           nuevaPromocion = await PromocionRepository.addPromocion(this.nuevaPromocion);
         }
 
-        // Obtener el nombre del servicio para mostrarlo en la tarjeta de promoción
         const servicio = this.servicios.find(
           (servicio) => servicio.id === nuevaPromocion.servicioId
         );
         nuevaPromocion.servicioNombre = servicio ? servicio.nombre : "Sin servicio asociado";
 
-        // Actualizar la lista de promociones
         if (this.editIndex !== null) {
           this.promociones[this.editIndex] = nuevaPromocion;
         } else {

@@ -1,43 +1,51 @@
 <template>
-    <div class="container py-5">
-      <h2 class="text-center text-primary mb-4">Elige tu tipo de rostro</h2>
-      <div class="grid-container">
-        <div
-          class="grid-item"
-          v-for="estructura in estructurasFaciales"
-          :key="estructura"
-          @click="irAPeinadosRecomendados(estructura)"
-        >
-          <img :src="getImagenEstructura(estructura)" :alt="estructura" />
-          <div class="image-overlay">
-            <h5>{{ estructura }}</h5>
-          </div>
+  <div class="container py-5">
+    <h2 class="text-center text-primary mb-4">Elige tu tipo de rostro</h2>
+    <div class="grid-container">
+      <div 
+        class="grid-item" 
+        v-for="estructura in estructurasFaciales" 
+        :key="estructura"
+        @click="irAPeinadosRecomendados(estructura)"
+      >
+        <img :src="getImagenEstructura(estructura)" :alt="estructuraFacialMap[estructura]" />
+        <div class="image-overlay">
+          <h5>{{ estructuraFacialMap[estructura] }}</h5>
         </div>
       </div>
     </div>
-  </template>
-  
-  
-  <script>
+  </div>
+</template>
+
+<script>
+import { estructuraFacialMap } from "@/estructuraFacialMap";
+
 export default {
   data() {
     return {
-      estructurasFaciales: [
-        "Ovalada",
-        "Redonda",
-        "Rectangular",
-        "Triangulo_Invertido",
-        "Cuadrado",
-        "Triangulo",
-        "Diamante",
-        "Corazon",
-        "Ovalado_Largo",
-      ],
+      estructuraFacialMap, 
+      estructurasFaciales: Object.keys(estructuraFacialMap),
     };
   },
   methods: {
     getImagenEstructura(estructura) {
-      return require(`@/assets/${estructura}.jpeg`); // Cambia según tu estructura de imágenes
+      if (!estructuraFacialMap[estructura]) {
+        console.warn(`No se encontró estructura para: ${estructura}`);
+        return require("@/assets/defaultBanner.jpg");
+      }
+
+      const nombreImagen = estructura
+        .normalize("NFD") // elimina acentos
+        .replace(/[\u0300-\u036f]/g, "")
+        //.toLowerCase()
+        .replace(/\s+/g, "_"); // sustituye espacios por "_"
+
+      try {
+        return require(`@/assets/${nombreImagen}.jpeg`);
+      } catch (e) {
+        console.warn(`Imagen no encontrada para ${nombreImagen}, usando imagen por defecto.`);
+        return require("@/assets/defaultBanner.jpg");
+      }
     },
     irAPeinadosRecomendados(estructura) {
       this.$router.push(`/trending/recomendador/${estructura}`);
@@ -117,4 +125,3 @@ h5 {
   text-transform: capitalize;
 }
 </style>
-

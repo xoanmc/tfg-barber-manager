@@ -57,22 +57,19 @@ export default {
   },
   async mounted() {
     try {
-      // Determinar si el usuario es jefe
       this.isJefe = auth.isJefe();
 
-      // Cargar peinados según el rol del usuario
       const peinadosCargados = this.isJefe
-        ? await PeinadoRepository.obtenerPeinados() // Cargar todos los peinados si es jefe
-        : await PeinadoRepository.obtenerPeinadosEnTendencia(); // Solo peinados en tendencia para otros usuarios
+        ? await PeinadoRepository.obtenerPeinados() 
+        : await PeinadoRepository.obtenerPeinadosEnTendencia(); 
 
-      // Mapear imágenes nuevas y precargadas
       this.peinados = peinadosCargados.map((peinado) => ({
         ...peinado,
-        imagen: peinado.urlImagen // Si tiene una URL de imagen, úsala directamente
+        imagen: peinado.urlImagen 
           ? peinado.urlImagen
-          : this.isImagenFija(peinado.nombre) // Si es una imagen fija, usa el archivo local
+          : this.isImagenFija(peinado.nombre)
             ? require(`@/assets/${this.getImagenFileName(peinado.nombre)}`)
-            : require("@/assets/default.png"), // Usa la imagen por defecto si no hay URL ni nombre fijo
+            : require("@/assets/default.png"), 
       }));
 
       console.log("Peinados cargados:", this.peinados);
@@ -92,7 +89,7 @@ export default {
       try {
         await PeinadoRepository.toggleTendencia(peinadoId);
         const peinado = this.peinados.find((p) => p.id === peinadoId);
-        peinado.tendencia = !peinado.tendencia; // alternar estado de tendencia
+        peinado.tendencia = !peinado.tendencia;
       } catch (error) {
         console.error("Error al actualizar la tendencia:", error);
       }
@@ -194,12 +191,10 @@ h2 {
   transform: translateY(100%);
   transition: transform 0.3s ease;
   opacity: 0;
-  /* Ocultar inicialmente */
 }
 
 .grid-item:hover .image-overlay {
-  opacity: 1;
-  /* Mostrar al pasar el cursor */
+  opacity: 1; /* mostrar al pasar cursor */
   transform: translateY(0);
 }
 
@@ -208,7 +203,6 @@ h2 {
   top: 10px;
   right: 10px;
   z-index: 2;
-  /* Asegura que esté encima de la imagen */
 }
 
 .toggle-button {

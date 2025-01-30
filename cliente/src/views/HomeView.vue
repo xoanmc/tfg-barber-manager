@@ -52,9 +52,9 @@ export default {
       homePageInfo: {
         nombre: "",
         descripcion: "",
-        imagen: "", // URL temporal de la imagen seleccionada
+        imagen: "", 
       },
-      selectedFile: null, // Archivo seleccionado
+      selectedFile: null, 
       defaultBanner: require('@/assets/defaultBanner.jpg'),
       isJefe: auth.isJefe(),
     };
@@ -79,7 +79,7 @@ export default {
         formData.append("descripcion", this.homePageInfo.descripcion);
 
         if (this.selectedFile) {
-          formData.append("imagen", this.selectedFile); // Añadir archivo si fue seleccionado
+          formData.append("imagen", this.selectedFile); 
         } else {
           console.warn("No se seleccionó ninguna imagen para subir.");
         }
@@ -102,10 +102,10 @@ export default {
     onFileChange(event) {
       const file = event.target.files[0];
       if (file) {
-        this.selectedFile = file; // signa archivo seleccionado
+        this.selectedFile = file; 
         const reader = new FileReader();
         reader.onload = (e) => {
-          this.homePageInfo.imagen = e.target.result; // URL temporal para previsualización
+          this.homePageInfo.imagen = e.target.result; 
         };
         reader.readAsDataURL(file);
       }
@@ -116,7 +116,6 @@ export default {
 </script>
 
 <style scoped>
-/* General estilos */
 .home-container {
   width: 100%;
   height: 100vh;
@@ -133,7 +132,7 @@ export default {
 }
 
 .overlay {
-  background-color: rgba(0, 0, 0, 0.6); /* Oscurece la imagen de fondo */
+  background-color: rgba(0, 0, 0, 0.6); /* oscurece imagen de fondo */
   position: absolute;
   top: 0;
   left: 0;
@@ -151,7 +150,6 @@ export default {
   text-align: center;
   max-width: 800px;
   margin-bottom: 50px;
-  /* Espacio adicional entre el contenido y el formulario */
 }
 
 .logo-img {
@@ -181,7 +179,6 @@ p {
   background-color: #0056b3;
 }
 
-/* Formulario */
 .form-container {
   max-width: 500px;
   background: white;

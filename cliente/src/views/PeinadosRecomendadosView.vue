@@ -5,7 +5,9 @@
             <button @click="volverAlRecomendador" class="btn btn-secondary">
                 ← Volver al Recomendador
             </button>
-            <h2 class="text-primary">Peinados Recomendados para {{ tipoRostro }}</h2>
+            <h2 class="text-primary">
+                Peinados para un rostro {{ nombreEstructuraFacial }}
+            </h2>
         </div>
 
         <div v-if="peinados.length > 0" class="grid-container">
@@ -29,20 +31,29 @@
 
 <script>
 import PeinadoRepository from "@/repositories/PeinadoRepository";
+import { estructuraFacialMap } from "@/estructuraFacialMap";
 
 export default {
     data() {
         return {
-            tipoRostro: this.$route.params.estructuraFacial,
+            claveEstructura: this.$route.params.estructuraFacial,
             peinados: [],
         };
     },
+    computed: {
+        nombreEstructuraFacial() {
+            return estructuraFacialMap[this.claveEstructura] || this.claveEstructura;
+        },
+    },
     async mounted() {
         try {
-            // Obtener peinados recomendados según la estructura facial
-            const peinadosCargados = await PeinadoRepository.obtenerPeinadosPorEstructura(this.tipoRostro);
+            if (!this.claveEstructura) {
+                throw new Error("Estructura facial no válida");
+            }
 
-            // Mapear imágenes nuevas y precargadas
+            // obtener peinados recomendados según la estructura facial en el formato esperado por el backend
+            const peinadosCargados = await PeinadoRepository.obtenerPeinadosPorEstructura(this.claveEstructura);
+
             this.peinados = peinadosCargados.map((peinado) => ({
                 ...peinado,
                 imagen: this.isImagenFija(peinado.nombre)
@@ -105,17 +116,14 @@ export default {
 </script>
 
 <style scoped>
-
-/* Contenedor del botón y el título */
 .header-container {
     margin-top: 50px;
     display: flex;
-    justify-content: space-between; /* Alinea el botón a la izquierda y el título a la derecha */
-    align-items: center; /* Asegura alineación vertical */
-    margin-bottom: 20px; /* Espaciado inferior */
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-/* Estilos del botón */
 .btn-secondary {
     background-color: #6c757d;
     border: none;
@@ -131,14 +139,13 @@ export default {
     background-color: #5a6268;
 }
 
-/* Estilos del título */
 h2 {
     font-size: 2.5rem;
     font-weight: bold;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95);
     color: #0d6efd;
-    flex-grow: 1; /* Permite que el título ocupe el espacio restante */
-    text-align: center; /* Centra el texto dentro del espacio asignado */
+    flex-grow: 1;
+    text-align: center;
 }
 
 

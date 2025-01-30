@@ -146,7 +146,7 @@ h1 {
 }
 
 .clickable-row:hover {
-  background-color: #f1f1f1; /* Color más claro al pasar el cursor */
+  background-color: #f1f1f1;
 }
 
 </style>

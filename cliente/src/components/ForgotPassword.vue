@@ -77,7 +77,7 @@ export default {
     cerrarAlerta() {
       this.mostrarAlerta = false;
       if (this.alertaTitulo === "¡Éxito!") {
-        this.$router.push("/login"); // Redirigir solo si la operación fue exitosa
+        this.$router.push("/login");
       }
     },
   },

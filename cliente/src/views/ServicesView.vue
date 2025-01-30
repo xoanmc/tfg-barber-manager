@@ -242,15 +242,15 @@ export default {
 h1 {
   font-size: 2.5rem;
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95); /* Sombreado para mejorar la legibilidad */
-  color: #f8f9fa; /* Color claro para contraste */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95); /* sombreado para mejorar la legibilidad */
+  color: #f8f9fa;  /* color claro para contraste */
 }
 
 h3 {
   font-size: 1.8rem;
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95); /* Sombreado para mejorar la legibilidad */
-  color: #f8f9fa; /* Color claro para contraste */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95); /* sombreado para mejorar la legibilidad */
+  color: #f8f9fa; /* color claro para contraste */
 }
 
 .d-flex.justify-content-center {

@@ -135,10 +135,10 @@ export default {
         },
         async checkAuth() {
             try {
-                await auth.isAuthenticationChecked;  // Espera a que se autentique
-                this.isCliente = auth.isCliente();  // Actualiza el estado de cliente
-                this.isJefe = auth.isJefe();  // Actualiza el estado de jefe
-                console.log("Rol del usuario:", getStore().state.user.autoridad);  // Muestra en consola
+                await auth.isAuthenticationChecked;  
+                this.isCliente = auth.isCliente();  
+                this.isJefe = auth.isJefe();  
+                console.log("Rol del usuario:", getStore().state.user.autoridad);  
             } catch (error) {
                 console.error("Error verificando autenticación:", error);
                 this.isCliente = false;

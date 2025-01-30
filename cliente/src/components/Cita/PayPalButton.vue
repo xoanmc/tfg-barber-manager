@@ -16,10 +16,10 @@
         return;
       }
   
-      // Renderizar el botón de PayPal
+      // eenderizar botón de PayPal
       window.paypal.Buttons({
         createOrder: (data, actions) => {
-          // Crear el pedido de PayPal con los detalles
+          // crear pedido de PayPal
           return actions.order.create({
             purchase_units: [
               {
@@ -33,7 +33,7 @@
           });
         },
         onApprove: async (data, actions) => {
-          // Capturar el pago
+          // capturar pago
           const order = await actions.order.capture();
           console.log("Pago realizado con éxito:", order);
           this.$emit("pago-completado", order);

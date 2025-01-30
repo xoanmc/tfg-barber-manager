@@ -18,7 +18,7 @@ export default {
     async addPromocion(promocion) {
         try {
             const response = await HTTP.post(`/promociones`, {
-                servicioId: promocion.servicioId, // Usamos servicioId como lo define el DTO
+                servicioId: promocion.servicioId,
                 porcentajeDescuento: promocion.porcentajeDescuento,
                 fechaInicio: promocion.fechaInicio,
                 fechaFin: promocion.fechaFin,

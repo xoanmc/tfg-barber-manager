@@ -151,7 +151,6 @@ export default {
         );
         this.horariosDisponibles = horarios;
 
-        // Recalcular servicios y precios según la fecha seleccionada
         await this.cargarServicios(this.cita.fecha);
       } catch (error) {
         console.error("Error obteniendo horarios disponibles:", error);
