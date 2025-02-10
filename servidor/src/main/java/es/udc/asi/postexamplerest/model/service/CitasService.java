@@ -146,7 +146,6 @@ public class CitasService {
         );
     }
 
-
     @Transactional(readOnly = false)
     public void rechazarCita(Long citaId) {
         Cita cita = citasDao.findById(citaId);

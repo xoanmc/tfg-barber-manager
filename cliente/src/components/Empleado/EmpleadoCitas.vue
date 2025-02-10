@@ -4,7 +4,7 @@
 
     <!-- Filtro por fecha -->
     <div class="text-center mb-4">
-      <label for="fechaFiltro" class="form-label fw-bold text-primary">Filtrar por Día</label>
+      <label for="fechaFiltro" class="form-label filtro-titulo">Filtrar por Día</label>
       <input type="date" id="fechaFiltro" v-model="filtroFecha" @change="filtrarPorFecha"
         class="form-control w-50 mx-auto" />
     </div>
@@ -169,5 +169,15 @@ h2 {
   font-size: 1.5rem;
   font-weight: bold;
   color: #f8f9fa;
+}
+
+.filtro-titulo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.95);
+  color: #0d6efd;
+  display: block;
+  text-align: center;
+  margin-bottom: 15px;
 }
 </style>
