@@ -25,7 +25,6 @@ Aplicación full-stack para gestionar reservas, clientes y servicios en barberí
 - Gestión de catálogo de servicios y precios.
 - Gestión de usuarios (clientes y barberos).
 - Creación de promociones y configuración global.
-- Panel de control con métricas básicas.
 
 ---
 
@@ -47,7 +46,8 @@ flowchart LR
     API[Spring Boot REST API]
     DB[(PostgreSQL)]
   end
-```
+
 
   UI -->|HTTP/JSON| API
   API --> DB
+```
