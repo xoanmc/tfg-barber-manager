@@ -77,7 +77,14 @@ export default {
             ...cita,
             fechaHora: `${cita.fecha}T${cita.hora}`,
           }))
-          .sort((a, b) => new Date(a.fechaHora) - new Date(b.fechaHora));
+          .sort((a, b) => {
+            if (a.estado === "Pendiente" && b.estado !== "Pendiente") {
+              return -1; // As citas Pendentes van primeiro
+            } else if (a.estado !== "Pendiente" && b.estado === "Pendiente") {
+              return 1;
+            }
+            return new Date(a.fechaHora) - new Date(b.fechaHora); // Se teñen o mesmo estado, ordenar por data
+          });
 
         this.citasFiltradas = this.citas;
       } catch (error) {
@@ -87,7 +94,7 @@ export default {
 
     filtrarPorFecha() {
       if (!this.filtroFecha) {
-        this.citasFiltradas = this.citas; 
+        this.citasFiltradas = this.citas;
       } else {
         this.citasFiltradas = this.citas.filter(cita => {
           const fechaCita = new Date(cita.fecha).toISOString().split('T')[0]; // convertir a "YYYY-MM-DD"

@@ -97,7 +97,7 @@ public class DatabaseLoader {
         empleado1.setPassword(passwordEncoder.encode("ronaldo"));
         empleado1.setSalario(2500.00);
         empleado1.setContrato("01/01/2023");
-        empleado1.setDescripcion("Especialista en cortes y afeitado tradicional");
+        empleado1.setDescripcion("Especialista en cortes y afeitado tradicional.");
         empleado1.setDespedido(false);
         userDAO.create(empleado1);
 
@@ -112,7 +112,7 @@ public class DatabaseLoader {
         empleado2.setPassword(passwordEncoder.encode("messi"));
         empleado2.setSalario(3000.00);
         empleado2.setContrato("01/06/2022");
-        empleado2.setDescripcion("Experto en cortes modernos y degradados");
+        empleado2.setDescripcion("Experto en cortes modernos y degradados.");
         empleado2.setDespedido(false);
         userDAO.create(empleado2);
 
@@ -127,7 +127,7 @@ public class DatabaseLoader {
         empleado3.setPassword(passwordEncoder.encode("neymar"));
         empleado3.setSalario(3000.00);
         empleado3.setContrato("11/02/2023");
-        empleado3.setDescripcion("Experto en cortes atrevidos");
+        empleado3.setDescripcion("Experto en cortes atrevidos.");
         empleado3.setDespedido(false);
         userDAO.create(empleado3);
 
@@ -404,6 +404,46 @@ public class DatabaseLoader {
         Cita cita10 = new Cita(null, maria, empleado2, LocalDate.of(2025, 9, 3), LocalTime.of(9, 30), "Confirmada", afeitar);
         cita10.setPreferencias("Afeitado suave y natural");
         citaDao.create(cita10);
+
+        Cita cita11 = new Cita(null, maria, empleado2, LocalDate.of(2025, 2, 28), LocalTime.of(16, 30), "Confirmada", afeitar);
+        cita10.setPreferencias("sin preferencias");
+        citaDao.create(cita11);
+
+        Cita cita12 = new Cita(null, maria, empleado2, LocalDate.of(2025, 2, 28), LocalTime.of(17, 0), "Confirmada", afeitar);
+        cita10.setPreferencias("sin preferencias");
+        citaDao.create(cita12);
+
+        Cita cita13 = new Cita(null, maria, empleado2, LocalDate.of(2025, 2, 28), LocalTime.of(18, 0), "Confirmada", afeitar);
+        cita10.setPreferencias("sin preferencias");
+        citaDao.create(cita13);
+
+        Cita cita14 = new Cita(null, maria, empleado2, LocalDate.of(2025, 2, 28), LocalTime.of(10, 30), "Confirmada", afeitar);
+        cita10.setPreferencias("sin preferencias");
+        citaDao.create(cita14);
+
+        Cita cita15 = new Cita(null, maria, empleado2, LocalDate.of(2025, 2, 28), LocalTime.of(11, 30), "Confirmada", afeitar);
+        cita10.setPreferencias("sin preferencias");
+        citaDao.create(cita15);
+
+        Cita cita16 = new Cita(null, maria, empleado2, LocalDate.of(2025, 2, 28), LocalTime.of(12, 0), "Confirmada", afeitar);
+        cita10.setPreferencias("sin preferencias");
+        citaDao.create(cita16);
+
+        Cita cita17 = new Cita(null, maria, empleado2, LocalDate.of(2025, 2, 28), LocalTime.of(13, 0), "Confirmada", afeitar);
+        cita10.setPreferencias("sin preferencias");
+        citaDao.create(cita17);
+
+        Cita cita18 = new Cita(null, maria, empleado2, LocalDate.of(2025, 2, 28), LocalTime.of(13, 30), "Confirmada", afeitar);
+        cita10.setPreferencias("sin preferencias");
+        citaDao.create(cita18);
+
+        Cita cita19 = new Cita(null, maria, empleado2, LocalDate.of(2025, 2, 28), LocalTime.of(15, 0), "Confirmada", afeitar);
+        cita10.setPreferencias("sin preferencias");
+        citaDao.create(cita19);
+
+        Cita cita20 = new Cita(null, maria, empleado2, LocalDate.of(2025, 2, 28), LocalTime.of(15, 30), "Confirmada", afeitar);
+        cita10.setPreferencias("sin preferencias");
+        citaDao.create(cita20);
 
         System.out.println("10 citas confirmadas con Lionel Messi creadas correctamente.");
     }

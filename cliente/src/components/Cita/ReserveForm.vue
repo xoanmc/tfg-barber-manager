@@ -31,7 +31,7 @@
           </select>
         </div>
         <div v-else class="text-muted mb-4">
-          <p>No hay horarios disponibles para la fecha seleccionada.</p>
+          <!-- <p>No hay horarios disponibles para la fecha seleccionada.</p> -->
         </div>
 
         <!-- Selección de servicio -->
