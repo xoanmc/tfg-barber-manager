@@ -1,11 +1,8 @@
 spring:
   datasource:
-    host: localhost
-    port: 5432
-    database: tfg
-    username: tfg
-    password: tfg
-    url: jdbc:postgresql://${spring.datasource.host}:${spring.datasource.port}/${spring.datasource.database}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/tfg}
+    username: ${SPRING_DATASOURCE_USERNAME:tfg}
+    password: ${SPRING_DATASOURCE_PASSWORD:tfg}
     hikari:
       connectionTimeout: 20000
       maximumPoolSize: 5
@@ -23,10 +20,10 @@ spring:
       mode: always
       continue-on-error: false
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: pepe11.perez91@gmail.com
-    password: dhvc hfet nieo afpr
+    host: ${SPRING_MAIL_HOST:smtp.gmail.com}
+    port: ${SPRING_MAIL_PORT:587}
+    username: ${SPRING_MAIL_USERNAME:pepe11.perez91@gmail.com}
+    password: ${SPRING_MAIL_PASSWORD:dhvc hfet nieo afpr}
     properties:
       mail:
         smtp:
@@ -48,11 +45,11 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 properties:
-  clientHost: http://localhost:1234
-  jwtSecretKey: iuabhsdfiasddfioasddfoa7w9earh324982h397239u23badswfasd2i9238723
-  jwtValidity: 7200
+  clientHost: ${PROPERTIES_CLIENTHOST:http://localhost:1234}
+  jwtSecretKey: ${PROPERTIES_JWTSECRET:dev-secret}
+  jwtValidity: ${PROPERTIES_JWTVALIDITY:7200}
   upload:
-    path: D:\TFG\tfg-barber\tfg\servidor\uploads # ruta donde se guardaran los archivos de subida
+    path: ${PROPERTIES_UPLOAD_PATH:/tmp/uploads}
 app:
   base:
-    url: http://localhost:8080
+    url: ${APP_BASE_URL:http://localhost:8080}
