@@ -51,3 +51,23 @@ flowchart LR
   UI -->|HTTP/JSON| API
   API --> DB
 ```
+
+## 🔧 Variables de entorno obligatorias
+
+Estas variables controlan la configuración del backend. Cada una puede definirse en el entorno y tiene el valor indicado por defecto:
+
+| Variable | Valor por defecto |
+|----------|------------------|
+| `SPRING_DATASOURCE_URL` | `jdbc:postgresql://localhost:5432/tfg` |
+| `SPRING_DATASOURCE_USERNAME` | `tfg` |
+| `SPRING_DATASOURCE_PASSWORD` | `tfg` |
+| `SPRING_MAIL_HOST` | `smtp.gmail.com` |
+| `SPRING_MAIL_PORT` | `587` |
+| `SPRING_MAIL_USERNAME` | `pepe11.perez91@gmail.com` |
+| `SPRING_MAIL_PASSWORD` | `dhvc hfet nieo afpr` |
+| `PROPERTIES_CLIENTHOST` | `http://localhost:1234` |
+| `PROPERTIES_JWTSECRET` | `dev-secret` |
+| `PROPERTIES_JWTVALIDITY` | `7200` |
+| `PROPERTIES_UPLOAD_PATH` | `/tmp/uploads` |
+| `APP_BASE_URL` | `http://localhost:8080` |
+
