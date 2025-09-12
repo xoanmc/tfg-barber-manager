@@ -52,6 +52,7 @@ flowchart LR
   API --> DB
 ```
 
+
 ## 🔧 Variables de entorno obligatorias
 
 Estas variables controlan la configuración del backend. Cada una puede definirse en el entorno y tiene el valor indicado por defecto:
@@ -70,4 +71,24 @@ Estas variables controlan la configuración del backend. Cada una puede definirs
 | `PROPERTIES_JWTVALIDITY` | `7200` |
 | `PROPERTIES_UPLOAD_PATH` | `/tmp/uploads` |
 | `APP_BASE_URL` | `http://localhost:8080` |
+
+
+## 🔧 Configuración del frontend
+
+El cliente de Vue puede apuntar a distintos backends mediante la
+variable de entorno `VUE_APP_BACKEND_URL`.
+
+- Durante el desarrollo se utiliza la URL definida en
+  `.env.development`.
+- Para producción se puede definir en `.env.production`.
+
+También es posible establecer la variable manualmente antes de ejecutar
+los comandos de Vue CLI:
+
+```bash
+VUE_APP_BACKEND_URL=http://localhost:8080/api npm run serve
+VUE_APP_BACKEND_URL=https://backend.example.com/api npm run build
+```
+
+Estas rutas se leen en `cliente/src/constants.js`.
 
