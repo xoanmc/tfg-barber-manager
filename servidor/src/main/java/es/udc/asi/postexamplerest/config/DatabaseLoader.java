@@ -8,6 +8,7 @@ import es.udc.asi.postexamplerest.model.service.HomePageInfoService;
 import es.udc.asi.postexamplerest.model.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Configuration
+@Profile("demo")
 public class DatabaseLoader {
 
     @Autowired
