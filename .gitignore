@@ -35,3 +35,11 @@ jspm_packages/
 # IDE files
 .vscode/
 .idea/
+
+# Configs locales de Spring (no subir)
+servidor/src/main/resources/application-local.yml
+servidor/src/main/resources/*-local.yml
+
+# (opcional) subidas locales
+uploads/
+
