@@ -6,6 +6,15 @@ Aplicación full-stack para gestionar reservas, clientes y servicios en barberí
 
 ---
 
+## 🚧 Estado del proyecto
+
+Actualmente el **código está completo y en GitHub** ✅.  
+El **despliegue en un entorno online ** está en proceso y pronto se añadirá aquí la URL de demo para poder probar la aplicación directamente.
+
+
+
+---
+
 ## ✨ Características clave
 
 **Para clientes**
@@ -52,25 +61,80 @@ flowchart LR
   API --> DB
 ```
 
+## 🚀 Ejecución en local
+
+Mientras la demo online está en proceso de despliegue, es posible ejecutar el proyecto en local siguiendo estos pasos:
+
+### 🔑 Requisitos
+
+- JDK 17+
+- Node.js 16+
+- PostgreSQL (crear base de datos `tfg`)
+
+### 📥 Clonar el repositorio
+```bash
+git clone <url-del-repo>
+cd tfg
+```
+
+### ⚙️ Configurar variables de entorno
+
+Edita tus credenciales en el entorno o en un fichero `.env`.  
+Ejemplo de configuración mínima:
+
+```env
+SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/tfg
+SPRING_DATASOURCE_USERNAME=<usuario>
+SPRING_DATASOURCE_PASSWORD=<contraseña>
+PROPERTIES_CLIENTHOST=http://localhost:1234
+APP_BASE_URL=http://localhost:8080
+```
+
+👉 Revisa la sección **Variables de entorno** para ver la lista completa.
+
+### ▶️ Levantar el backend
+```bash
+cd servidor
+./mvnw spring-boot:run
+```
+
+El backend quedará disponible en:  
+👉 http://localhost:8080/api
+
+### 💻 Levantar el frontend
+```bash
+cd cliente
+npm install
+npm run serve
+```
+
+El frontend quedará disponible en:  
+👉 http://localhost:1234, conectado al backend.
+
 
 ## 🔧 Variables de entorno obligatorias
 
 Estas variables controlan la configuración del backend. Cada una puede definirse en el entorno y tiene el valor indicado por defecto:
 
-| Variable | Valor por defecto |
+⚠️ **Nota:** por seguridad no se incluyen credenciales reales.  
+Configura tus propias credenciales en el entorno antes de ejecutar la aplicación.
+
+| Variable | Ejemplo |
 |----------|------------------|
 | `SPRING_DATASOURCE_URL` | `jdbc:postgresql://localhost:5432/tfg` |
 | `SPRING_DATASOURCE_USERNAME` | `tfg` |
-| `SPRING_DATASOURCE_PASSWORD` | `tfg` |
+| `SPRING_DATASOURCE_PASSWORD` | `password` |
 | `SPRING_MAIL_HOST` | `smtp.gmail.com` |
 | `SPRING_MAIL_PORT` | `587` |
-| `SPRING_MAIL_USERNAME` | `pepe11.perez91@gmail.com` |
-| `SPRING_MAIL_PASSWORD` | `dhvc hfet nieo afpr` |
+| `SPRING_MAIL_USERNAME` | `usuario@gmail.com` |
+| `SPRING_MAIL_PASSWORD` | `contraseña_de_app` |
 | `PROPERTIES_CLIENTHOST` | `http://localhost:1234` |
 | `PROPERTIES_JWTSECRET` | `dev-secret` |
 | `PROPERTIES_JWTVALIDITY` | `7200` |
 | `PROPERTIES_UPLOAD_PATH` | `/tmp/uploads` |
 | `APP_BASE_URL` | `http://localhost:8080` |
+
+---
 
 
 ## 🔧 Configuración del frontend
@@ -91,4 +155,9 @@ VUE_APP_BACKEND_URL=https://backend.example.com/api npm run build
 ```
 
 Estas rutas se leen en `cliente/src/constants.js`.
+
+## 📌 Próximos pasos
+- [ ] Despliegue de la aplicación en un servidor público.  
+- [ ] Añadir tests end-to-end con Cypress.  
+- [ ] Publicar demo accesible para cualquier usuario.  
 
