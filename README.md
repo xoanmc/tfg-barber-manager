@@ -46,6 +46,7 @@ El proyecto está en fase de desarrollo. Las funcionalidades básicas están en 
    cd tu-repo
    ```
 
+<<<<<<< HEAD
 2. Configura la base de datos:
    - Cambia las credenciales en el archivo `application.yml` ubicado en `src/main/resources` según tu configuración local.
 
@@ -64,3 +65,4 @@ El proyecto está en fase de desarrollo. Las funcionalidades básicas están en 
 5. Accede a la aplicación desde tu navegador:
    - **Frontend**: `http://localhost:8080`
    - **Backend API**: `http://localhost:1234/api`
+
