@@ -60,6 +60,9 @@ flowchart LR
   end
   UI -->|HTTP/JSON| API
   API --> DB
+```
+
+---
 
 ## ⚙️ Configuración del Proyecto
 
@@ -67,6 +70,8 @@ flowchart LR
 - **Java 17**
 - **PostgreSQL**
 - **Node.js y npm** (para el frontend)
+
+---
 
 ### Instalación
 
@@ -85,12 +90,26 @@ flowchart LR
    ```
 
 4. Ejecuta el frontend:
-   - Navega al directorio `cliente/` y ejecuta:
-     ```bash
-     npm install
-     npm run serve
-     ```
+   ```bash
+   cd cliente
+   npm install
+   npm run serve
+   ```
 
 5. Accede a la aplicación desde tu navegador:
-   - **Frontend**: `http://localhost:8080`
-   - **Backend API**: `http://localhost:1234/api`
+   - **Frontend**: [http://localhost:8080](http://localhost:8080)  
+   - **Backend API**: [http://localhost:1234/api](http://localhost:1234/api)
+
+---
+
+## 🚀 Estado Actual del Proyecto
+El proyecto está en fase de desarrollo. Las funcionalidades básicas están en proceso de implementación y se espera realizar iteraciones constantes para añadir mejoras y nuevas características.
+
+### Próximos Pasos
+- Mejoras en las interfaces de usuario para clientes y barberos.  
+- Optimización del sistema de notificaciones y recordatorios.  
+
+---
+
+## 🪪 Licencia
+Desarrollado como parte del **Trabajo Fin de Grado** en la **Facultad de Informática de la Universidad de A Coruña (UDC)**.
