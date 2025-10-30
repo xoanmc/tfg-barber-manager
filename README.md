@@ -40,6 +40,7 @@ El proyecto está en fase de desarrollo. Las funcionalidades básicas están en 
 
 ### Instalación
 
+<<<<<<< HEAD
 1. Clona este repositorio:
    ```bash
    git clone https://github.com/tu-usuario/tu-repo.git
@@ -65,4 +66,3 @@ El proyecto está en fase de desarrollo. Las funcionalidades básicas están en 
 5. Accede a la aplicación desde tu navegador:
    - **Frontend**: `http://localhost:8080`
    - **Backend API**: `http://localhost:1234/api`
-
