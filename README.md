@@ -1,37 +1,67 @@
+💈 Aplicación Web para la Gestión de Barberías (Spring + Vue + PostgreSQL)
 
 # Aplicación Web para la Gestión de Barberías
+Aplicación full-stack para gestionar reservas, clientes y servicios en barberías, con paneles diferenciados para **cliente**, **barbero** y **administrador**. Moderniza la operativa del negocio y mejora la experiencia del usuario con reservas online, notificaciones y valoraciones.
 
-Este repositorio contiene el código fuente de una aplicación web diseñada para facilitar la gestión de servicios en barberías. La aplicación está orientada tanto a barberos como a clientes, y tiene como objetivo optimizar la operatividad, mejorar la experiencia del cliente y modernizar la interacción entre ambos.
+Este repositorio contiene el código fuente de una aplicación web diseñada para facilitar la gestión de servicios en barberías. La aplicación está orientada tanto a barberos como a clientes, y tiene como objetivo optimizar la operatividad, mejorar la experiencia del cliente y modernizar la interacción entre ambos.  
+> 📄 **Memoria del TFG (UDC):** [http://hdl.handle.net/2183/41551](http://hdl.handle.net/2183/41551)
 
-## Descripción del Proyecto
+---
 
-En la era digital, la gestión eficiente de citas y servicios es fundamental para el éxito de las barberías. Esta aplicación busca resolver las limitaciones de los métodos tradicionales, como el uso de agendas manuales o llamadas telefónicas, mediante las siguientes funcionalidades clave:
+## ✨ Descripción del Proyecto
+En la era digital, la gestión eficiente de citas y servicios es fundamental para el éxito de las barberías.  
+Esta aplicación busca resolver las limitaciones de los métodos tradicionales, como el uso de agendas manuales o llamadas telefónicas, mediante las siguientes funcionalidades clave:
 
 ### Funcionalidades Principales
-- **Sistema de reservas y citas en línea**: Permite a los clientes agendar sus citas con facilidad y a los barberos optimizar su tiempo.
-- **Gestión de clientes y servicios**: Historial de servicios, preferencias personalizadas y administración de peinados.
-- **Panel de control para barberos**: Herramientas para la gestión de citas, servicios y perfiles profesionales.
-- **Feedback y calificaciones**: Mejora continua basada en las opiniones de los clientes.
-- **Sistema de notificaciones**: Alertas para recordar citas y notificar cambios en tiempo real.
+- **Sistema de reservas y citas en línea**: Permite a los clientes agendar sus citas con facilidad y a los barberos optimizar su tiempo.  
+- **Gestión de clientes y servicios**: Historial de servicios, preferencias personalizadas y administración de peinados.  
+- **Panel de control para barberos**: Herramientas para la gestión de citas, servicios y perfiles profesionales.  
+- **Feedback y calificaciones**: Mejora continua basada en las opiniones de los clientes.  
+- **Sistema de notificaciones**: Alertas para recordar citas y notificar cambios en tiempo real.  
 
-## Tecnologías Utilizadas
+---
 
-- **Backend**: Java Spring Boot
-- **Frontend**: Vue.js
-- **Base de Datos**: PostgreSQL
-- **Control de Versiones**: Git
-- **Notificaciones y Emails**: Configuración SMTP para envío de correos electrónicos.
+### 👤 Para clientes
+- Reserva de citas online con selección de servicios.  
+- Perfil e historial de citas.  
+- **Recomendación de cortes** en función de la forma del rostro.  
+- Valoraciones y comentarios tras el servicio.  
+- Notificaciones recordatorio de cita.  
 
-## Estado Actual del Proyecto
+### 💇 Para barberos
+- Agenda y gestión de disponibilidad.  
+- Historial de clientes y servicios realizados.  
+- Perfil profesional (especialidades, horarios).  
+- Notificaciones de nuevas reservas/cambios.  
 
-El proyecto está en fase de desarrollo. Las funcionalidades básicas están en proceso de implementación y se espera realizar iteraciones constantes para añadir mejoras y nuevas características.
+### 🧑‍💼 Para administradores
+- Gestión de catálogo de servicios y precios.  
+- Gestión de usuarios (clientes y barberos).  
+- Creación de promociones y configuración global.  
+- Panel de control con métricas básicas.  
 
-### Próximos Pasos
-- Integración de un sistema de autenticación por correo electrónico para la confirmación de registros.
-- Finalización de las interfaces de usuario para clientes y barberos.
-- Optimización del sistema de notificaciones y recordatorios.
+---
 
-## Configuración del Proyecto
+## 🧱 Arquitectura
+Stack principal:
+- **Backend:** Java **Spring Boot** (API REST)  
+- **Frontend:** **Vue.js**  
+- **Base de datos:** **PostgreSQL**  
+- **Otros:** Maven, Node.js, Git/GitHub  
+
+```mermaid
+flowchart LR
+  subgraph Client
+    UI[Vue.js SPA]
+  end
+  subgraph Server
+    API[Spring Boot REST API]
+    DB[(PostgreSQL)]
+  end
+  UI -->|HTTP/JSON| API
+  API --> DB
+
+## ⚙️ Configuración del Proyecto
 
 ### Requisitos Previos
 - **Java 17**
