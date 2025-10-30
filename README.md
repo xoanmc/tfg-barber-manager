@@ -40,15 +40,12 @@ El proyecto está en fase de desarrollo. Las funcionalidades básicas están en 
 
 ### Instalación
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 1. Clona este repositorio:
    ```bash
    git clone https://github.com/tu-usuario/tu-repo.git
    cd tu-repo
    ```
 
-<<<<<<< HEAD
 2. Configura la base de datos:
    - Cambia las credenciales en el archivo `application.yml` ubicado en `src/main/resources` según tu configuración local.
 
